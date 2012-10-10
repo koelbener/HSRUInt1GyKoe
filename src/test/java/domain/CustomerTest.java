@@ -1,9 +1,11 @@
 package domain;
 
-import junit.framework.TestCase;
+import static org.junit.Assert.assertEquals;
 
-public class CustomerTest extends TestCase {
+import org.junit.Test;
 
+public class CustomerTest {
+    @Test
     public void testCreateCustomer() {
 	Customer cu1 = new Customer("Keller", "Heinz");
 	cu1.setAdress("Zelgweg 12", 8000, "ZŸrich");
