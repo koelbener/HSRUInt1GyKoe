@@ -1,4 +1,4 @@
-package test;
+package domain;
 
 import junit.framework.TestCase;
 import domain.Copy;
