@@ -1,0 +1,4 @@
+# ignore specific files
+.project
+.classpath
+.settings/*
