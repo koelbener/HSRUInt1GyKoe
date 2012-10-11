@@ -4,15 +4,15 @@ import java.util.List;
 
 import javax.swing.AbstractListModel;
 
-import domain.Book;
+import domain.Copy;
 
-public class BookListModel extends AbstractListModel<Book> {
+public class CopyListModel extends AbstractListModel<Copy> {
 
     private static final long serialVersionUID = 1L;
-    List<Book> bookList;
+    List<Copy> copyList;
 
-    public BookListModel(List<Book> list) {
-        this.bookList = list;
+    public CopyListModel(List<Copy> list) {
+        this.copyList = list;
     }
 
     public void propagateUpdate(int pos) {
@@ -20,13 +20,13 @@ public class BookListModel extends AbstractListModel<Book> {
     }
 
     @Override
-    public Book getElementAt(int index) {
-        return bookList.get(index);
+    public Copy getElementAt(int index) {
+        return copyList.get(index);
     }
 
     @Override
     public int getSize() {
-        return bookList.size();
+        return copyList.size();
     }
 
 }

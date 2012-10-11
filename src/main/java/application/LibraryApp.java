@@ -13,18 +13,25 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+import domain.Book;
 import domain.Copy;
 import domain.Customer;
 import domain.IllegalLoanOperationException;
 import domain.Library;
 import domain.Loan;
-import domain.Book;
 import domain.Shelf;
 
 public class LibraryApp {
     public static void main(String[] args) throws Exception {
         Library library = new Library();
         initLibrary(library);
+    }
+
+    public static Library readLibrary() throws ParserConfigurationException, SAXException, IOException,
+            IllegalLoanOperationException {
+        Library result = new Library();
+        initLibrary(result);
+        return result;
     }
 
     private static void initLibrary(Library library) throws ParserConfigurationException, SAXException, IOException,
