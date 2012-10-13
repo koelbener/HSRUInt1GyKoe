@@ -2,98 +2,49 @@ package application.view;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.EventQueue;
 import java.awt.FlowLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
-import javax.swing.ListModel;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 
 import net.miginfocom.swing.MigLayout;
-import application.LibraryApp;
-import application.viewModel.BookListModel;
+import application.controller.BookMasterController;
+import application.core.Repository;
+import application.presentationModel.BooksPMod;
 import domain.Book;
-import domain.Library;
 
-public class BookMaster {
+public class BookMasterMainView extends MainViewBase {
+    public BookMasterMainView() {
+    }
 
-    private JFrame frame;
+    private static final long serialVersionUID = -5636590532882178863L;
     private JTextField txtSuche;
-    private ListModel<Book> bookListModel;
     private JList<Book> booksList;
     private JLabel numberOfCopies;
     private JLabel numberOfBooks;
-    private Library library;
+    private JButton btnbuchOeffnen;
+    private BooksPMod booksPMod;
 
-    /**
-     * Launch the application.
-     */
-    public static void main(String[] args) {
-        try {
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } catch (ClassNotFoundException e1) {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
-        } catch (InstantiationException e1) {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
-        } catch (IllegalAccessException e1) {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
-        } catch (UnsupportedLookAndFeelException e1) {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
-        }
-        EventQueue.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    BookMaster window = new BookMaster();
-                    window.frame.setVisible(true);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-    }
-
-    /**
-     * Create the application.
-     * 
-     * @throws Exception
-     */
-    public BookMaster() throws Exception {
-        initModel();
-        initialize();
-    }
-
-    /**
-     * Initialize the contents of the frame.
-     */
-    private void initialize() {
-        frame = new JFrame();
-        frame.setBounds(100, 100, 616, 445);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.getContentPane().setLayout(new BorderLayout(0, 0));
+    @Override
+    protected void initUIElements() {
+        super.initUIElements();
+        setTitle("Swinging Library");
+        setBounds(100, 100, 616, 445);
+        getContentPane().setLayout(new BorderLayout(0, 0));
 
         JPanel panel = new JPanel();
         FlowLayout flowLayout = (FlowLayout) panel.getLayout();
         flowLayout.setAlignment(FlowLayout.LEFT);
-        frame.getContentPane().add(panel, BorderLayout.NORTH);
+        getContentPane().add(panel, BorderLayout.NORTH);
 
         JLabel lblSwingingLibrary = new JLabel("Swinging Library");
         panel.add(lblSwingingLibrary);
@@ -101,7 +52,7 @@ public class BookMaster {
         JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
         tabbedPane.setBorder(new CompoundBorder(new EmptyBorder(10, 5, 5, 5), new LineBorder(new Color(0, 0, 0), 1,
                 true)));
-        frame.getContentPane().add(tabbedPane, BorderLayout.CENTER);
+        getContentPane().add(tabbedPane, BorderLayout.CENTER);
 
         JPanel panel_1 = new JPanel();
         tabbedPane.addTab("B\u00FCcher", null, panel_1, null);
@@ -115,7 +66,7 @@ public class BookMaster {
 
         JLabel lblLasd = new JLabel("Anzahl B\u00FCcher:");
         panel_3.add(lblLasd, "cell 0 0");
-        numberOfBooks = new JLabel(String.valueOf(bookListModel.getSize()));
+        numberOfBooks = new JLabel(String.valueOf(booksPMod.getBookListModel().getSize()));
         panel_3.add(numberOfBooks, "cell 1 0");
 
         JLabel lblAnzahlExemplare = new JLabel("Anzahl Exemplare:");
@@ -147,10 +98,9 @@ public class BookMaster {
         JLabel lblNurVerfgbare = new JLabel("Nur Verf\u00FCgbare");
         panel_5.add(lblNurVerfgbare, "cell 1 1");
 
-        JButton btnSelektierteAngaben = new JButton("Bücher öffnen");
-        btnSelektierteAngaben.setToolTipText("Alle selektierten Bücher öffnen");
-        btnSelektierteAngaben.addActionListener(new ViewBookActionListener());
-        panel_5.add(btnSelektierteAngaben, "cell 2 1,growx");
+        btnbuchOeffnen = new JButton("Bücher öffnen");
+        btnbuchOeffnen.setToolTipText("Alle selektierten Bücher öffnen");
+        panel_5.add(btnbuchOeffnen, "cell 2 1,growx");
 
         JButton btnNeuesBuchHinzufgen = new JButton("Neues Buch hinzuf\u00FCgen");
         panel_5.add(btnNeuesBuchHinzufgen, "cell 3 1,growx");
@@ -160,33 +110,39 @@ public class BookMaster {
         panel_6.setLayout(new BorderLayout(0, 0));
 
         booksList = new JList<Book>();
-        booksList.setModel(bookListModel);
+        booksList.setModel(booksPMod.getBookListModel());
         panel_6.add(booksList);
 
         JPanel panel_2 = new JPanel();
         tabbedPane.addTab("Ausleihen", null, panel_2, null);
+
     }
 
-    private void initModel() throws Exception {
-        try {
-            library = LibraryApp.readLibrary();
-            bookListModel = new BookListModel(library.getBooks());
-        } catch (Exception e) {
-            // TODO improve exception handling
-            e.printStackTrace();
-            throw new Exception("Error while loading books.", e);
-        }
+    @Override
+    protected void initModel() {
+        super.initModel();
+        booksPMod = Repository.getInstance().getBooksPMod();
     }
 
-    private final class ViewBookActionListener implements ActionListener {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            for (int index : booksList.getSelectedIndices()) {
-                Book book = bookListModel.getElementAt(index);
-                System.out.println("opening book view " + book.getName());
-                new BookDetailView(library, book);
+    @Override
+    protected void initController() {
+        controller = new BookMasterController();
+
+    }
+
+    @Override
+    protected void initListeners() {
+        btnbuchOeffnen.addActionListener(new LibraryActionListener() {
+            @Override
+            protected void execute() {
+                getController().openBooks(booksList.getSelectedIndices());
             }
-        }
+        });
+    }
+
+    @Override
+    protected BookMasterController getController() {
+        return (BookMasterController) controller;
     }
 
 }
