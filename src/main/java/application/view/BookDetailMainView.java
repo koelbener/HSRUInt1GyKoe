@@ -20,6 +20,8 @@ import domain.Copy;
 
 public class BookDetailMainView extends MainViewBase<Book, BookDetailController> {
 
+    public static final String NAME_BOOK_DETAIL_MAIN_VIEW = "BookDetailMainView";
+
     private static final long serialVersionUID = 1L;
     private JTextField tfTitle;
     private JTextField tfAutor;
@@ -29,7 +31,7 @@ public class BookDetailMainView extends MainViewBase<Book, BookDetailController>
     private CopyListModel copyListModel;
 
     public BookDetailMainView(Book book) {
-        super(book);
+        super(book, NAME_BOOK_DETAIL_MAIN_VIEW);
         updateValues();
     }
 

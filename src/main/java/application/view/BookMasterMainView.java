@@ -30,6 +30,7 @@ import domain.Library;
 
 public class BookMasterMainView extends MainViewBase<Library, BookMasterController> {
 
+    public static final String NAME_BOOK_MASTER_MAIN_VIEW = "BookMasterMainView";
     public static final String NAME_BUTTON_SEARCH = "button.search";
     public static final String NAME_BUTTON_OPEN = "button.open";
     public static final String NAME_LIST_BOOKS = "list.books";
@@ -44,7 +45,7 @@ public class BookMasterMainView extends MainViewBase<Library, BookMasterControll
     private BooksPMod booksPMod;
 
     public BookMasterMainView() {
-        super(null);
+        super(null, NAME_BOOK_MASTER_MAIN_VIEW);
         setMinimumSize(new Dimension(616, 445));
     }
 
@@ -52,7 +53,6 @@ public class BookMasterMainView extends MainViewBase<Library, BookMasterControll
     protected void initUIElements() {
         super.initUIElements();
         setTitle("Swinging Library");
-        setName("MainWindow");
         setBounds(100, 100, 616, 445);
         getContentPane().setLayout(new BorderLayout(0, 0));
 

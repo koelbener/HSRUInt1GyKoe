@@ -1,11 +1,13 @@
 package application.view;
 
+import static application.view.BookDetailMainView.NAME_BOOK_DETAIL_MAIN_VIEW;
 import static application.view.BookMasterMainView.NAME_BUTTON_OPEN;
 import static application.view.BookMasterMainView.NAME_LIST_BOOKS;
 
 import org.fest.swing.fixture.FrameFixture;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import application.LibraryApp;
@@ -44,6 +46,17 @@ public class BookMasterMainViewTest {
         window.list(NAME_LIST_BOOKS).selectItems(1, 2, 3);
         window.list(NAME_LIST_BOOKS).clearSelection();
         window.button(NAME_BUTTON_OPEN).requireDisabled();
+    }
+
+    @Test
+    @Ignore
+    public void openBookButtonOpensNewView() {
+        window.list(NAME_LIST_BOOKS).selectItem(1);
+        window.button(NAME_BUTTON_OPEN).click();
+        FrameFixture bookDetailDialog = new FrameFixture(NAME_BOOK_DETAIL_MAIN_VIEW);
+        bookDetailDialog.requireVisible();
+        bookDetailDialog.close();
+        window.requireVisible();
     }
 
 }
