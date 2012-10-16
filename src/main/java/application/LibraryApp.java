@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.GregorianCalendar;
 
+import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -29,7 +30,7 @@ import domain.Loan;
 import domain.Shelf;
 
 public class LibraryApp {
-    private static final Logger logger = LoggerFactory.getLogger(LibraryApp.class.getName());
+    private static final Logger logger = LoggerFactory.getLogger(LibraryApp.class);
 
     /**
      * Launch the application.
@@ -47,14 +48,14 @@ public class LibraryApp {
             logger.error("Unable to set a native look and feel.", e);
         }
 
-        EventQueue.invokeLater(new Runnable() {
+        SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
                 try {
                     BookMasterMainView bookMasterView = new BookMasterMainView();
                     bookMasterView.setVisible(true);
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    logger.error("Unable to instanciate the main dialog.", e);
                 }
             }
         });

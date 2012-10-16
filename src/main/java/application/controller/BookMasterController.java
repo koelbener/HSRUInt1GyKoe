@@ -9,7 +9,7 @@ import application.viewModel.BookListModel;
 import domain.Book;
 
 public class BookMasterController extends AbstractController {
-    private static final Logger logger = LoggerFactory.getLogger(BookMasterController.class.getName());
+    private static final Logger logger = LoggerFactory.getLogger(BookMasterController.class);
 
     public void openBooks(int[] selectedIndices) {
         BookListModel booksListModel = Repository.getInstance().getBooksPMod().getBookListModel();
