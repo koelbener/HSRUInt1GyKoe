@@ -22,7 +22,7 @@ import application.core.Repository;
 import application.presentationModel.BooksPMod;
 import domain.Book;
 
-public class BookMasterMainView extends MainViewBase {
+public class BookMasterMainView extends MainViewBase<BookMasterController> {
     public BookMasterMainView() {
     }
 
@@ -125,9 +125,8 @@ public class BookMasterMainView extends MainViewBase {
     }
 
     @Override
-    protected void initController() {
-        controller = new BookMasterController();
-
+    protected BookMasterController initController() {
+        return new BookMasterController();
     }
 
     @Override
@@ -138,11 +137,6 @@ public class BookMasterMainView extends MainViewBase {
                 getController().openBooks(booksList.getSelectedIndices());
             }
         });
-    }
-
-    @Override
-    protected BookMasterController getController() {
-        return (BookMasterController) controller;
     }
 
 }

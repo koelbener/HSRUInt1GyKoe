@@ -5,7 +5,7 @@ import application.view.BookDetailMainView;
 import application.viewModel.BookListModel;
 import domain.Book;
 
-public class BookMasterController extends ControllerBase {
+public class BookMasterController extends AbstractController {
 
     public void openBooks(int[] selectedIndices) {
         BookListModel booksListModel = Repository.getInstance().getBooksPMod().getBookListModel();

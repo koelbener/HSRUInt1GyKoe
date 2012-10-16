@@ -14,8 +14,9 @@ import net.miginfocom.swing.MigLayout;
 import application.controller.BookDetailController;
 import application.viewModel.CopyListModel;
 import domain.Book;
+import domain.Copy;
 
-public class BookDetailMainView extends MainViewBase {
+public class BookDetailMainView extends MainViewBase<BookDetailController> {
 
     private static final long serialVersionUID = 1L;
     private JTextField tfTitle;
@@ -117,25 +118,19 @@ public class BookDetailMainView extends MainViewBase {
         panel_1.add(panel_3, BorderLayout.CENTER);
         panel_3.setLayout(new BorderLayout(0, 0));
 
-        JList list = new JList();
+        JList<Copy> list = new JList<Copy>();
         list.setModel(copyListModel);
         panel_3.add(list);
     }
 
     @Override
-    public void initController() {
-        controller = new BookDetailController();
+    public BookDetailController initController() {
+        return new BookDetailController();
 
-    }
-
-    @Override
-    public BookDetailController getController() {
-        return (BookDetailController) controller;
     }
 
     @Override
     public void initListeners() {
-        // TODO Auto-generated method stub
 
     }
 

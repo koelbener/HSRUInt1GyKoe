@@ -1,5 +1,5 @@
 package application.controller;
 
-public class BookDetailController extends ControllerBase {
+public class BookDetailController extends AbstractController {
 
 }
