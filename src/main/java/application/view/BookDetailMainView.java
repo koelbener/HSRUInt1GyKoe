@@ -18,7 +18,7 @@ import application.viewModel.CopyListModel;
 import domain.Book;
 import domain.Copy;
 
-public class BookDetailMainView extends MainViewBase<BookDetailController> {
+public class BookDetailMainView extends MainViewBase<Book, BookDetailController> {
 
     private static final long serialVersionUID = 1L;
     private JTextField tfTitle;
@@ -27,25 +27,23 @@ public class BookDetailMainView extends MainViewBase<BookDetailController> {
     private JTextField tfRegal;
     private JTextField tfNumberOfCopies;
     private CopyListModel copyListModel;
-    private final Book book;
 
     public BookDetailMainView(Book book) {
-        super();
-        this.book = book;
+        super(book);
         updateValues();
     }
 
     @Override
     protected void initModel() {
         super.initModel();
-        copyListModel = new CopyListModel(library.getCopiesOfBook(book));
+        copyListModel = new CopyListModel(library.getCopiesOfBook(getReferenceObject()));
     }
 
     private void updateValues() {
-        tfTitle.setText(book.getName());
-        tfAutor.setText(book.getAuthor());
-        tfVerlag.setText(book.getPublisher());
-        tfRegal.setText(book.getShelf().toString());
+        tfTitle.setText(getReferenceObject().getName());
+        tfAutor.setText(getReferenceObject().getAuthor());
+        tfVerlag.setText(getReferenceObject().getPublisher());
+        tfRegal.setText(getReferenceObject().getShelf().toString());
         tfNumberOfCopies.setText(String.valueOf(copyListModel.getSize()));
     }
 

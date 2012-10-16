@@ -26,8 +26,9 @@ import application.core.LibraryActionListener;
 import application.core.Repository;
 import application.presentationModel.BooksPMod;
 import domain.Book;
+import domain.Library;
 
-public class BookMasterMainView extends MainViewBase<BookMasterController> {
+public class BookMasterMainView extends MainViewBase<Library, BookMasterController> {
 
     public static final String NAME_BUTTON_SEARCH = "button.search";
     public static final String NAME_BUTTON_OPEN = "button.open";
@@ -43,6 +44,7 @@ public class BookMasterMainView extends MainViewBase<BookMasterController> {
     private BooksPMod booksPMod;
 
     public BookMasterMainView() {
+        super(null);
         setMinimumSize(new Dimension(616, 445));
     }
 

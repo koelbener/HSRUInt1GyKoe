@@ -19,15 +19,17 @@ import domain.Library;
  * MainViewBase descendant.
  * 
  */
-public abstract class MainViewBase<T extends AbstractController> extends JFrame {
+public abstract class MainViewBase<R, T extends AbstractController> extends JFrame {
 
     private static final Logger logger = LoggerFactory.getLogger(MainViewBase.class);
 
     private static final long serialVersionUID = 1L;
     protected T controller;
     protected Library library;
+    private final R referenceObject;
 
-    public MainViewBase() {
+    public MainViewBase(R referenceObject) {
+        this.referenceObject = referenceObject;
         initModel();
         initUIElements();
         initListeners();
@@ -56,7 +58,8 @@ public abstract class MainViewBase<T extends AbstractController> extends JFrame 
                 logger.trace("check frame position {} against {}", myPosition, framePosition);
                 if (!frame.equals(this) && frame.getLocation().equals(this.getLocation())) {
                     setLocation(getLocation().x + gap, getLocation().y + gap);
-                    logger.debug("change location of frame {} from {} to {}", new Object[] { getName(), myPosition, this.getLocation() });
+                    logger.debug("change location of frame {} from {} to {}", new Object[] { getName(), myPosition,
+                            this.getLocation() });
                     needToCheck = true;
                     break;
                 }
@@ -79,5 +82,9 @@ public abstract class MainViewBase<T extends AbstractController> extends JFrame 
 
     protected T getController() {
         return controller;
+    }
+
+    protected R getReferenceObject() {
+        return referenceObject;
     }
 }
