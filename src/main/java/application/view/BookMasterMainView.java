@@ -2,6 +2,7 @@ package application.view;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 
 import javax.swing.JButton;
@@ -9,6 +10,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import javax.swing.border.CompoundBorder;
@@ -18,12 +20,14 @@ import javax.swing.border.TitledBorder;
 
 import net.miginfocom.swing.MigLayout;
 import application.controller.BookMasterController;
+import application.core.LibraryActionListener;
 import application.core.Repository;
 import application.presentationModel.BooksPMod;
 import domain.Book;
 
 public class BookMasterMainView extends MainViewBase {
     public BookMasterMainView() {
+        setMinimumSize(new Dimension(616, 445));
     }
 
     private static final long serialVersionUID = -5636590532882178863L;
@@ -88,6 +92,8 @@ public class BookMasterMainView extends MainViewBase {
         panel_5.add(lblNewLabel_1, "cell 0 0");
 
         txtSuche = new JTextField();
+        txtSuche.setMinimumSize(new Dimension(20, 20));
+        txtSuche.setPreferredSize(new Dimension(20, 20));
         txtSuche.setText("Suche...");
         panel_5.add(txtSuche, "flowx,cell 0 1,growx");
         txtSuche.setColumns(10);
@@ -111,7 +117,10 @@ public class BookMasterMainView extends MainViewBase {
 
         booksList = new JList<Book>();
         booksList.setModel(booksPMod.getBookListModel());
-        panel_6.add(booksList);
+
+        JScrollPane scrollPane = new JScrollPane(booksList);
+
+        panel_6.add(scrollPane, BorderLayout.CENTER);
 
         JPanel panel_2 = new JPanel();
         tabbedPane.addTab("Ausleihen", null, panel_2, null);

@@ -23,7 +23,7 @@ public abstract class MainViewBase extends JFrame {
         initListeners();
         initController();
 
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setVisible(true);
     }
 
@@ -40,5 +40,4 @@ public abstract class MainViewBase extends JFrame {
     protected void initUIElements() {
         getContentPane().removeAll();
     }
-
 }
