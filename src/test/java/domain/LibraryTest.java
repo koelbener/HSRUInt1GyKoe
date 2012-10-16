@@ -21,6 +21,7 @@ public class LibraryTest {
         Book b1 = library.createAndAddBook("Design Pattern");
         Book b2 = library.createAndAddBook("Refactoring");
         Book b3 = library.createAndAddBook("Clean Code");
+        library.createAndAddBook("Book without Copies");
 
         // Books
         library.createAndAddCopy(b1);
@@ -48,7 +49,7 @@ public class LibraryTest {
         Book t2 = library.findByBookTitle("Clean Code");
         assertEquals(1, library.getCopiesOfBook(t2).size());
 
-        Book t3 = library.findByBookTitle("noTitle");
+        Book t3 = library.findByBookTitle("Book without Copies");
         assertEquals(0, library.getCopiesOfBook(t3).size());
     }
 
