@@ -98,12 +98,8 @@ public class BookMasterMainView extends MainViewBase<BookMasterController> {
         JLabel lblNurVerfgbare = new JLabel("Nur Verf\u00FCgbare");
         panel_5.add(lblNurVerfgbare, "cell 1 1");
 
-        btnbuchOeffnen = new JButton("Bücher öffnen");
-        btnbuchOeffnen.setToolTipText("Alle selektierten Bücher öffnen");
-        panel_5.add(btnbuchOeffnen, "cell 2 1,growx");
-
-        JButton btnNeuesBuchHinzufgen = new JButton("Neues Buch hinzuf\u00FCgen");
-        panel_5.add(btnNeuesBuchHinzufgen, "cell 3 1,growx");
+        JButton btnSuchen = new JButton("Suchen");
+        panel_5.add(btnSuchen, "cell 2 1");
 
         JPanel panel_6 = new JPanel();
         panel_4.add(panel_6, BorderLayout.CENTER);
@@ -112,6 +108,17 @@ public class BookMasterMainView extends MainViewBase<BookMasterController> {
         booksList = new JList<Book>();
         booksList.setModel(booksPMod.getBookListModel());
         panel_6.add(booksList);
+
+        JPanel panel_7 = new JPanel();
+        panel_6.add(panel_7, BorderLayout.EAST);
+        panel_7.setLayout(new MigLayout("", "[]", "[23px][]"));
+
+        JButton btnNeuesBuchHinzufgen = new JButton("Neu");
+        panel_7.add(btnNeuesBuchHinzufgen, "cell 0 0,growx,aligny center");
+
+        btnbuchOeffnen = new JButton("\u00D6ffnen");
+        panel_7.add(btnbuchOeffnen, "cell 0 1,growx,aligny center");
+        btnbuchOeffnen.setToolTipText("Alle selektierten Bücher öffnen");
 
         JPanel panel_2 = new JPanel();
         tabbedPane.addTab("Ausleihen", null, panel_2, null);
