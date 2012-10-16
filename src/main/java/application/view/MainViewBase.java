@@ -2,7 +2,7 @@ package application.view;
 
 import javax.swing.JFrame;
 
-import application.controller.ControllerBase;
+import application.controller.AbstractController;
 import application.core.Repository;
 import domain.Library;
 
@@ -11,17 +11,17 @@ import domain.Library;
  * MainViewBase descendant.
  * 
  */
-public abstract class MainViewBase extends JFrame {
+public abstract class MainViewBase<T extends AbstractController> extends JFrame {
 
     private static final long serialVersionUID = 1L;
-    protected ControllerBase controller;
+    protected T controller;
     protected Library library;
 
     public MainViewBase() {
         initModel();
         initUIElements();
         initListeners();
-        initController();
+        controller = initController();
 
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setVisible(true);
@@ -31,13 +31,15 @@ public abstract class MainViewBase extends JFrame {
         library = Repository.getInstance().getLibrary();
     }
 
-    protected abstract void initController();
+    protected void initUIElements() {
+        getContentPane().removeAll();
+    }
 
     protected abstract void initListeners();
 
-    protected abstract ControllerBase getController();
+    protected abstract T initController();
 
-    protected void initUIElements() {
-        getContentPane().removeAll();
+    protected T getController() {
+        return controller;
     }
 }

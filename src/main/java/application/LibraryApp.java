@@ -5,12 +5,14 @@ import java.io.File;
 import java.io.IOException;
 import java.util.GregorianCalendar;
 
+import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -28,6 +30,8 @@ import domain.Loan;
 import domain.Shelf;
 
 public class LibraryApp {
+    private static final Logger logger = LoggerFactory.getLogger(LibraryApp.class);
+
     /**
      * Launch the application.
      */
@@ -40,27 +44,18 @@ public class LibraryApp {
 
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } catch (ClassNotFoundException e1) {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
-        } catch (InstantiationException e1) {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
-        } catch (IllegalAccessException e1) {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
-        } catch (UnsupportedLookAndFeelException e1) {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
+        } catch (Exception e) {
+            logger.error("Unable to set a native look and feel.", e);
         }
-        EventQueue.invokeLater(new Runnable() {
+
+        SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
                 try {
                     BookMasterMainView bookMasterView = new BookMasterMainView();
                     bookMasterView.setVisible(true);
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    logger.error("Unable to instanciate the main dialog.", e);
                 }
             }
         });
@@ -91,17 +86,17 @@ public class LibraryApp {
         // create pseudo random books and loans
         createBooksAndLoans(library);
 
-        System.out.println("Initialisation of the library was successful!\n");
-        System.out.println("Books in library: " + library.getBooks().size());
-        System.out.println("Customers: " + library.getCustomers().size() + "\n");
-        System.out.println("Copies in library: " + library.getCopies().size());
-        System.out.println("Copies currently on loan: " + library.getLentOutBooks().size());
+        logger.info("Initialisation of the library was successful!");
+        logger.debug("Books in library: " + library.getBooks().size());
+        logger.debug("Customers: " + library.getCustomers().size());
+        logger.debug("Copies in library: " + library.getCopies().size());
+        logger.debug("Copies currently on loan: " + library.getLentOutBooks().size());
         int lentBooksPercentage = (int) (((double) library.getLentOutBooks().size()) / library.getCopies().size() * 100);
-        System.out.println("Percent copies on loan: " + lentBooksPercentage + "%");
-        System.out.println("Copies currently overdue: " + library.getOverdueLoans().size());
+        logger.debug("Percent copies on loan: " + lentBooksPercentage + "%");
+        logger.debug("Copies currently overdue: " + library.getOverdueLoans().size());
 
         for (Loan l : library.getOverdueLoans())
-            System.out.println(l.getDaysOverdue());
+            logger.debug("Loan by {} is overdue by {} days.", l.getCustomer(), l.getDaysOverdue());
     }
 
     private static void createBooksAndLoans(Library library) throws IllegalLoanOperationException {
