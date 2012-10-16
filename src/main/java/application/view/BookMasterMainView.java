@@ -28,9 +28,11 @@ import application.presentationModel.BooksPMod;
 import domain.Book;
 
 public class BookMasterMainView extends MainViewBase<BookMasterController> {
-    public BookMasterMainView() {
-        setMinimumSize(new Dimension(616, 445));
-    }
+
+    public static final String NAME_BUTTON_SEARCH = "button.search";
+    public static final String NAME_BUTTON_OPEN = "button.open";
+    public static final String NAME_LIST_BOOKS = "list.books";
+    public static final String NAME_LABEL_NUMBER_OF_BOOKS = "label.numberOfBooks";
 
     private static final long serialVersionUID = -5636590532882178863L;
     private JTextField txtSuche;
@@ -40,10 +42,15 @@ public class BookMasterMainView extends MainViewBase<BookMasterController> {
     private JButton btnbuchOeffnen;
     private BooksPMod booksPMod;
 
+    public BookMasterMainView() {
+        setMinimumSize(new Dimension(616, 445));
+    }
+
     @Override
     protected void initUIElements() {
         super.initUIElements();
         setTitle("Swinging Library");
+        setName("MainWindow");
         setBounds(100, 100, 616, 445);
         getContentPane().setLayout(new BorderLayout(0, 0));
 
@@ -73,6 +80,7 @@ public class BookMasterMainView extends MainViewBase<BookMasterController> {
         JLabel lblLasd = new JLabel("Anzahl B\u00FCcher:");
         panel_3.add(lblLasd, "cell 0 0");
         numberOfBooks = new JLabel(String.valueOf(booksPMod.getBookListModel().getSize()));
+        numberOfBooks.setName(NAME_LABEL_NUMBER_OF_BOOKS);
         panel_3.add(numberOfBooks, "cell 1 0");
 
         JLabel lblAnzahlExemplare = new JLabel("Anzahl Exemplare:");
@@ -105,6 +113,7 @@ public class BookMasterMainView extends MainViewBase<BookMasterController> {
         panel_5.add(lblNurVerfgbare, "cell 1 1");
 
         JButton btnSuchen = new JButton("Suchen");
+        btnSuchen.setName(NAME_BUTTON_SEARCH);
         panel_5.add(btnSuchen, "cell 2 1");
 
         JPanel panel_6 = new JPanel();
@@ -112,6 +121,7 @@ public class BookMasterMainView extends MainViewBase<BookMasterController> {
         panel_6.setLayout(new BorderLayout(0, 0));
 
         booksList = new JList<Book>();
+        booksList.setName(NAME_LIST_BOOKS);
         booksList.setModel(booksPMod.getBookListModel());
 
         JScrollPane scrollPane = new JScrollPane(booksList);
@@ -126,6 +136,7 @@ public class BookMasterMainView extends MainViewBase<BookMasterController> {
         panel_7.add(btnNeuesBuchHinzufgen, "cell 0 0,growx,aligny center");
 
         btnbuchOeffnen = new JButton("\u00D6ffnen");
+        btnbuchOeffnen.setName(NAME_BUTTON_OPEN);
         panel_7.add(btnbuchOeffnen, "cell 0 1,growx,aligny center");
         btnbuchOeffnen.setToolTipText("Alle selektierten Bücher öffnen");
         btnbuchOeffnen.setEnabled(false);
@@ -154,6 +165,7 @@ public class BookMasterMainView extends MainViewBase<BookMasterController> {
                 getController().openBooks(booksList.getSelectedIndices());
             }
         });
+
         // TODO this could be extracted into a reusable class
         booksList.addListSelectionListener(new ListSelectionListener() {
 
