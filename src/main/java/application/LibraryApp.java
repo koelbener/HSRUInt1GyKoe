@@ -2,6 +2,7 @@ package application;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.Thread.UncaughtExceptionHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.util.GregorianCalendar;
 
@@ -36,6 +37,15 @@ public class LibraryApp {
      * Launch the application.
      */
     public static void main(String[] args) throws Exception {
+
+        Thread.setDefaultUncaughtExceptionHandler(new UncaughtExceptionHandler() {
+
+            @Override
+            public void uncaughtException(Thread t, Throwable e) {
+                logger.error("Uncaught exception", e);
+            }
+        });
+
         createMainWindow();
     }
 
