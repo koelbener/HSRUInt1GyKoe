@@ -4,8 +4,7 @@ import application.presentationModel.BooksPMod;
 import domain.Library;
 
 /**
- * Singelton to store core Objects
- * 
+ * Singleton to store core Objects
  */
 public class Repository {
     private static Repository instance;
