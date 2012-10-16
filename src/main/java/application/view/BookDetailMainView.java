@@ -1,6 +1,8 @@
 package application.view;
 
 import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -109,6 +111,11 @@ public class BookDetailMainView extends MainViewBase<BookDetailController> {
         tfNumberOfCopies.setColumns(10);
 
         JButton btnEntfernen = new JButton("Entfernen");
+        btnEntfernen.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent arg0) {
+            }
+        });
         panel_2.add(btnEntfernen, "cell 2 0");
 
         JButton btnHinzufgen = new JButton("Hinzuf\u00FCgen");

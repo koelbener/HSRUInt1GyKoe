@@ -1,4 +1,4 @@
-package application.view;
+package application.core;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

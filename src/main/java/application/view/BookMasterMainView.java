@@ -2,6 +2,7 @@ package application.view;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 
 import javax.swing.JButton;
@@ -9,6 +10,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import javax.swing.border.CompoundBorder;
@@ -20,11 +22,13 @@ import javax.swing.event.ListSelectionListener;
 
 import net.miginfocom.swing.MigLayout;
 import application.controller.BookMasterController;
+import application.core.LibraryActionListener;
 import application.core.Repository;
 import application.presentationModel.BooksPMod;
 import domain.Book;
 
 public class BookMasterMainView extends MainViewBase<BookMasterController> {
+
     public static final String NAME_BUTTON_SEARCH = "button.search";
     public static final String NAME_BUTTON_OPEN = "button.open";
     public static final String NAME_LIST_BOOKS = "list.books";
@@ -37,6 +41,10 @@ public class BookMasterMainView extends MainViewBase<BookMasterController> {
     private JLabel numberOfBooks;
     private JButton btnbuchOeffnen;
     private BooksPMod booksPMod;
+
+    public BookMasterMainView() {
+        setMinimumSize(new Dimension(616, 445));
+    }
 
     @Override
     protected void initUIElements() {
@@ -115,7 +123,10 @@ public class BookMasterMainView extends MainViewBase<BookMasterController> {
         booksList = new JList<Book>();
         booksList.setName(NAME_LIST_BOOKS);
         booksList.setModel(booksPMod.getBookListModel());
-        panel_6.add(booksList);
+
+        JScrollPane scrollPane = new JScrollPane(booksList);
+
+        panel_6.add(scrollPane, BorderLayout.CENTER);
 
         JPanel panel_7 = new JPanel();
         panel_6.add(panel_7, BorderLayout.EAST);

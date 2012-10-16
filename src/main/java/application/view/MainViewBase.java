@@ -23,7 +23,7 @@ public abstract class MainViewBase<T extends AbstractController> extends JFrame 
         initListeners();
         controller = initController();
 
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setVisible(true);
     }
 
@@ -42,5 +42,4 @@ public abstract class MainViewBase<T extends AbstractController> extends JFrame 
     protected T getController() {
         return controller;
     }
-
 }
