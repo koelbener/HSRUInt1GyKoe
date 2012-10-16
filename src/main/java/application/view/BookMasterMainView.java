@@ -15,6 +15,8 @@ import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 import net.miginfocom.swing.MigLayout;
 import application.controller.BookMasterController;
@@ -119,6 +121,7 @@ public class BookMasterMainView extends MainViewBase<BookMasterController> {
         btnbuchOeffnen = new JButton("\u00D6ffnen");
         panel_7.add(btnbuchOeffnen, "cell 0 1,growx,aligny center");
         btnbuchOeffnen.setToolTipText("Alle selektierten Bücher öffnen");
+        btnbuchOeffnen.setEnabled(false);
 
         JPanel panel_2 = new JPanel();
         tabbedPane.addTab("Ausleihen", null, panel_2, null);
@@ -142,6 +145,16 @@ public class BookMasterMainView extends MainViewBase<BookMasterController> {
             @Override
             protected void execute() {
                 getController().openBooks(booksList.getSelectedIndices());
+            }
+        });
+        // TODO this could be extracted into a reusable class
+        booksList.addListSelectionListener(new ListSelectionListener() {
+
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                int numberOfSelectedIndices = booksList.getSelectedIndices().length;
+                boolean enableButton = numberOfSelectedIndices > 0;
+                btnbuchOeffnen.setEnabled(enableButton);
             }
         });
     }
