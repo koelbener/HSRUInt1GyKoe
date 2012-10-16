@@ -1,14 +1,16 @@
 package domain;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class Library {
 
-    private List<Copy> copies;
-    private List<Customer> customers;
-    private List<Loan> loans;
-    private List<Book> books;
+    private final List<Copy> copies;
+    private final List<Customer> customers;
+    private final List<Loan> loans;
+    private final List<Book> books;
 
     public Library() {
         copies = new ArrayList<Copy>();
@@ -64,6 +66,7 @@ public class Library {
     }
 
     public List<Copy> getCopiesOfBook(Book book) {
+        checkNotNull(book);
         List<Copy> res = new ArrayList<Copy>();
         for (Copy c : copies) {
             if (c.getTitle().equals(book)) {
