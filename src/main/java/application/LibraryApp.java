@@ -1,8 +1,8 @@
 package application;
 
-import java.awt.EventQueue;
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.GregorianCalendar;
 
 import javax.swing.SwingUtilities;
@@ -36,6 +36,11 @@ public class LibraryApp {
      * Launch the application.
      */
     public static void main(String[] args) throws Exception {
+        createMainWindow();
+    }
+
+    public static BookMasterMainView createMainWindow() throws ParserConfigurationException, SAXException, IOException,
+            IllegalLoanOperationException, InterruptedException, InvocationTargetException {
         Library library = new Library();
         initLibrary(library);
         Repository.getInstance().setLibrary(library);
@@ -47,19 +52,28 @@ public class LibraryApp {
         } catch (Exception e) {
             logger.error("Unable to set a native look and feel.", e);
         }
+        MyRunnable runner = new MyRunnable();
+        SwingUtilities.invokeAndWait(runner);
+        return runner.getCreatedMainView();
+    }
 
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    BookMasterMainView bookMasterView = new BookMasterMainView();
-                    bookMasterView.setVisible(true);
-                } catch (Exception e) {
-                    logger.error("Unable to instanciate the main dialog.", e);
-                }
+    static class MyRunnable implements Runnable {
+
+        private BookMasterMainView bookMasterView;
+
+        @Override
+        public void run() {
+            try {
+                bookMasterView = new BookMasterMainView();
+                bookMasterView.setVisible(true);
+            } catch (Exception e) {
+                logger.error("Unable to instanciate the main dialog.", e);
             }
-        });
+        }
 
+        public BookMasterMainView getCreatedMainView() {
+            return bookMasterView;
+        }
     }
 
     private static void initPMods() {
