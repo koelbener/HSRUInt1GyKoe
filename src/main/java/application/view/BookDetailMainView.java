@@ -33,7 +33,6 @@ public class BookDetailMainView extends MainViewBase<Book, BookDetailController>
     private CopyListModel copyListModel;
 
     private JButton btnSave;
-
     private JButton btnCancel;
 
     public BookDetailMainView(Book book) {
@@ -159,11 +158,13 @@ public class BookDetailMainView extends MainViewBase<Book, BookDetailController>
         getContentPane().add(panel_5, BorderLayout.SOUTH);
         panel_5.setLayout(new MigLayout("", "[grow,fill][][]", "[]"));
 
-        btnSave = new JButton("Save");
+        btnSave = new JButton("Speichern");
+        btnSave.setMnemonic('s');
         panel_5.add(btnSave, "cell 1 0");
 
-        btnCancel = new JButton(NAME_BUTTON_CANCEL);
+        btnCancel = new JButton("Abbrechen");
         btnCancel.setName(NAME_BUTTON_CANCEL);
+        btnCancel.setMnemonic('c');
         panel_5.add(btnCancel, "cell 2 0");
     }
 

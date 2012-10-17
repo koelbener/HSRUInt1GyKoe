@@ -136,10 +136,12 @@ public class BookMasterMainView extends MainViewBase<Library, BookMasterControll
         panel_7.setLayout(new MigLayout("", "[]", "[23px][]"));
 
         btnNewBook = new JButton("Neu");
+        btnNewBook.setMnemonic('n');
         panel_7.add(btnNewBook, "cell 0 0,growx,aligny center");
 
         btnOpenBook = new JButton("\u00D6ffnen");
         btnOpenBook.setName(NAME_BUTTON_OPEN);
+        btnOpenBook.setMnemonic('o');
         panel_7.add(btnOpenBook, "cell 0 1,growx,aligny center");
         btnOpenBook.setToolTipText("Alle selektierten Bücher öffnen");
         btnOpenBook.setEnabled(false);
