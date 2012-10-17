@@ -4,16 +4,26 @@ import static application.view.BookDetailMainView.NAME_BOOK_DETAIL_MAIN_VIEW;
 import static application.view.BookMasterMainView.NAME_BUTTON_OPEN;
 import static application.view.BookMasterMainView.NAME_LIST_BOOKS;
 
+import org.fest.swing.annotation.GUITest;
+import org.fest.swing.core.Robot;
+import org.fest.swing.edt.FailOnThreadViolationRepaintManager;
+import org.fest.swing.finder.WindowFinder;
 import org.fest.swing.fixture.FrameFixture;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import application.LibraryApp;
 
+@GUITest
 public class BookMasterMainViewTest {
     private FrameFixture window;
+
+    @BeforeClass
+    public static void setUpOnce() {
+        FailOnThreadViolationRepaintManager.install();
+    }
 
     @Before
     public void setUp() throws Exception {
@@ -49,14 +59,20 @@ public class BookMasterMainViewTest {
     }
 
     @Test
-    @Ignore
     public void openBookButtonOpensNewView() {
         window.list(NAME_LIST_BOOKS).selectItem(1);
         window.button(NAME_BUTTON_OPEN).click();
-        FrameFixture bookDetailDialog = new FrameFixture(NAME_BOOK_DETAIL_MAIN_VIEW);
+
+        FrameFixture bookDetailDialog = findFrame(window, NAME_BOOK_DETAIL_MAIN_VIEW);
         bookDetailDialog.requireVisible();
         bookDetailDialog.close();
+        bookDetailDialog.requireNotVisible();
         window.requireVisible();
+    }
+
+    private FrameFixture findFrame(FrameFixture parent, String frameName) {
+        Robot robot = window.robot;
+        return WindowFinder.findFrame(frameName).using(robot);
     }
 
 }
