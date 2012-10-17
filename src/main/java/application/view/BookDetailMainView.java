@@ -1,8 +1,8 @@
 package application.view;
 
 import java.awt.BorderLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -14,6 +14,7 @@ import javax.swing.border.TitledBorder;
 
 import net.miginfocom.swing.MigLayout;
 import application.controller.BookDetailController;
+import application.core.LibraryActionListener;
 import application.viewModel.CopyListModel;
 import domain.Book;
 import domain.Copy;
@@ -21,6 +22,7 @@ import domain.Copy;
 public class BookDetailMainView extends MainViewBase<Book, BookDetailController> {
 
     public static final String NAME_BOOK_DETAIL_MAIN_VIEW = "BookDetailMainView";
+    public static final String NAME_BUTTON_CANCEL = "Cancel";
 
     private static final long serialVersionUID = 1L;
     private JTextField tfTitle;
@@ -30,23 +32,48 @@ public class BookDetailMainView extends MainViewBase<Book, BookDetailController>
     private JTextField tfNumberOfCopies;
     private CopyListModel copyListModel;
 
+    private JButton btnSave;
+
+    private JButton btnCancel;
+
     public BookDetailMainView(Book book) {
         super(book, NAME_BOOK_DETAIL_MAIN_VIEW);
-        updateValues();
+        updateViewValues();
     }
 
     @Override
     protected void initModel() {
         super.initModel();
-        copyListModel = new CopyListModel(library.getCopiesOfBook(getReferenceObject()));
+        Book referenceObject = getReferenceObject();
+        List<Copy> copiesOfBook = new ArrayList<Copy>();
+        if (referenceObject != null) {
+            copiesOfBook = library.getCopiesOfBook(referenceObject);
+        }
+        copyListModel = new CopyListModel(copiesOfBook);
     }
 
-    private void updateValues() {
-        tfTitle.setText(getReferenceObject().getName());
-        tfAutor.setText(getReferenceObject().getAuthor());
-        tfVerlag.setText(getReferenceObject().getPublisher());
-        tfRegal.setText(getReferenceObject().getShelf().toString());
-        tfNumberOfCopies.setText(String.valueOf(copyListModel.getSize()));
+    private void updateViewValues() {
+        Book referenceObject = getReferenceObject();
+        if (referenceObject != null) {
+            tfTitle.setText(referenceObject.getName());
+            tfAutor.setText(referenceObject.getAuthor());
+            tfVerlag.setText(referenceObject.getPublisher());
+            tfRegal.setText(referenceObject.getShelf().toString());
+            tfNumberOfCopies.setText(String.valueOf(copyListModel.getSize()));
+        }
+    }
+
+    private Book extractViewValues() {
+        Book book = getReferenceObject();
+        if (book == null) {
+            book = new Book();
+        }
+        book.setAuthor(tfAutor.getText());
+        book.setName(tfTitle.getText());
+        book.setPublisher(tfVerlag.getText());
+        // TODO convert to combobox
+        // book.setShelf(tfRegal.getText());
+        return book;
     }
 
     /**
@@ -60,9 +87,13 @@ public class BookDetailMainView extends MainViewBase<Book, BookDetailController>
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         getContentPane().setLayout(new BorderLayout(0, 0));
 
+        JPanel panel_4 = new JPanel();
+        getContentPane().add(panel_4, BorderLayout.CENTER);
+        panel_4.setLayout(new BorderLayout(0, 0));
+
         JPanel panel = new JPanel();
+        panel_4.add(panel, BorderLayout.NORTH);
         panel.setBorder(new TitledBorder(null, "Buch Informationen", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-        getContentPane().add(panel, BorderLayout.NORTH);
         panel.setLayout(new MigLayout("", "[][grow]", "[][][][]"));
 
         JLabel lblTitel = new JLabel("Titel");
@@ -94,8 +125,8 @@ public class BookDetailMainView extends MainViewBase<Book, BookDetailController>
         tfRegal.setColumns(10);
 
         JPanel panel_1 = new JPanel();
+        panel_4.add(panel_1, BorderLayout.CENTER);
         panel_1.setBorder(new TitledBorder(null, "Exemplare", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-        getContentPane().add(panel_1, BorderLayout.CENTER);
         panel_1.setLayout(new BorderLayout(0, 0));
 
         JPanel panel_2 = new JPanel();
@@ -111,11 +142,6 @@ public class BookDetailMainView extends MainViewBase<Book, BookDetailController>
         tfNumberOfCopies.setColumns(10);
 
         JButton btnEntfernen = new JButton("Entfernen");
-        btnEntfernen.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent arg0) {
-            }
-        });
         panel_2.add(btnEntfernen, "cell 2 0");
 
         JButton btnHinzufgen = new JButton("Hinzuf\u00FCgen");
@@ -128,16 +154,43 @@ public class BookDetailMainView extends MainViewBase<Book, BookDetailController>
         JList<Copy> list = new JList<Copy>();
         list.setModel(copyListModel);
         panel_3.add(list);
+
+        JPanel panel_5 = new JPanel();
+        getContentPane().add(panel_5, BorderLayout.SOUTH);
+        panel_5.setLayout(new MigLayout("", "[grow,fill][][]", "[]"));
+
+        btnSave = new JButton("Save");
+        panel_5.add(btnSave, "cell 1 0");
+
+        btnCancel = new JButton(NAME_BUTTON_CANCEL);
+        btnCancel.setName(NAME_BUTTON_CANCEL);
+        panel_5.add(btnCancel, "cell 2 0");
     }
 
     @Override
-    public BookDetailController initController() {
+    protected BookDetailController initController() {
         return new BookDetailController();
 
     }
 
     @Override
-    public void initListeners() {
+    protected void initListeners() {
+        btnCancel.addActionListener(new LibraryActionListener() {
+
+            @Override
+            protected void execute() {
+                BookDetailMainView.this.dispose();
+            }
+        });
+        btnSave.addActionListener(new LibraryActionListener() {
+
+            @Override
+            protected void execute() {
+                if (getController().saveBook(extractViewValues())) {
+                    BookDetailMainView.this.dispose();
+                }
+            }
+        });
 
     }
 

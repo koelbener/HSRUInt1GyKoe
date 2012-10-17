@@ -1,6 +1,7 @@
 package application.view;
 
 import static application.view.BookDetailMainView.NAME_BOOK_DETAIL_MAIN_VIEW;
+import static application.view.BookDetailMainView.NAME_BUTTON_CANCEL;
 import static application.view.BookMasterMainView.NAME_BUTTON_OPEN;
 import static application.view.BookMasterMainView.NAME_LIST_BOOKS;
 
@@ -65,7 +66,7 @@ public class BookMasterMainViewTest {
 
         FrameFixture bookDetailDialog = findFrame(window, NAME_BOOK_DETAIL_MAIN_VIEW);
         bookDetailDialog.requireVisible();
-        bookDetailDialog.close();
+        bookDetailDialog.button(NAME_BUTTON_CANCEL).click();
         bookDetailDialog.requireNotVisible();
         window.requireVisible();
     }

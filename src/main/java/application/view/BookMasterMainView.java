@@ -41,8 +41,9 @@ public class BookMasterMainView extends MainViewBase<Library, BookMasterControll
     private JList<Book> booksList;
     private JLabel numberOfCopies;
     private JLabel numberOfBooks;
-    private JButton btnbuchOeffnen;
+    private JButton btnOpenBook;
     private BooksPMod booksPMod;
+    private JButton btnNewBook;
 
     public BookMasterMainView() {
         super(null, NAME_BOOK_MASTER_MAIN_VIEW);
@@ -134,14 +135,14 @@ public class BookMasterMainView extends MainViewBase<Library, BookMasterControll
         panel_6.add(panel_7, BorderLayout.EAST);
         panel_7.setLayout(new MigLayout("", "[]", "[23px][]"));
 
-        JButton btnNeuesBuchHinzufgen = new JButton("Neu");
-        panel_7.add(btnNeuesBuchHinzufgen, "cell 0 0,growx,aligny center");
+        btnNewBook = new JButton("Neu");
+        panel_7.add(btnNewBook, "cell 0 0,growx,aligny center");
 
-        btnbuchOeffnen = new JButton("\u00D6ffnen");
-        btnbuchOeffnen.setName(NAME_BUTTON_OPEN);
-        panel_7.add(btnbuchOeffnen, "cell 0 1,growx,aligny center");
-        btnbuchOeffnen.setToolTipText("Alle selektierten Bücher öffnen");
-        btnbuchOeffnen.setEnabled(false);
+        btnOpenBook = new JButton("\u00D6ffnen");
+        btnOpenBook.setName(NAME_BUTTON_OPEN);
+        panel_7.add(btnOpenBook, "cell 0 1,growx,aligny center");
+        btnOpenBook.setToolTipText("Alle selektierten Bücher öffnen");
+        btnOpenBook.setEnabled(false);
 
         JPanel panel_2 = new JPanel();
         tabbedPane.addTab("Ausleihen", null, panel_2, null);
@@ -161,10 +162,17 @@ public class BookMasterMainView extends MainViewBase<Library, BookMasterControll
 
     @Override
     protected void initListeners() {
-        btnbuchOeffnen.addActionListener(new LibraryActionListener() {
+        btnOpenBook.addActionListener(new LibraryActionListener() {
             @Override
             protected void execute() {
                 getController().openBooks(booksList.getSelectedIndices());
+            }
+        });
+        btnNewBook.addActionListener(new LibraryActionListener() {
+
+            @Override
+            protected void execute() {
+                getController().openNewBook();
             }
         });
 
@@ -175,7 +183,7 @@ public class BookMasterMainView extends MainViewBase<Library, BookMasterControll
             public void valueChanged(ListSelectionEvent e) {
                 int numberOfSelectedIndices = booksList.getSelectedIndices().length;
                 boolean enableButton = numberOfSelectedIndices > 0;
-                btnbuchOeffnen.setEnabled(enableButton);
+                btnOpenBook.setEnabled(enableButton);
             }
         });
     }

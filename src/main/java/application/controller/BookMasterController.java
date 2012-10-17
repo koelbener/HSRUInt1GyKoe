@@ -22,4 +22,8 @@ public class BookMasterController extends AbstractController {
 
     }
 
+    public void openNewBook() {
+        new BookDetailMainView(null);
+    }
+
 }

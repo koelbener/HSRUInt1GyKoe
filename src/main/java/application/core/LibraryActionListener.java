@@ -13,14 +13,12 @@ public abstract class LibraryActionListener implements ActionListener {
     }
 
     protected void afterExecute() {
-        // TODO Auto-generated method stub
 
     }
 
     protected abstract void execute();
 
     protected void beforeExecute() {
-        // TODO Auto-generated method stub
 
     }
 
