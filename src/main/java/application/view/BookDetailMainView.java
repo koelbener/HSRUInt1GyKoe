@@ -96,7 +96,7 @@ public class BookDetailMainView extends MainViewBase<Book, BookDetailController>
     protected void initUIElements() {
         super.initUIElements();
         setTitle("Buch Detailansicht");
-        setBounds(100, 100, 450, 300);
+        setBounds(100, 100, 450, 450);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         getContentPane().setLayout(new BorderLayout(0, 0));
 
@@ -178,7 +178,6 @@ public class BookDetailMainView extends MainViewBase<Book, BookDetailController>
         validationModel = new DefaultValidationResultModel();
         panel_7.setLayout(new MigLayout("", "[grow]", "[1px]"));
         JComponent validationResultList = ValidationResultViewFactory.createReportList(validationModel);
-        validationResultList.setMinimumSize(new Dimension(100, 100));
         panel_7.add(validationResultList, "cell 0 0,alignx right,growy");
 
         JPanel panel_8 = new JPanel();
