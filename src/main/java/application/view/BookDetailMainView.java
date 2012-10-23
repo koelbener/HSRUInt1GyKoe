@@ -29,6 +29,7 @@ import com.jgoodies.validation.view.ValidationResultViewFactory;
 import domain.Book;
 import domain.Copy;
 import domain.Shelf;
+import domain.validator.BookValidator;
 
 public class BookDetailMainView extends MainViewBase<Book, BookDetailController> {
 
@@ -172,11 +173,11 @@ public class BookDetailMainView extends MainViewBase<Book, BookDetailController>
         panel_5.setLayout(new BorderLayout(0, 0));
 
         JPanel panel_7 = new JPanel();
-        panel_7.setMinimumSize(new Dimension(10, 20));
+        panel_7.setMinimumSize(new Dimension(0, 0));
         panel_5.add(panel_7, BorderLayout.NORTH);
 
         validationModel = new DefaultValidationResultModel();
-        panel_7.setLayout(new MigLayout("", "[grow]", "[1px]"));
+        panel_7.setLayout(new MigLayout("", "[grow]", "[40px,grow]"));
         JComponent validationResultList = ValidationResultViewFactory.createReportList(validationModel);
         panel_7.add(validationResultList, "cell 0 0,alignx right,growy");
 
