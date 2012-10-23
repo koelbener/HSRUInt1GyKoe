@@ -66,8 +66,7 @@ public class BookMasterMainView extends MainViewBase<Library, BookMasterControll
         panel.add(lblSwingingLibrary);
 
         JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-        tabbedPane.setBorder(new CompoundBorder(new EmptyBorder(10, 5, 5, 5), new LineBorder(new Color(0, 0, 0), 1,
-                true)));
+        tabbedPane.setBorder(new CompoundBorder(new EmptyBorder(10, 5, 5, 5), new LineBorder(new Color(0, 0, 0), 1, true)));
         getContentPane().add(tabbedPane, BorderLayout.CENTER);
 
         JPanel panel_1 = new JPanel();
@@ -75,8 +74,7 @@ public class BookMasterMainView extends MainViewBase<Library, BookMasterControll
         panel_1.setLayout(new BorderLayout(0, 0));
 
         JPanel panel_3 = new JPanel();
-        panel_3.setBorder(new TitledBorder(null, "Inventar Statistiken", TitledBorder.LEADING, TitledBorder.TOP, null,
-                null));
+        panel_3.setBorder(new TitledBorder(null, "Inventar Statistiken", TitledBorder.LEADING, TitledBorder.TOP, null, null));
         panel_1.add(panel_3, BorderLayout.NORTH);
         panel_3.setLayout(new MigLayout("", "[][][fill][][]", "[]"));
 
