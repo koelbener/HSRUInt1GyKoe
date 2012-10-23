@@ -1,6 +1,7 @@
 package application.core;
 
 import application.presentationModel.BooksPMod;
+import application.presentationModel.ShelfPMod;
 import domain.Library;
 
 /**
@@ -12,6 +13,7 @@ public class Repository {
     private Library library;
 
     private BooksPMod booksPMod;
+    private ShelfPMod shelfPMod;
 
     private Repository() {
 
@@ -39,4 +41,13 @@ public class Repository {
     public BooksPMod getBooksPMod() {
         return booksPMod;
     }
+
+    public ShelfPMod getShelfPMod() {
+        return shelfPMod;
+    }
+
+    public void setShelfPMod(ShelfPMod shelfPMod) {
+        this.shelfPMod = shelfPMod;
+    }
+
 }
