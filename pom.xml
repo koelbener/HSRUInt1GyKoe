@@ -51,7 +51,7 @@
 				<version>2.12.4</version>
 				<configuration>
 					<excludes>
-						<exlude>**/application/view/**.java</exlude>
+						<exlude>**/**ViewTest.java</exlude>
 					</excludes>
 				</configuration>
 			</plugin>
@@ -61,7 +61,7 @@
 				<version>2.6</version>
 				<configuration>
 					<includes>
-						<include>**/application/view/**.java</include>
+						<include>**/**ViewTest.java</include>
 					</includes>
 				</configuration>
 				<executions>

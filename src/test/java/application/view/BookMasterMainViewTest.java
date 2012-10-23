@@ -21,7 +21,7 @@ import application.data.XmlDataLoader;
 import domain.Library;
 
 @GUITest
-public class BookMasterMainViewTest extends AbstractViewTest {
+public class BookMasterMainViewTest extends AbstractFestTest {
     FrameFixture window;
     private static Library library;
 
