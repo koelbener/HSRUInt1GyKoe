@@ -18,6 +18,9 @@ import application.controller.BookDetailController;
 import application.core.LibraryActionListener;
 import application.core.Repository;
 import application.viewModel.CopyListModel;
+
+import com.jgoodies.validation.ValidationResult;
+
 import domain.Book;
 import domain.Copy;
 import domain.Shelf;
@@ -191,9 +194,19 @@ public class BookDetailMainView extends MainViewBase<Book, BookDetailController>
 
             @Override
             protected void execute() {
-                if (getController().saveBook(extractViewValues())) {
-                    BookDetailMainView.this.dispose();
+
+                Book book = extractViewValues();
+                ValidationResult validation = new BookValidator().validate(book);
+
+                if (validation.hasErrors()) {
+
+                } else {
+                    if (getController().saveBook(book)) {
+                        BookDetailMainView.this.dispose();
+                    }
+
                 }
+
             }
         });
 
