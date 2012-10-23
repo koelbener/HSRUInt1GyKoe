@@ -35,8 +35,7 @@ public class XmlDataLoader implements DataLoder {
         return result;
     }
 
-    private void initLibrary(Library library) throws ParserConfigurationException, SAXException, IOException,
-            IllegalLoanOperationException {
+    private void initLibrary(Library library) throws ParserConfigurationException, SAXException, IOException, IllegalLoanOperationException {
 
         DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
 
@@ -89,8 +88,7 @@ public class XmlDataLoader implements DataLoder {
         }
     }
 
-    private void loadBooksFromXml(Library library, DocumentBuilder builder, InputStream file) throws SAXException,
-            IOException {
+    private void loadBooksFromXml(Library library, DocumentBuilder builder, InputStream file) throws SAXException, IOException {
         Document doc2 = builder.parse(file);
         NodeList titles = doc2.getElementsByTagName("title");
         for (int i = 0; i < titles.getLength(); i++) {
@@ -102,22 +100,18 @@ public class XmlDataLoader implements DataLoder {
         }
     }
 
-    private void loadCustomersFromXml(Library library, DocumentBuilder builder, InputStream file) throws SAXException,
-            IOException {
+    private void loadCustomersFromXml(Library library, DocumentBuilder builder, InputStream file) throws SAXException, IOException {
         Document doc = builder.parse(file);
         NodeList customers = doc.getElementsByTagName("customer");
         for (int i = 0; i < customers.getLength(); i++) {
             Node customer = customers.item(i);
 
-            Customer c = library.createAndAddCustomer(getTextContentOf(customer, "name"),
-                    getTextContentOf(customer, "surname"));
-            c.setAdress(getTextContentOf(customer, "street"), Integer.parseInt(getTextContentOf(customer, "zip")),
-                    getTextContentOf(customer, "city"));
+            Customer c = library.createAndAddCustomer(getTextContentOf(customer, "name"), getTextContentOf(customer, "surname"));
+            c.setAdress(getTextContentOf(customer, "street"), Integer.parseInt(getTextContentOf(customer, "zip")), getTextContentOf(customer, "city"));
         }
     }
 
-    private void createLoansForCopy(Library library, Copy copy, int position, int count)
-            throws IllegalLoanOperationException {
+    private void createLoansForCopy(Library library, Copy copy, int position, int count) throws IllegalLoanOperationException {
         // Create Loans in the past
         for (int i = count; i > 1; i--) {
             Loan l = library.createAndAddLoan(getCustomer(library, position + i), copy);
@@ -138,8 +132,7 @@ public class XmlDataLoader implements DataLoder {
         }
     }
 
-    private void createOverdueLoanForCopy(Library library, Copy copy, int position)
-            throws IllegalLoanOperationException {
+    private void createOverdueLoanForCopy(Library library, Copy copy, int position) throws IllegalLoanOperationException {
         Loan l = library.createAndAddLoan(getCustomer(library, position), copy);
         GregorianCalendar pickup = l.getPickupDate();
         pickup.add(GregorianCalendar.MONTH, -1);

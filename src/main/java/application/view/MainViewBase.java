@@ -59,8 +59,7 @@ public abstract class MainViewBase<R, T extends AbstractController> extends JFra
                 logger.trace("check frame position {} against {}", myPosition, framePosition);
                 if (!frame.equals(this) && frame.getLocation().equals(this.getLocation())) {
                     setLocation(getLocation().x + gap, getLocation().y + gap);
-                    logger.debug("change location of frame {} from {} to {}", new Object[] { getName(), myPosition,
-                            this.getLocation() });
+                    logger.debug("change location of frame {} from {} to {}", new Object[] { getName(), myPosition, this.getLocation() });
                     needToCheck = true;
                     break;
                 }
