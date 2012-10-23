@@ -39,8 +39,8 @@
 		</dependency>
 		<dependency>
 			<groupId>com.jgoodies</groupId>
-			<artifactId>validation</artifactId>
-			<version>2.0.1</version>
+			<artifactId>jgoodies-validation</artifactId>
+			<version>2.4.2</version>
 		</dependency>
 	</dependencies>
 	<build>

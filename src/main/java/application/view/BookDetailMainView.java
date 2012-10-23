@@ -1,11 +1,13 @@
 package application.view;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -20,6 +22,9 @@ import application.core.Repository;
 import application.viewModel.CopyListModel;
 
 import com.jgoodies.validation.ValidationResult;
+import com.jgoodies.validation.ValidationResultModel;
+import com.jgoodies.validation.util.DefaultValidationResultModel;
+import com.jgoodies.validation.view.ValidationResultViewFactory;
 
 import domain.Book;
 import domain.Copy;
@@ -40,6 +45,7 @@ public class BookDetailMainView extends MainViewBase<Book, BookDetailController>
 
     private JButton btnSave;
     private JButton btnCancel;
+    private ValidationResultModel validationModel;
 
     public BookDetailMainView(Book book) {
         super(book, NAME_BOOK_DETAIL_MAIN_VIEW);
@@ -163,16 +169,30 @@ public class BookDetailMainView extends MainViewBase<Book, BookDetailController>
 
         JPanel panel_5 = new JPanel();
         getContentPane().add(panel_5, BorderLayout.SOUTH);
-        panel_5.setLayout(new MigLayout("", "[grow,fill][][]", "[]"));
+        panel_5.setLayout(new BorderLayout(0, 0));
+
+        JPanel panel_7 = new JPanel();
+        panel_7.setMinimumSize(new Dimension(10, 20));
+        panel_5.add(panel_7, BorderLayout.NORTH);
+
+        validationModel = new DefaultValidationResultModel();
+        panel_7.setLayout(new MigLayout("", "[grow]", "[1px]"));
+        JComponent validationResultList = ValidationResultViewFactory.createReportList(validationModel);
+        validationResultList.setMinimumSize(new Dimension(100, 100));
+        panel_7.add(validationResultList, "cell 0 0,alignx right,growy");
+
+        JPanel panel_8 = new JPanel();
+        panel_5.add(panel_8, BorderLayout.SOUTH);
+        panel_8.setLayout(new MigLayout("", "[grow][85px][]", "[23px]"));
 
         btnSave = new JButton("Speichern");
+        panel_8.add(btnSave, "cell 1 0,alignx left,aligny top");
         btnSave.setMnemonic('s');
-        panel_5.add(btnSave, "cell 1 0");
 
         btnCancel = new JButton("Abbrechen");
+        panel_8.add(btnCancel, "cell 2 0,alignx left,aligny top");
         btnCancel.setName(NAME_BUTTON_CANCEL);
         btnCancel.setMnemonic('c');
-        panel_5.add(btnCancel, "cell 2 0");
     }
 
     @Override
@@ -198,6 +218,7 @@ public class BookDetailMainView extends MainViewBase<Book, BookDetailController>
                 Book book = extractViewValues();
                 ValidationResult validation = new BookValidator().validate(book);
 
+                validationModel.setResult(validation);
                 if (validation.hasErrors()) {
 
                 } else {
