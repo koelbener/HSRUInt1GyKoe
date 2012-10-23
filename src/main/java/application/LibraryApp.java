@@ -21,6 +21,7 @@ import org.xml.sax.SAXException;
 
 import application.core.Repository;
 import application.presentationModel.BooksPMod;
+import application.presentationModel.ShelfPMod;
 import application.view.BookMasterMainView;
 import domain.Book;
 import domain.Copy;
@@ -49,8 +50,8 @@ public class LibraryApp {
         createMainWindow();
     }
 
-    public static BookMasterMainView createMainWindow() throws ParserConfigurationException, SAXException, IOException,
-            IllegalLoanOperationException, InterruptedException, InvocationTargetException {
+    public static BookMasterMainView createMainWindow() throws ParserConfigurationException, SAXException, IOException, IllegalLoanOperationException, InterruptedException,
+            InvocationTargetException {
         Library library = new Library();
         initLibrary(library);
         Repository.getInstance().setLibrary(library);
@@ -88,18 +89,17 @@ public class LibraryApp {
 
     private static void initPMods() {
         Repository.getInstance().setBooksPMod(new BooksPMod());
+        Repository.getInstance().setShelfPMod(new ShelfPMod());
 
     }
 
-    public static Library readLibrary() throws ParserConfigurationException, SAXException, IOException,
-            IllegalLoanOperationException {
+    public static Library readLibrary() throws ParserConfigurationException, SAXException, IOException, IllegalLoanOperationException {
         Library result = new Library();
         initLibrary(result);
         return result;
     }
 
-    private static void initLibrary(Library library) throws ParserConfigurationException, SAXException, IOException,
-            IllegalLoanOperationException {
+    private static void initLibrary(Library library) throws ParserConfigurationException, SAXException, IOException, IllegalLoanOperationException {
 
         DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
 
@@ -153,8 +153,7 @@ public class LibraryApp {
         }
     }
 
-    private static void loadBooksFromXml(Library library, DocumentBuilder builder, File file) throws SAXException,
-            IOException {
+    private static void loadBooksFromXml(Library library, DocumentBuilder builder, File file) throws SAXException, IOException {
         Document doc2 = builder.parse(file);
         NodeList titles = doc2.getElementsByTagName("title");
         for (int i = 0; i < titles.getLength(); i++) {
@@ -166,22 +165,18 @@ public class LibraryApp {
         }
     }
 
-    private static void loadCustomersFromXml(Library library, DocumentBuilder builder, File file) throws SAXException,
-            IOException {
+    private static void loadCustomersFromXml(Library library, DocumentBuilder builder, File file) throws SAXException, IOException {
         Document doc = builder.parse(file);
         NodeList customers = doc.getElementsByTagName("customer");
         for (int i = 0; i < customers.getLength(); i++) {
             Node customer = customers.item(i);
 
-            Customer c = library.createAndAddCustomer(getTextContentOf(customer, "name"),
-                    getTextContentOf(customer, "surname"));
-            c.setAdress(getTextContentOf(customer, "street"), Integer.parseInt(getTextContentOf(customer, "zip")),
-                    getTextContentOf(customer, "city"));
+            Customer c = library.createAndAddCustomer(getTextContentOf(customer, "name"), getTextContentOf(customer, "surname"));
+            c.setAdress(getTextContentOf(customer, "street"), Integer.parseInt(getTextContentOf(customer, "zip")), getTextContentOf(customer, "city"));
         }
     }
 
-    private static void createLoansForCopy(Library library, Copy copy, int position, int count)
-            throws IllegalLoanOperationException {
+    private static void createLoansForCopy(Library library, Copy copy, int position, int count) throws IllegalLoanOperationException {
         // Create Loans in the past
         for (int i = count; i > 1; i--) {
             Loan l = library.createAndAddLoan(getCustomer(library, position + i), copy);
@@ -202,8 +197,7 @@ public class LibraryApp {
         }
     }
 
-    private static void createOverdueLoanForCopy(Library library, Copy copy, int position)
-            throws IllegalLoanOperationException {
+    private static void createOverdueLoanForCopy(Library library, Copy copy, int position) throws IllegalLoanOperationException {
         Loan l = library.createAndAddLoan(getCustomer(library, position), copy);
         GregorianCalendar pickup = l.getPickupDate();
         pickup.add(GregorianCalendar.MONTH, -1);

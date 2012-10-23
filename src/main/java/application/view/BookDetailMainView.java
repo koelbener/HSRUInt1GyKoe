@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -15,9 +16,11 @@ import javax.swing.border.TitledBorder;
 import net.miginfocom.swing.MigLayout;
 import application.controller.BookDetailController;
 import application.core.LibraryActionListener;
+import application.core.Repository;
 import application.viewModel.CopyListModel;
 import domain.Book;
 import domain.Copy;
+import domain.Shelf;
 
 public class BookDetailMainView extends MainViewBase<Book, BookDetailController> {
 
@@ -28,7 +31,7 @@ public class BookDetailMainView extends MainViewBase<Book, BookDetailController>
     private JTextField tfTitle;
     private JTextField tfAutor;
     private JTextField tfVerlag;
-    private JTextField tfRegal;
+    private JComboBox<Shelf> tfRegal;
     private JTextField tfNumberOfCopies;
     private CopyListModel copyListModel;
 
@@ -57,7 +60,10 @@ public class BookDetailMainView extends MainViewBase<Book, BookDetailController>
             tfTitle.setText(referenceObject.getName());
             tfAutor.setText(referenceObject.getAuthor());
             tfVerlag.setText(referenceObject.getPublisher());
-            tfRegal.setText(referenceObject.getShelf().toString());
+            // retrieve new possible shelves-data
+            tfRegal.setModel(Repository.getInstance().getShelfPMod().getShelfComboBoxModel());
+            // select the correct shelf
+            tfRegal.setSelectedItem(referenceObject.getShelf());
             tfNumberOfCopies.setText(String.valueOf(copyListModel.getSize()));
         }
     }
@@ -70,8 +76,7 @@ public class BookDetailMainView extends MainViewBase<Book, BookDetailController>
         book.setAuthor(tfAutor.getText());
         book.setName(tfTitle.getText());
         book.setPublisher(tfVerlag.getText());
-        // TODO convert to combobox
-        // book.setShelf(tfRegal.getText());
+        book.setShelf((Shelf) tfRegal.getSelectedItem());
         return book;
     }
 
@@ -119,9 +124,8 @@ public class BookDetailMainView extends MainViewBase<Book, BookDetailController>
         JLabel lblRegal = new JLabel("Regal");
         panel.add(lblRegal, "cell 0 3,alignx trailing");
 
-        tfRegal = new JTextField();
+        tfRegal = new JComboBox<Shelf>();
         panel.add(tfRegal, "cell 1 3,growx");
-        tfRegal.setColumns(10);
 
         JPanel panel_1 = new JPanel();
         panel_4.add(panel_1, BorderLayout.CENTER);
