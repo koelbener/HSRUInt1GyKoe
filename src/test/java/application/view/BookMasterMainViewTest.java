@@ -8,6 +8,8 @@ import static application.view.BookMasterMainView.NAME_LIST_BOOKS;
 import org.fest.swing.annotation.GUITest;
 import org.fest.swing.core.Robot;
 import org.fest.swing.edt.FailOnThreadViolationRepaintManager;
+import org.fest.swing.edt.GuiActionRunner;
+import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.finder.WindowFinder;
 import org.fest.swing.fixture.FrameFixture;
 import org.junit.After;
@@ -16,19 +18,30 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import application.LibraryApp;
+import application.data.DataLoder;
+import application.data.XmlDataLoader;
+import domain.Library;
 
 @GUITest
 public class BookMasterMainViewTest {
     private FrameFixture window;
+    private static Library library;
 
     @BeforeClass
-    public static void setUpOnce() {
+    public static void setUpOnce() throws Exception {
         FailOnThreadViolationRepaintManager.install();
+        DataLoder dataLoader = new XmlDataLoader();
+        library = dataLoader.loadLibrary();
     }
 
     @Before
     public void setUp() throws Exception {
-        BookMasterMainView mainWindow = LibraryApp.createMainWindow();
+        BookMasterMainView mainWindow = GuiActionRunner.execute(new GuiQuery<BookMasterMainView>() {
+            @Override
+            protected BookMasterMainView executeInEDT() {
+                return LibraryApp.createMainWindow(library);
+            }
+        });
         window = new FrameFixture(mainWindow);
         window.show(); // shows the frame to test
     }

@@ -9,6 +9,7 @@
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>4.10</version>
+            <scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.miglayout</groupId>
@@ -29,6 +30,7 @@
 			<groupId>org.easytesting</groupId>
 			<artifactId>fest-swing</artifactId>
 			<version>1.2.1</version>
+			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.google.guava</groupId>
