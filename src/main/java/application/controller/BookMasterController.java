@@ -17,7 +17,11 @@ public class BookMasterController extends AbstractController {
         for (int index : selectedIndices) {
             Book book = booksListModel.getElementAt(index);
             logger.debug("opening book view " + book.getName());
-            new BookDetailMainView(book);
+            try {
+                new BookDetailMainView((Book) book.clone());
+            } catch (CloneNotSupportedException e) {
+                logger.error("Clone for Book.java is not possible", e);
+            }
         }
 
     }

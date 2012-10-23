@@ -225,13 +225,10 @@ public class BookDetailMainView extends MainViewBase<Book, BookDetailController>
                 ValidationResult validation = new BookValidator().validate(book);
 
                 validationModel.setResult(validation);
-                if (validation.hasErrors()) {
-
-                } else {
+                if (!validation.hasErrors()) {
                     if (getController().saveBook(book)) {
                         BookDetailMainView.this.dispose();
                     }
-
                 }
 
             }

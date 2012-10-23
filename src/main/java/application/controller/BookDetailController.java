@@ -9,8 +9,8 @@ public class BookDetailController extends AbstractController {
     private static final Logger logger = LoggerFactory.getLogger(BookDetailController.class);
 
     /**
-     * @return whether the save action was successful and the calling dialog can
-     *         be closed
+     * @return <code>true</code> if the book was successfully persisted and the
+     *         calling dialog can be closed
      */
     public boolean saveBook(Book book) {
         // TODO implement
