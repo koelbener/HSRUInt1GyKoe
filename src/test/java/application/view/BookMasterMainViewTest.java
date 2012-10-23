@@ -6,11 +6,9 @@ import static application.view.BookMasterMainView.NAME_BUTTON_OPEN;
 import static application.view.BookMasterMainView.NAME_LIST_BOOKS;
 
 import org.fest.swing.annotation.GUITest;
-import org.fest.swing.core.Robot;
 import org.fest.swing.edt.FailOnThreadViolationRepaintManager;
 import org.fest.swing.edt.GuiActionRunner;
 import org.fest.swing.edt.GuiQuery;
-import org.fest.swing.finder.WindowFinder;
 import org.fest.swing.fixture.FrameFixture;
 import org.junit.After;
 import org.junit.Before;
@@ -23,8 +21,8 @@ import application.data.XmlDataLoader;
 import domain.Library;
 
 @GUITest
-public class BookMasterMainViewTest {
-    private FrameFixture window;
+public class BookMasterMainViewTest extends AbstractViewTest {
+    FrameFixture window;
     private static Library library;
 
     @BeforeClass
@@ -82,11 +80,6 @@ public class BookMasterMainViewTest {
         bookDetailDialog.button(NAME_BUTTON_CANCEL).click();
         bookDetailDialog.requireNotVisible();
         window.requireVisible();
-    }
-
-    private FrameFixture findFrame(FrameFixture parent, String frameName) {
-        Robot robot = window.robot;
-        return WindowFinder.findFrame(frameName).using(robot);
     }
 
 }

@@ -33,8 +33,11 @@ import domain.validator.BookValidator;
 
 public class BookDetailMainView extends MainViewBase<Book, BookDetailController> {
 
+    public static final String NAME_VALIDATION_PANEL = "ValidationPanel";
     public static final String NAME_BOOK_DETAIL_MAIN_VIEW = "BookDetailMainView";
+    public static final String NAME_BUTTON_SAVE = "Save";
     public static final String NAME_BUTTON_CANCEL = "Cancel";
+    public static final String NAME_TEXTBOX_TITLE = "Title";
 
     private static final long serialVersionUID = 1L;
     private JTextField tfTitle;
@@ -116,6 +119,7 @@ public class BookDetailMainView extends MainViewBase<Book, BookDetailController>
         tfTitle = new JTextField();
         panel.add(tfTitle, "cell 1 0,growx");
         tfTitle.setColumns(10);
+        tfTitle.setName(NAME_TEXTBOX_TITLE);
 
         JLabel lblAutor = new JLabel("Autor");
         panel.add(lblAutor, "cell 0 1,alignx trailing");
@@ -174,6 +178,7 @@ public class BookDetailMainView extends MainViewBase<Book, BookDetailController>
 
         JPanel panel_7 = new JPanel();
         panel_7.setMinimumSize(new Dimension(0, 0));
+        panel_7.setName(NAME_VALIDATION_PANEL);
         panel_5.add(panel_7, BorderLayout.NORTH);
 
         validationModel = new DefaultValidationResultModel();
@@ -188,6 +193,7 @@ public class BookDetailMainView extends MainViewBase<Book, BookDetailController>
         btnSave = new JButton("Speichern");
         panel_8.add(btnSave, "cell 1 0,alignx left,aligny top");
         btnSave.setMnemonic('s');
+        btnSave.setName(NAME_BUTTON_SAVE);
 
         btnCancel = new JButton("Abbrechen");
         panel_8.add(btnCancel, "cell 2 0,alignx left,aligny top");
