@@ -6,7 +6,7 @@ import static application.view.BookDetailMainView.NAME_BUTTON_SAVE;
 import static application.view.BookDetailMainView.NAME_TEXTBOX_TITLE;
 import static application.view.BookDetailMainView.NAME_VALIDATION_PANEL;
 import static application.view.BookMasterMainView.NAME_BUTTON_OPEN;
-import static application.view.BookMasterMainView.NAME_LIST_BOOKS;
+import static application.view.BookMasterMainView.NAME_TABLE_BOOKS;
 import static org.junit.Assert.assertEquals;
 
 import org.fest.swing.edt.FailOnThreadViolationRepaintManager;
@@ -23,7 +23,7 @@ import domain.Book;
 import domain.Library;
 
 public class BookDetailMainViewTest extends AbstractFestTest {
-    private static final String BOOK_PUBLISHER = "HSR Hochschule für Technik Rapperswil";
+    private static final String BOOK_PUBLISHER = "HSR Hochschule fï¿½r Technik Rapperswil";
     private static final String BOOK_AUTHOR = "Michi Gysel";
     private static final String BOOK_TITLE = "Testing with JUnit 4";
     private FrameFixture bookMaster;
@@ -77,7 +77,7 @@ public class BookDetailMainViewTest extends AbstractFestTest {
     }
 
     private void openFirstBook() {
-        bookMaster.list(NAME_LIST_BOOKS).selectItem(0);
+        bookMaster.table(NAME_TABLE_BOOKS).selectRows(0);
         bookMaster.button(NAME_BUTTON_OPEN).click();
     }
 

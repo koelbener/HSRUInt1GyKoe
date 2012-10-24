@@ -8,10 +8,10 @@ import java.awt.FlowLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
-import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
+import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
@@ -25,7 +25,7 @@ import application.controller.BookMasterController;
 import application.core.LibraryActionListener;
 import application.core.Repository;
 import application.presentationModel.BooksPMod;
-import domain.Book;
+import application.viewModel.BookTableModel;
 import domain.Library;
 
 public class BookMasterMainView extends MainViewBase<Library, BookMasterController> {
@@ -33,17 +33,17 @@ public class BookMasterMainView extends MainViewBase<Library, BookMasterControll
     public static final String NAME_BOOK_MASTER_MAIN_VIEW = "BookMasterMainView";
     public static final String NAME_BUTTON_SEARCH = "button.search";
     public static final String NAME_BUTTON_OPEN = "button.open";
-    public static final String NAME_LIST_BOOKS = "list.books";
+    public static final String NAME_TABLE_BOOKS = "table.books";
     public static final String NAME_LABEL_NUMBER_OF_BOOKS = "label.numberOfBooks";
 
     private static final long serialVersionUID = -5636590532882178863L;
     private JTextField txtSuche;
-    private JList<Book> booksList;
     private JLabel numberOfCopies;
     private JLabel numberOfBooks;
     private JButton btnOpenBook;
     private BooksPMod booksPMod;
     private JButton btnNewBook;
+    private JTable booksTable;
 
     public BookMasterMainView() {
         super(null, NAME_BOOK_MASTER_MAIN_VIEW);
@@ -121,13 +121,14 @@ public class BookMasterMainView extends MainViewBase<Library, BookMasterControll
         panel_4.add(panel_6, BorderLayout.CENTER);
         panel_6.setLayout(new BorderLayout(0, 0));
 
-        booksList = new JList<Book>();
-        booksList.setName(NAME_LIST_BOOKS);
-        booksList.setModel(booksPMod.getBookListModel());
-
-        JScrollPane scrollPane = new JScrollPane(booksList);
+        JScrollPane scrollPane = new JScrollPane();
 
         panel_6.add(scrollPane, BorderLayout.CENTER);
+
+        booksTable = new JTable(new BookTableModel(library.getBooks()));
+        booksTable.setName(NAME_TABLE_BOOKS);
+
+        scrollPane.setViewportView(booksTable);
 
         JPanel panel_7 = new JPanel();
         panel_6.add(panel_7, BorderLayout.EAST);
@@ -141,7 +142,7 @@ public class BookMasterMainView extends MainViewBase<Library, BookMasterControll
         btnOpenBook.setName(NAME_BUTTON_OPEN);
         btnOpenBook.setMnemonic('o');
         panel_7.add(btnOpenBook, "cell 0 1,growx,aligny center");
-        btnOpenBook.setToolTipText("Alle selektierten Bücher öffnen");
+        btnOpenBook.setToolTipText("Alle selektierten Bï¿½cher ï¿½ffnen");
         btnOpenBook.setEnabled(false);
 
         JPanel panel_2 = new JPanel();
@@ -162,10 +163,23 @@ public class BookMasterMainView extends MainViewBase<Library, BookMasterControll
 
     @Override
     protected void initListeners() {
+        booksTable.getColumnModel().getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                int[] rows = booksTable.getSelectedRows();
+                if (rows != null && rows.length > 0) {
+                    btnOpenBook.setEnabled(true);
+                } else {
+                    btnOpenBook.setEnabled(false);
+                }
+            }
+        });
+
         btnOpenBook.addActionListener(new LibraryActionListener() {
             @Override
             protected void execute() {
-                getController().openBooks(booksList.getSelectedIndices());
+                getController().openBooks(booksTable.getSelectedRows());
             }
         });
         btnNewBook.addActionListener(new LibraryActionListener() {
@@ -173,17 +187,6 @@ public class BookMasterMainView extends MainViewBase<Library, BookMasterControll
             @Override
             protected void execute() {
                 getController().openNewBook();
-            }
-        });
-
-        // TODO this could be extracted into a reusable class
-        booksList.addListSelectionListener(new ListSelectionListener() {
-
-            @Override
-            public void valueChanged(ListSelectionEvent e) {
-                int numberOfSelectedIndices = booksList.getSelectedIndices().length;
-                boolean enableButton = numberOfSelectedIndices > 0;
-                btnOpenBook.setEnabled(enableButton);
             }
         });
     }

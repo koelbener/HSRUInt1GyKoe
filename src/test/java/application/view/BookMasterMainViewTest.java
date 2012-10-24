@@ -3,7 +3,9 @@ package application.view;
 import static application.view.BookDetailMainView.NAME_BOOK_DETAIL_MAIN_VIEW;
 import static application.view.BookDetailMainView.NAME_BUTTON_CANCEL;
 import static application.view.BookMasterMainView.NAME_BUTTON_OPEN;
-import static application.view.BookMasterMainView.NAME_LIST_BOOKS;
+import static application.view.BookMasterMainView.NAME_TABLE_BOOKS;
+
+import javax.swing.SwingUtilities;
 
 import org.fest.swing.annotation.GUITest;
 import org.fest.swing.edt.FailOnThreadViolationRepaintManager;
@@ -52,27 +54,33 @@ public class BookMasterMainViewTest extends AbstractFestTest {
     @Test
     public void openBookButtonBecomesEnabledWhenSelectingASingleBook() {
         window.button(NAME_BUTTON_OPEN).requireDisabled();
-        window.list(NAME_LIST_BOOKS).selectItem(1);
+        window.table(NAME_TABLE_BOOKS).selectRows(1);
         window.button(NAME_BUTTON_OPEN).requireEnabled();
     }
 
     @Test
     public void openBookButtonBecomesEnabledWhenSelectingAMultipleBooks() {
         window.button(NAME_BUTTON_OPEN).requireDisabled();
-        window.list(NAME_LIST_BOOKS).selectItems(1, 2, 3);
+        window.table(NAME_TABLE_BOOKS).selectRows(1, 2, 3);
         window.button(NAME_BUTTON_OPEN).requireEnabled();
     }
 
     @Test
     public void openBookButtonBecomesDisabledWhenDeselectingBooks() {
-        window.list(NAME_LIST_BOOKS).selectItems(1, 2, 3);
-        window.list(NAME_LIST_BOOKS).clearSelection();
+        window.table(NAME_TABLE_BOOKS).selectRows(1, 2, 3);
+        SwingUtilities.invokeLater(new Runnable() {
+
+            @Override
+            public void run() {
+                window.table(NAME_TABLE_BOOKS).target.clearSelection();
+            }
+        });
         window.button(NAME_BUTTON_OPEN).requireDisabled();
     }
 
     @Test
     public void openBookButtonOpensNewView() {
-        window.list(NAME_LIST_BOOKS).selectItem(1);
+        window.table(NAME_TABLE_BOOKS).selectRows(1);
         window.button(NAME_BUTTON_OPEN).click();
 
         FrameFixture bookDetailDialog = findFrame(window, NAME_BOOK_DETAIL_MAIN_VIEW);
