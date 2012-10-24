@@ -16,6 +16,9 @@ public class BookDetailController extends AbstractController {
     public boolean saveBook(Book book) {
         logger.info("Posting book update to the EventBus: {}", book.toString());
         getEventBus().post(new BookChangeEvent(book));
+
+        getRepository().getBooksPMod().updateBook(book);
+
         return true; // TODO remove return val?
     }
 

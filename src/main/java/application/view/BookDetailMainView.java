@@ -81,8 +81,7 @@ public class BookDetailMainView extends MainViewBase<Book, BookDetailController>
         }
     }
 
-    private Book extractViewValues() {
-        Book book = getReferenceObject();
+    private Book extractViewValues(Book book) {
         if (book == null) {
             book = new Book();
         }
@@ -221,12 +220,14 @@ public class BookDetailMainView extends MainViewBase<Book, BookDetailController>
             @Override
             protected void execute() {
 
-                Book book = extractViewValues();
-                ValidationResult validation = new BookValidator().validate(book);
+                Book bookToValidate = extractViewValues(new Book());
+                ValidationResult validation = new BookValidator().validate(bookToValidate);
 
                 validationModel.setResult(validation);
+
                 if (!validation.hasErrors()) {
-                    if (getController().saveBook(book)) {
+                    Book bookToUpdate = extractViewValues(getReferenceObject());
+                    if (getController().saveBook(bookToUpdate)) {
                         BookDetailMainView.this.dispose();
                     }
                 }

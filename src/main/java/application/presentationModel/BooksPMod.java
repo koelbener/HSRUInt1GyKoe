@@ -1,18 +1,22 @@
 package application.presentationModel;
 
 import application.core.Repository;
-import application.viewModel.BookListModel;
+import application.viewModel.BookTableModel;
+import domain.Book;
 
 public class BooksPMod extends pModBase {
 
-    private final BookListModel bookListModel;
-
-    public BookListModel getBookListModel() {
-        return bookListModel;
-    }
+    private final BookTableModel bookTableModel;
 
     public BooksPMod() {
-        bookListModel = new BookListModel(Repository.getInstance().getLibrary().getBooks());
+        bookTableModel = new BookTableModel(Repository.getInstance().getLibrary().getBooks());
     }
 
+    public BookTableModel getBookTableModel() {
+        return bookTableModel;
+    }
+
+    public void updateBook(Book book) {
+        bookTableModel.fireTableDataChanged();
+    }
 }

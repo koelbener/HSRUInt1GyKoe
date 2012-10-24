@@ -25,7 +25,6 @@ import application.controller.BookMasterController;
 import application.core.LibraryActionListener;
 import application.core.Repository;
 import application.presentationModel.BooksPMod;
-import application.viewModel.BookTableModel;
 import domain.Library;
 
 public class BookMasterMainView extends MainViewBase<Library, BookMasterController> {
@@ -80,7 +79,7 @@ public class BookMasterMainView extends MainViewBase<Library, BookMasterControll
 
         JLabel lblLasd = new JLabel("Anzahl B\u00FCcher:");
         panel_3.add(lblLasd, "cell 0 0");
-        numberOfBooks = new JLabel(String.valueOf(booksPMod.getBookListModel().getSize()));
+        numberOfBooks = new JLabel(String.valueOf(booksPMod.getBookTableModel().getRowCount()));
         numberOfBooks.setName(NAME_LABEL_NUMBER_OF_BOOKS);
         panel_3.add(numberOfBooks, "cell 1 0");
 
@@ -125,7 +124,7 @@ public class BookMasterMainView extends MainViewBase<Library, BookMasterControll
 
         panel_6.add(scrollPane, BorderLayout.CENTER);
 
-        booksTable = new JTable(new BookTableModel(library.getBooks()));
+        booksTable = new JTable(booksPMod.getBookTableModel());
         booksTable.setName(NAME_TABLE_BOOKS);
 
         scrollPane.setViewportView(booksTable);

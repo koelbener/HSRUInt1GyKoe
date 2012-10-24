@@ -1,6 +1,6 @@
 package domain;
 
-public class Book implements Cloneable {
+public class Book {
 
     private String title, author, publisher;
     private Shelf shelf;
@@ -47,11 +47,6 @@ public class Book implements Cloneable {
     @Override
     public String toString() {
         return title; // + ", " + author + ", " + publisher;
-    }
-
-    @Override
-    public Object clone() throws CloneNotSupportedException {
-        return super.clone();
     }
 
     public void updateFrom(Book updatedBook) {

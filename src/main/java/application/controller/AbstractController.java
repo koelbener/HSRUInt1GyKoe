@@ -10,13 +10,19 @@ import com.google.common.eventbus.EventBus;
 public abstract class AbstractController {
 
     private final EventBus eventBus;
+    private final Repository repository;
 
     public AbstractController() {
-        eventBus = Repository.getInstance().getEventBus();
+        repository = Repository.getInstance();
+        eventBus = repository.getEventBus();
     }
 
     protected EventBus getEventBus() {
         return eventBus;
+    }
+
+    public Repository getRepository() {
+        return repository;
     }
 
 }
