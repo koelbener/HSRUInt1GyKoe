@@ -3,6 +3,7 @@ package application.controller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import application.core.BookChangeEvent;
 import domain.Book;
 
 public class BookDetailController extends AbstractController {
@@ -13,9 +14,9 @@ public class BookDetailController extends AbstractController {
      *         calling dialog can be closed
      */
     public boolean saveBook(Book book) {
-        // TODO implement
-        logger.info("Persisting book update: {}", book.toString());
-        return true;
+        logger.info("Posting book update to the EventBus: {}", book.toString());
+        getEventBus().post(new BookChangeEvent(book));
+        return true; // TODO remove return val?
     }
 
 }

@@ -54,4 +54,10 @@ public class Book implements Cloneable {
         return super.clone();
     }
 
+    public void updateFrom(Book updatedBook) {
+        title = updatedBook.title;
+        author = updatedBook.author;
+        publisher = updatedBook.publisher;
+    }
+
 }
