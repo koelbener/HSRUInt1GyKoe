@@ -23,7 +23,7 @@ import domain.Book;
 import domain.Library;
 
 public class BookDetailMainViewTest extends AbstractFestTest {
-    private static final String BOOK_PUBLISHER = "HSR Hochschule f�r Technik Rapperswil";
+    private static final String BOOK_PUBLISHER = "HSR Hochschule für Technik Rapperswil";
     private static final String BOOK_AUTHOR = "Michi Gysel";
     private static final String BOOK_TITLE = "Testing with JUnit 4";
     private FrameFixture bookMaster;

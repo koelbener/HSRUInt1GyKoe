@@ -5,7 +5,7 @@ import static application.view.BookDetailMainView.NAME_BUTTON_CANCEL;
 import static application.view.BookMasterMainView.NAME_BUTTON_OPEN;
 import static application.view.BookMasterMainView.NAME_TABLE_BOOKS;
 
-import javax.swing.SwingUtilities;
+import java.awt.event.KeyEvent;
 
 import org.fest.swing.annotation.GUITest;
 import org.fest.swing.edt.FailOnThreadViolationRepaintManager;
@@ -68,13 +68,10 @@ public class BookMasterMainViewTest extends AbstractFestTest {
     @Test
     public void openBookButtonBecomesDisabledWhenDeselectingBooks() {
         window.table(NAME_TABLE_BOOKS).selectRows(1, 2, 3);
-        SwingUtilities.invokeLater(new Runnable() {
-
-            @Override
-            public void run() {
-                window.table(NAME_TABLE_BOOKS).target.clearSelection();
-            }
-        });
+        // deselect the rows again
+        window.table(NAME_TABLE_BOOKS).pressKey(KeyEvent.VK_CONTROL);
+        window.table(NAME_TABLE_BOOKS).selectRows(1, 2, 3);
+        window.table(NAME_TABLE_BOOKS).releaseKey(KeyEvent.VK_CONTROL);
         window.button(NAME_BUTTON_OPEN).requireDisabled();
     }
 
