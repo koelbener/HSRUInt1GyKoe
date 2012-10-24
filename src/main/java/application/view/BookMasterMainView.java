@@ -4,6 +4,8 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -43,6 +45,7 @@ public class BookMasterMainView extends MainViewBase<Library, BookMasterControll
     private BooksPMod booksPMod;
     private JButton btnNewBook;
     private JTable booksTable;
+    private JButton btnSearch;
 
     public BookMasterMainView() {
         super(null, NAME_BOOK_MASTER_MAIN_VIEW);
@@ -112,9 +115,9 @@ public class BookMasterMainView extends MainViewBase<Library, BookMasterControll
         JLabel lblNurVerfgbare = new JLabel("Nur Verf\u00FCgbare");
         panel_5.add(lblNurVerfgbare, "cell 1 1");
 
-        JButton btnSuchen = new JButton("Suchen");
-        btnSuchen.setName(NAME_BUTTON_SEARCH);
-        panel_5.add(btnSuchen, "cell 2 1");
+        btnSearch = new JButton("Suchen");
+        btnSearch.setName(NAME_BUTTON_SEARCH);
+        panel_5.add(btnSearch, "cell 2 1");
 
         JPanel panel_6 = new JPanel();
         panel_4.add(panel_6, BorderLayout.CENTER);
@@ -125,6 +128,7 @@ public class BookMasterMainView extends MainViewBase<Library, BookMasterControll
         panel_6.add(scrollPane, BorderLayout.CENTER);
 
         booksTable = new JTable(booksPMod.getBookTableModel());
+        booksTable.setRowSorter(booksPMod.getBookTableRowSorter());
         booksTable.setName(NAME_TABLE_BOOKS);
 
         scrollPane.setViewportView(booksTable);
@@ -141,7 +145,7 @@ public class BookMasterMainView extends MainViewBase<Library, BookMasterControll
         btnOpenBook.setName(NAME_BUTTON_OPEN);
         btnOpenBook.setMnemonic('o');
         panel_7.add(btnOpenBook, "cell 0 1,growx,aligny center");
-        btnOpenBook.setToolTipText("Alle selektierten B�cher �ffnen");
+        btnOpenBook.setToolTipText("Alle selektierten Bücher öffnen");
         btnOpenBook.setEnabled(false);
 
         JPanel panel_2 = new JPanel();
@@ -188,6 +192,13 @@ public class BookMasterMainView extends MainViewBase<Library, BookMasterControll
                 getController().openNewBook();
             }
         });
-    }
+        btnSearch.addActionListener(new ActionListener() {
 
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                booksPMod.setSearchString(txtSuche.getText());
+            }
+        });
+
+    }
 }
