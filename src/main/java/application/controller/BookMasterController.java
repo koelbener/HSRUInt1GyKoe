@@ -12,10 +12,10 @@ public class BookMasterController extends AbstractController {
     private static final Logger logger = LoggerFactory.getLogger(BookMasterController.class);
 
     public void openBooks(int[] selectedIndices) {
-        BookListModel booksListModel = Repository.getInstance().getBooksPMod().getBookListModel();
+        BookListModel booksTableModel = Repository.getInstance().getBooksPMod().getBookListModel();
 
         for (int index : selectedIndices) {
-            Book book = booksListModel.getElementAt(index);
+            Book book = booksTableModel.getElementAt(index);
             logger.debug("opening book view " + book.getName());
             try {
                 new BookDetailMainView((Book) book.clone());
