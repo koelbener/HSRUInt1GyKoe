@@ -163,7 +163,7 @@ public class BookMasterMainView extends MainViewBase<Library, BookMasterControll
 
     @Override
     protected void initListeners() {
-        booksTable.getColumnModel().getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+        booksTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 
             @Override
             public void valueChanged(ListSelectionEvent e) {
