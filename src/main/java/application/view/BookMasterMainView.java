@@ -6,6 +6,10 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -31,6 +35,7 @@ import domain.Library;
 
 public class BookMasterMainView extends MainViewBase<Library, BookMasterController> {
 
+    private static final String SEARCH_DEFAULT_VALUE = "Suche...";
     public static final String NAME_BOOK_MASTER_MAIN_VIEW = "BookMasterMainView";
     public static final String NAME_BUTTON_SEARCH = "button.search";
     public static final String NAME_BUTTON_OPEN = "button.open";
@@ -105,7 +110,7 @@ public class BookMasterMainView extends MainViewBase<Library, BookMasterControll
         panel_5.add(lblNewLabel_1, "cell 0 0");
 
         txtSuche = new JTextField();
-        txtSuche.setText("Suche...");
+        txtSuche.setText(SEARCH_DEFAULT_VALUE);
         panel_5.add(txtSuche, "flowx,cell 0 1,growx");
         txtSuche.setColumns(10);
 
@@ -192,11 +197,35 @@ public class BookMasterMainView extends MainViewBase<Library, BookMasterControll
                 getController().openNewBook();
             }
         });
+
+        txtSuche.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyReleased(KeyEvent arg0) {
+                getController().searchBooks(txtSuche.getText());
+            }
+        });
+
+        txtSuche.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusGained(FocusEvent arg0) {
+                if (txtSuche.getText().equals(SEARCH_DEFAULT_VALUE)) {
+                    txtSuche.setText("");
+                }
+            }
+
+            @Override
+            public void focusLost(FocusEvent arg0) {
+                if (txtSuche.getText().equals("")) {
+                    txtSuche.setText(SEARCH_DEFAULT_VALUE);
+                }
+            }
+        });
+
         btnSearch.addActionListener(new ActionListener() {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                booksPMod.setSearchString(txtSuche.getText());
+                getController().searchBooks(txtSuche.getText());
             }
         });
 
