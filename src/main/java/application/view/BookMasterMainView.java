@@ -10,6 +10,8 @@ import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -27,6 +29,10 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import net.miginfocom.swing.MigLayout;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import application.controller.BookMasterController;
 import application.core.LibraryActionListener;
 import application.core.Repository;
@@ -34,6 +40,8 @@ import application.presentationModel.BooksPMod;
 import domain.Library;
 
 public class BookMasterMainView extends MainViewBase<Library, BookMasterController> {
+
+    private static final Logger logger = LoggerFactory.getLogger(BookMasterMainView.class);
 
     private static final String SEARCH_DEFAULT_VALUE = "Suche...";
     public static final String NAME_BOOK_MASTER_MAIN_VIEW = "BookMasterMainView";
@@ -180,6 +188,16 @@ public class BookMasterMainView extends MainViewBase<Library, BookMasterControll
                     btnOpenBook.setEnabled(true);
                 } else {
                     btnOpenBook.setEnabled(false);
+                }
+            }
+        });
+
+        booksTable.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() == 2) {
+                    logger.trace("doubleClick detected");
+                    getController().openBooks(new int[] { booksTable.rowAtPoint(e.getPoint()) });
                 }
             }
         });
