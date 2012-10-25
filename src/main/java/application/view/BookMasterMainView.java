@@ -43,14 +43,17 @@ public class BookMasterMainView extends MainViewBase<Library, BookMasterControll
 
     private static final Logger logger = LoggerFactory.getLogger(BookMasterMainView.class);
 
-    private static final String SEARCH_DEFAULT_VALUE = "Suche...";
+    public static final String SEARCH_DEFAULT_VALUE = "Suche...";
+
     public static final String NAME_BOOK_MASTER_MAIN_VIEW = "BookMasterMainView";
     public static final String NAME_BUTTON_SEARCH = "button.search";
     public static final String NAME_BUTTON_OPEN = "button.open";
     public static final String NAME_TABLE_BOOKS = "table.books";
     public static final String NAME_LABEL_NUMBER_OF_BOOKS = "label.numberOfBooks";
+    public static final String NAME_SEARCH_FIELD = "textField.search";
 
     private static final long serialVersionUID = -5636590532882178863L;
+
     private JTextField txtSuche;
     private JLabel numberOfCopies;
     private JLabel numberOfBooks;
@@ -118,6 +121,7 @@ public class BookMasterMainView extends MainViewBase<Library, BookMasterControll
         panel_5.add(lblNewLabel_1, "cell 0 0");
 
         txtSuche = new JTextField();
+        txtSuche.setName(NAME_SEARCH_FIELD);
         txtSuche.setText(SEARCH_DEFAULT_VALUE);
         panel_5.add(txtSuche, "flowx,cell 0 1,growx");
         txtSuche.setColumns(10);
