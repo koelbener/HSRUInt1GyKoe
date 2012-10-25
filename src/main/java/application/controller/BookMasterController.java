@@ -1,5 +1,7 @@
 package application.controller;
 
+import javax.swing.RowSorter;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -12,9 +14,10 @@ public class BookMasterController extends AbstractController {
 
     public void openBooks(int[] selectedIndices) {
         BookTableModel bookTableModel = getRepository().getBooksPMod().getBookTableModel();
+        RowSorter<BookTableModel> sorter = getRepository().getBooksPMod().getBookTableRowSorter();
 
         for (int index : selectedIndices) {
-            Book book = bookTableModel.getBook(index);
+            Book book = bookTableModel.getBook(sorter.convertRowIndexToModel(index));
             logger.debug("opening book {}", book.getName());
             new BookDetailMainView(book);
         }
