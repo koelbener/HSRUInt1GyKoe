@@ -2,10 +2,13 @@ package application.view;
 
 import static application.view.BookDetailMainView.NAME_BOOK_DETAIL_MAIN_VIEW;
 import static application.view.BookDetailMainView.NAME_BUTTON_CANCEL;
+import static application.view.BookDetailMainView.NAME_TEXTBOX_TITLE;
 import static application.view.BookMasterMainView.NAME_BUTTON_OPEN;
 import static application.view.BookMasterMainView.NAME_SEARCH_FIELD;
 import static application.view.BookMasterMainView.NAME_TABLE_BOOKS;
 import static application.view.BookMasterMainView.SEARCH_DEFAULT_VALUE;
+import static application.viewModel.BookTableModel.COLUMN_TITLE;
+import static org.fest.swing.data.TableCell.row;
 
 import java.awt.event.KeyEvent;
 
@@ -116,7 +119,15 @@ public class BookMasterMainViewTest extends AbstractFestTest {
         window.table(NAME_TABLE_BOOKS).requireRowCount(1);
         window.textBox(NAME_SEARCH_FIELD).setText("");
         window.table(NAME_TABLE_BOOKS).requireRowCount(numberOfBooks);
-
     }
 
+    public void testEditableTable() {
+        final String NEW_TITLE_VALUE = "C# for dummies";
+        window.table(NAME_TABLE_BOOKS).enterValue(row(3).column(COLUMN_TITLE), NEW_TITLE_VALUE);
+        window.table(NAME_TABLE_BOOKS).selectRows(3);
+        window.table(NAME_TABLE_BOOKS).doubleClick();
+
+        FrameFixture bookDetailDialog = findFrame(window, NAME_BOOK_DETAIL_MAIN_VIEW);
+        bookDetailDialog.textBox(NAME_TEXTBOX_TITLE).requireText(NEW_TITLE_VALUE);
+    }
 }
