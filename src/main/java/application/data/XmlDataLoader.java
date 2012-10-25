@@ -45,17 +45,17 @@ public class XmlDataLoader implements DataLoder {
         // create pseudo random books and loans
         createBooksAndLoans(library);
 
-        logger.info("Initialisation of the library was successful!");
-        logger.debug("Books in library: " + library.getBooks().size());
-        logger.debug("Customers: " + library.getCustomers().size());
-        logger.debug("Copies in library: " + library.getCopies().size());
-        logger.debug("Copies currently on loan: " + library.getLentOutBooks().size());
+        logger.info("Initialisation of the library was successful.");
+        logger.trace("Books in library: {}", library.getBooks().size());
+        logger.trace("Customers: {}", library.getCustomers().size());
+        logger.trace("Copies in library: {}", library.getCopies().size());
+        logger.trace("Copies currently on loan: {}", library.getLentOutBooks().size());
         int lentBooksPercentage = (int) (((double) library.getLentOutBooks().size()) / library.getCopies().size() * 100);
-        logger.debug("Percent copies on loan: " + lentBooksPercentage + "%");
-        logger.debug("Copies currently overdue: " + library.getOverdueLoans().size());
+        logger.trace("Percent copies on loan: {}%", lentBooksPercentage);
+        logger.trace("Copies currently overdue: {}", library.getOverdueLoans().size());
 
         for (Loan l : library.getOverdueLoans())
-            logger.debug("Loan by {} is overdue by {} days.", l.getCustomer(), l.getDaysOverdue());
+            logger.trace("Loan by {} is overdue by {} days.", l.getCustomer(), l.getDaysOverdue());
     }
 
     private void createBooksAndLoans(Library library) throws IllegalLoanOperationException {
