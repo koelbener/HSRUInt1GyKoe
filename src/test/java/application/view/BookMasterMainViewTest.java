@@ -17,6 +17,7 @@ import org.fest.swing.edt.FailOnThreadViolationRepaintManager;
 import org.fest.swing.edt.GuiActionRunner;
 import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.fixture.FrameFixture;
+import org.fest.swing.fixture.JTableFixture;
 import org.fest.swing.fixture.JTextComponentFixture;
 import org.junit.After;
 import org.junit.Before;
@@ -85,22 +86,18 @@ public class BookMasterMainViewTest extends AbstractFestTest {
     public void openBookButtonOpensNewView() {
         window.table(NAME_TABLE_BOOKS).selectRows(1);
         window.button(NAME_BUTTON_OPEN).click();
-        checkForDetailView();
+        assertThatDetailViewIsVisible();
     }
 
     @Test
     public void testDoubleClickOpenBook() {
-        window.table(NAME_TABLE_BOOKS).selectRows(3);
-        window.table(NAME_TABLE_BOOKS).doubleClick();
-        checkForDetailView();
-    }
-
-    private void checkForDetailView() {
-        FrameFixture bookDetailDialog = findFrame(window, NAME_BOOK_DETAIL_MAIN_VIEW);
-        bookDetailDialog.requireVisible();
-        bookDetailDialog.button(NAME_BUTTON_CANCEL).click();
-        bookDetailDialog.requireNotVisible();
-        window.requireVisible();
+        JTableFixture booksTable = window.table(NAME_TABLE_BOOKS);
+        booksTable.selectRows(3);
+        // make sure that the doubleclick is fired on a cell that is not editable.
+        // (only the "copies" column hopefully contains cells with the value "1")
+        String cellValue = "1";
+        doubleClickOnCell(booksTable, cellValue);
+        assertThatDetailViewIsVisible();
     }
 
     @Test
@@ -129,5 +126,13 @@ public class BookMasterMainViewTest extends AbstractFestTest {
 
         FrameFixture bookDetailDialog = findFrame(window, NAME_BOOK_DETAIL_MAIN_VIEW);
         bookDetailDialog.textBox(NAME_TEXTBOX_TITLE).requireText(NEW_TITLE_VALUE);
+    }
+
+    private void assertThatDetailViewIsVisible() {
+        FrameFixture bookDetailDialog = findFrame(window, NAME_BOOK_DETAIL_MAIN_VIEW);
+        bookDetailDialog.requireVisible();
+        bookDetailDialog.button(NAME_BUTTON_CANCEL).click();
+        bookDetailDialog.requireNotVisible();
+        window.requireVisible();
     }
 }
