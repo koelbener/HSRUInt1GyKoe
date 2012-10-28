@@ -5,25 +5,20 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 import org.junit.Test;
 
 public class LoanTest {
+    private static final int TOLERANCE_IN_MILLIS = 10;
+
     @Test
     public void testLoanCreation() {
         Loan l = createSampleLoan();
-        assertEquals(new GregorianCalendar(), l.getPickupDate());
+        assertEqualsWithTolerance(TOLERANCE_IN_MILLIS, new GregorianCalendar(), l.getPickupDate());
         assertEquals("Keller", l.getCustomer().getName());
         assertEquals("Design Pattern", l.getCopy().getTitle().getName());
-    }
-
-    private Loan createSampleLoan() {
-        Customer customer = new Customer("Keller", "Peter");
-        Book title = new Book("Design Pattern");
-        Copy copy = new Copy(title);
-        Loan loan = new Loan(customer, copy);
-        return loan;
     }
 
     @Test
@@ -68,5 +63,21 @@ public class LoanTest {
             fail("pickup date cannot be set after the book was returned");
         } catch (IllegalLoanOperationException e) {
         }
+    }
+
+    private Loan createSampleLoan() {
+        Customer customer = new Customer("Keller", "Peter");
+        Book title = new Book("Design Pattern");
+        Copy copy = new Copy(title);
+        Loan loan = new Loan(customer, copy);
+        return loan;
+    }
+
+    private void assertEqualsWithTolerance(long toleranceInMillis, Calendar expected, Calendar actual) {
+        assertEqualsWithTolerance(toleranceInMillis, expected.getTimeInMillis(), actual.getTimeInMillis());
+    }
+
+    private void assertEqualsWithTolerance(long tolerance, long expected, long actual) {
+        assertTrue(Math.abs(expected - actual) < tolerance);
     }
 }
