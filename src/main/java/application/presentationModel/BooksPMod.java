@@ -33,8 +33,12 @@ public class BooksPMod extends pModBase {
         bookTableModel.fireTableDataChanged();
     }
 
-    public void setSearchString(String filter) {
+    public void setSearchString(String filter, int columnIndex) {
         logger.debug("Filter books table for \"{}\"", filter);
-        bookTableRowSorter.setRowFilter(RowFilter.regexFilter("(?i)" + filter));
+        if (columnIndex < 0) {
+            bookTableRowSorter.setRowFilter(RowFilter.regexFilter("(?i)" + filter));
+        } else {
+            bookTableRowSorter.setRowFilter(RowFilter.regexFilter("(?i)" + filter, columnIndex));
+        }
     }
 }

@@ -24,8 +24,8 @@ public class BookMasterController extends AbstractController {
 
     }
 
-    public void searchBooks(String filter) {
-        getRepository().getBooksPMod().setSearchString(filter);
+    public void searchBooks(String filter, int columnIndex) {
+        getRepository().getBooksPMod().setSearchString(filter, columnIndex);
     }
 
     public void openNewBook() {

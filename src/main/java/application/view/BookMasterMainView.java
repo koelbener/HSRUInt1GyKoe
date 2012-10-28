@@ -4,6 +4,8 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.MouseAdapter;
@@ -11,6 +13,7 @@ import java.awt.event.MouseEvent;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -35,6 +38,8 @@ import application.controller.BookMasterController;
 import application.core.LibraryActionListener;
 import application.core.Repository;
 import application.presentationModel.BooksPMod;
+import application.viewModel.SearchFilterComboBoxModel;
+import application.viewModel.SearchFilterElement;
 import domain.Library;
 
 public class BookMasterMainView extends MainViewBase<Library, BookMasterController> {
@@ -48,6 +53,7 @@ public class BookMasterMainView extends MainViewBase<Library, BookMasterControll
     public static final String NAME_TABLE_BOOKS = "table.books";
     public static final String NAME_LABEL_NUMBER_OF_BOOKS = "label.numberOfBooks";
     public static final String NAME_SEARCH_FIELD = "textField.search";
+    public static final String NAME_COMBOBOX_FILTER = "comboBox.searchFilter";
 
     private static final long serialVersionUID = -5636590532882178863L;
 
@@ -58,6 +64,8 @@ public class BookMasterMainView extends MainViewBase<Library, BookMasterControll
     private BooksPMod booksPMod;
     private JButton btnNewBook;
     private JTable booksTable;
+
+    private JComboBox<SearchFilterElement> searchFilterComboBox;
 
     public BookMasterMainView() {
         super(null, NAME_BOOK_MASTER_MAIN_VIEW);
@@ -111,7 +119,7 @@ public class BookMasterMainView extends MainViewBase<Library, BookMasterControll
 
         JPanel panel_5 = new JPanel();
         panel_4.add(panel_5, BorderLayout.NORTH);
-        panel_5.setLayout(new MigLayout("", "[grow][][][]", "[][]"));
+        panel_5.setLayout(new MigLayout("", "[grow][][grow][]", "[][]"));
 
         JLabel lblNewLabel_1 = new JLabel("Alle B\u00FCcher stehen in der untenstehenden Tabelle");
         panel_5.add(lblNewLabel_1, "cell 0 0");
@@ -126,7 +134,12 @@ public class BookMasterMainView extends MainViewBase<Library, BookMasterControll
         panel_5.add(checkBox, "cell 0 1");
 
         JLabel lblNurVerfgbare = new JLabel("Nur Verf\u00FCgbare");
-        panel_5.add(lblNurVerfgbare, "cell 1 1");
+        panel_5.add(lblNurVerfgbare, "cell 1 1,alignx trailing");
+
+        searchFilterComboBox = new JComboBox<SearchFilterElement>();
+        searchFilterComboBox.setName(NAME_COMBOBOX_FILTER);
+        searchFilterComboBox.setModel(new SearchFilterComboBoxModel());
+        panel_5.add(searchFilterComboBox, "cell 2 1,growx");
 
         JPanel panel_6 = new JPanel();
         panel_4.add(panel_6, BorderLayout.CENTER);
@@ -188,6 +201,19 @@ public class BookMasterMainView extends MainViewBase<Library, BookMasterControll
             }
         });
 
+        searchFilterComboBox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent arg0) {
+                search();
+            }
+
+            private void search() {
+                if (!txtSuche.getText().equals(SEARCH_DEFAULT_VALUE)) {
+                    getController().searchBooks(txtSuche.getText(), ((SearchFilterElement) searchFilterComboBox.getSelectedItem()).getBookTableModelColumn());
+                }
+            }
+        });
+
         booksTable.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -228,9 +254,6 @@ public class BookMasterMainView extends MainViewBase<Library, BookMasterControll
                 search();
             }
 
-            private void search() {
-                getController().searchBooks(txtSuche.getText());
-            }
         });
 
         txtSuche.addFocusListener(new FocusAdapter() {
@@ -249,5 +272,11 @@ public class BookMasterMainView extends MainViewBase<Library, BookMasterControll
             }
         });
 
+    }
+
+    private void search() {
+        if (!txtSuche.getText().equals(SEARCH_DEFAULT_VALUE)) {
+            getController().searchBooks(txtSuche.getText(), ((SearchFilterElement) searchFilterComboBox.getSelectedItem()).getBookTableModelColumn());
+        }
     }
 }

@@ -7,6 +7,7 @@ import static application.view.BookMasterMainView.NAME_BUTTON_OPEN;
 import static application.view.BookMasterMainView.NAME_SEARCH_FIELD;
 import static application.view.BookMasterMainView.NAME_TABLE_BOOKS;
 import static application.view.BookMasterMainView.SEARCH_DEFAULT_VALUE;
+import static application.view.BookMasterMainView.NAME_COMBOBOX_FILTER;
 import static application.viewModel.BookTableModel.COLUMN_AMOUNT;
 import static application.viewModel.BookTableModel.COLUMN_TITLE;
 import static org.fest.swing.data.TableCell.row;
@@ -95,8 +96,7 @@ public class BookMasterMainViewTest extends AbstractFestTest {
     public void testDoubleClickOpenBook() {
         JTableFixture booksTable = window.table(NAME_TABLE_BOOKS);
         // make sure that the doubleclick is fired on a cell that is not editable.
-        booksTable.selectCell(row(3).column(COLUMN_AMOUNT));
-        booksTable.doubleClick();
+        booksTable.click(row(3).column(COLUMN_AMOUNT), MouseClickInfo.leftButton().times(2));
         assertThatDetailViewIsVisible();
     }
 
@@ -128,6 +128,21 @@ public class BookMasterMainViewTest extends AbstractFestTest {
 
         FrameFixture bookDetailDialog = findFrame(window, NAME_BOOK_DETAIL_MAIN_VIEW);
         bookDetailDialog.textBox(NAME_TEXTBOX_TITLE).requireText(NEW_TITLE_VALUE);
+    }
+    
+    @Test
+    public void testSearchFilterComboBox(){
+        window.textBox(NAME_SEARCH_FIELD).setText("wiley");
+        window.table(NAME_TABLE_BOOKS).requireRowCount(5);
+        // select "Suche Titel" in comboBox
+        window.comboBox(NAME_COMBOBOX_FILTER).selectItem(1);
+        // no titles with "wiley" should be found
+        window.table(NAME_TABLE_BOOKS).requireRowCount(0);
+        // select "Suche Verlag" in comboBox
+        window.comboBox(NAME_COMBOBOX_FILTER).selectItem(3);
+        // 5 books from wiley verlag should be found
+        window.table(NAME_TABLE_BOOKS).requireRowCount(5);
+        
     }
 
     private void assertThatDetailViewIsVisible() {
