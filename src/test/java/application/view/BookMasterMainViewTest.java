@@ -7,12 +7,14 @@ import static application.view.BookMasterMainView.NAME_BUTTON_OPEN;
 import static application.view.BookMasterMainView.NAME_SEARCH_FIELD;
 import static application.view.BookMasterMainView.NAME_TABLE_BOOKS;
 import static application.view.BookMasterMainView.SEARCH_DEFAULT_VALUE;
+import static application.viewModel.BookTableModel.COLUMN_AMOUNT;
 import static application.viewModel.BookTableModel.COLUMN_TITLE;
 import static org.fest.swing.data.TableCell.row;
 
 import java.awt.event.KeyEvent;
 
 import org.fest.swing.annotation.GUITest;
+import org.fest.swing.core.MouseClickInfo;
 import org.fest.swing.edt.FailOnThreadViolationRepaintManager;
 import org.fest.swing.edt.GuiActionRunner;
 import org.fest.swing.edt.GuiQuery;
@@ -92,11 +94,9 @@ public class BookMasterMainViewTest extends AbstractFestTest {
     @Test
     public void testDoubleClickOpenBook() {
         JTableFixture booksTable = window.table(NAME_TABLE_BOOKS);
-        booksTable.selectRows(3);
         // make sure that the doubleclick is fired on a cell that is not editable.
-        // (only the "copies" column hopefully contains cells with the value "1")
-        String cellValue = "1";
-        doubleClickOnCell(booksTable, cellValue);
+        booksTable.selectCell(row(3).column(COLUMN_AMOUNT));
+        booksTable.doubleClick();
         assertThatDetailViewIsVisible();
     }
 
@@ -110,19 +110,21 @@ public class BookMasterMainViewTest extends AbstractFestTest {
         searchField.requireText(SEARCH_DEFAULT_VALUE);
     }
 
+    @Test
     public void testFilter() {
         int numberOfBooks = window.table(NAME_TABLE_BOOKS).target.getRowCount();
         window.textBox(NAME_SEARCH_FIELD).setText("Beginning Groovy and Grails");
+        window.table(NAME_TABLE_BOOKS).focus();
         window.table(NAME_TABLE_BOOKS).requireRowCount(1);
         window.textBox(NAME_SEARCH_FIELD).setText("");
         window.table(NAME_TABLE_BOOKS).requireRowCount(numberOfBooks);
     }
 
+    @Test
     public void testEditableTable() {
-        final String NEW_TITLE_VALUE = "C# for dummies";
+        final String NEW_TITLE_VALUE = "C for dummies";
         window.table(NAME_TABLE_BOOKS).enterValue(row(3).column(COLUMN_TITLE), NEW_TITLE_VALUE);
-        window.table(NAME_TABLE_BOOKS).selectRows(3);
-        window.table(NAME_TABLE_BOOKS).doubleClick();
+        window.table(NAME_TABLE_BOOKS).click(row(3).column(COLUMN_AMOUNT), MouseClickInfo.leftButton().times(2));
 
         FrameFixture bookDetailDialog = findFrame(window, NAME_BOOK_DETAIL_MAIN_VIEW);
         bookDetailDialog.textBox(NAME_TEXTBOX_TITLE).requireText(NEW_TITLE_VALUE);
@@ -135,4 +137,5 @@ public class BookMasterMainViewTest extends AbstractFestTest {
         bookDetailDialog.requireNotVisible();
         window.requireVisible();
     }
+
 }

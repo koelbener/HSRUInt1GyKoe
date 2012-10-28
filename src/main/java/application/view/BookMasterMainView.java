@@ -4,12 +4,8 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -25,6 +21,8 @@ import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
@@ -46,7 +44,6 @@ public class BookMasterMainView extends MainViewBase<Library, BookMasterControll
     public static final String SEARCH_DEFAULT_VALUE = "Suche...";
 
     public static final String NAME_BOOK_MASTER_MAIN_VIEW = "BookMasterMainView";
-    public static final String NAME_BUTTON_SEARCH = "button.search";
     public static final String NAME_BUTTON_OPEN = "button.open";
     public static final String NAME_TABLE_BOOKS = "table.books";
     public static final String NAME_LABEL_NUMBER_OF_BOOKS = "label.numberOfBooks";
@@ -61,7 +58,6 @@ public class BookMasterMainView extends MainViewBase<Library, BookMasterControll
     private BooksPMod booksPMod;
     private JButton btnNewBook;
     private JTable booksTable;
-    private JButton btnSearch;
 
     public BookMasterMainView() {
         super(null, NAME_BOOK_MASTER_MAIN_VIEW);
@@ -131,10 +127,6 @@ public class BookMasterMainView extends MainViewBase<Library, BookMasterControll
 
         JLabel lblNurVerfgbare = new JLabel("Nur Verf\u00FCgbare");
         panel_5.add(lblNurVerfgbare, "cell 1 1");
-
-        btnSearch = new JButton("Suchen");
-        btnSearch.setName(NAME_BUTTON_SEARCH);
-        panel_5.add(btnSearch, "cell 2 1");
 
         JPanel panel_6 = new JPanel();
         panel_4.add(panel_6, BorderLayout.CENTER);
@@ -220,9 +212,23 @@ public class BookMasterMainView extends MainViewBase<Library, BookMasterControll
             }
         });
 
-        txtSuche.addKeyListener(new KeyAdapter() {
+        txtSuche.getDocument().addDocumentListener(new DocumentListener() {
             @Override
-            public void keyReleased(KeyEvent arg0) {
+            public void changedUpdate(DocumentEvent e) {
+                search();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                search();
+            }
+
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                search();
+            }
+
+            private void search() {
                 getController().searchBooks(txtSuche.getText());
             }
         });
@@ -240,14 +246,6 @@ public class BookMasterMainView extends MainViewBase<Library, BookMasterControll
                 if (txtSuche.getText().equals("")) {
                     txtSuche.setText(SEARCH_DEFAULT_VALUE);
                 }
-            }
-        });
-
-        btnSearch.addActionListener(new ActionListener() {
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                getController().searchBooks(txtSuche.getText());
             }
         });
 

@@ -2,10 +2,15 @@ package application.viewModel;
 
 import java.util.List;
 
+import javax.swing.JOptionPane;
 import javax.swing.table.AbstractTableModel;
 
 import application.core.Repository;
+
+import com.jgoodies.validation.ValidationResult;
+
 import domain.Book;
+import domain.validator.BookValidator;
 
 public class BookTableModel extends AbstractTableModel {
 
@@ -62,20 +67,51 @@ public class BookTableModel extends AbstractTableModel {
         return result;
     }
 
-    @Override
-    public void setValueAt(Object value, int row, int col) {
-        // TODO validation
-        Book book = getBook(row);
-        switch (col) {
+    private boolean validateRow(String value, int changedRow, int changedColumn) {
+        boolean result = true;
+
+        // get origin book
+        Book originBook = getBook(changedRow);
+        // create a validationBook object and copy fields from originBook
+        Book bookToValidate = new Book();
+        bookToValidate.updateFrom(originBook);
+
+        switch (changedColumn) {
         case COLUMN_TITLE:
-            book.setName(value.toString());
+            bookToValidate.setName(value.toString());
             break;
         case COLUMN_AUTHOR:
-            book.setAuthor(value.toString());
+            bookToValidate.setAuthor(value.toString());
             break;
         case COLUMN_PUBLISHER:
-            book.setPublisher(value.toString());
+            bookToValidate.setPublisher(value.toString());
             break;
+        }
+        ValidationResult validation = new BookValidator().validate(bookToValidate);
+
+        if (validation.hasErrors()) {
+            JOptionPane.showMessageDialog(null, validation.getMessagesText(), "Buch Validierung fehlgeschlagen", JOptionPane.WARNING_MESSAGE);
+            result = false;
+        }
+
+        return result;
+    }
+
+    @Override
+    public void setValueAt(Object value, int row, int col) {
+        Book book = getBook(row);
+        if (validateRow(value.toString(), row, col)) {
+            switch (col) {
+            case COLUMN_TITLE:
+                book.setName(value.toString());
+                break;
+            case COLUMN_AUTHOR:
+                book.setAuthor(value.toString());
+                break;
+            case COLUMN_PUBLISHER:
+                book.setPublisher(value.toString());
+                break;
+            }
         }
     }
 

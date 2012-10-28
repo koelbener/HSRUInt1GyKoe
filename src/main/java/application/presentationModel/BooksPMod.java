@@ -35,6 +35,6 @@ public class BooksPMod extends pModBase {
 
     public void setSearchString(String filter) {
         logger.debug("Filter books table for \"{}\"", filter);
-        bookTableRowSorter.setRowFilter(RowFilter.regexFilter(filter));
+        bookTableRowSorter.setRowFilter(RowFilter.regexFilter("(?i)" + filter));
     }
 }

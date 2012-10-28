@@ -68,13 +68,14 @@ public class BookDetailMainView extends MainViewBase<Book, BookDetailController>
     }
 
     private void updateViewValues() {
+        // retrieve new possible shelves-data
+        tfRegal.setModel(Repository.getInstance().getShelfPMod().getShelfComboBoxModel());
+
         Book referenceObject = getReferenceObject();
         if (referenceObject != null) {
             tfTitle.setText(referenceObject.getName());
             tfAutor.setText(referenceObject.getAuthor());
             tfVerlag.setText(referenceObject.getPublisher());
-            // retrieve new possible shelves-data
-            tfRegal.setModel(Repository.getInstance().getShelfPMod().getShelfComboBoxModel());
             // select the correct shelf
             tfRegal.setSelectedItem(referenceObject.getShelf());
             tfNumberOfCopies.setText(String.valueOf(copyListModel.getSize()));
