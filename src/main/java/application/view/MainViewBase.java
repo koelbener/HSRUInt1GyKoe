@@ -15,8 +15,7 @@ import application.core.Repository;
 import domain.Library;
 
 /**
- * A MainView is a view inheriting from JFrame. Every window of the UI is a
- * MainViewBase descendant.
+ * A MainView is a view inheriting from JFrame. Every window of the UI is a MainViewBase descendant.
  * 
  */
 public abstract class MainViewBase<R, T extends AbstractController> extends JFrame {
@@ -42,8 +41,7 @@ public abstract class MainViewBase<R, T extends AbstractController> extends JFra
     }
 
     /**
-     * checks if the JFrame is located on the same location as another frame.
-     * The method moves the frame until it finds a free location.
+     * checks if the JFrame is located on the same location as another frame. The method moves the frame until it finds a free location.
      */
     private void checkPositionAgainstActiveFrames() {
         int gap = 20;
@@ -86,5 +84,9 @@ public abstract class MainViewBase<R, T extends AbstractController> extends JFra
 
     protected R getReferenceObject() {
         return referenceObject;
+    }
+
+    protected boolean isNewEntity() {
+        return referenceObject == null;
     }
 }

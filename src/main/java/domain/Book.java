@@ -53,6 +53,7 @@ public class Book {
         title = updatedBook.title;
         author = updatedBook.author;
         publisher = updatedBook.publisher;
+        shelf = updatedBook.shelf;
     }
 
 }

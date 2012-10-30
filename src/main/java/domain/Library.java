@@ -47,6 +47,16 @@ public class Library {
         return c;
     }
 
+    public Copy addCopy(Copy c) {
+        copies.add(c);
+        return c;
+    }
+
+    public void removeCopy(Copy copy) {
+        copies.remove(copy);
+
+    }
+
     public Book findByBookTitle(String title) {
         for (Book b : books) {
             if (b.getName().equals(title)) {

@@ -29,4 +29,19 @@ public class CopyListModel extends AbstractListModel<Copy> {
         return copyList.size();
     }
 
+    public void addCopy(Copy copy) {
+        copyList.add(copy);
+        propagateUpdate(copyList.size() - 1);
+
+    }
+
+    public void removeCopy(Copy copy) {
+        copyList.remove(copy);
+        fireContentsChanged(this, 0, copyList.size());
+    }
+
+    public List<Copy> getAll() {
+        return copyList;
+    }
+
 }

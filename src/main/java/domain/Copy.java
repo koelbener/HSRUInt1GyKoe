@@ -9,7 +9,7 @@ public class Copy {
     public static long nextInventoryNumber = 1;
 
     private final long inventoryNumber;
-    private final Book book;
+    private Book book;
     private Condition condition;
 
     public Copy(Book title) {
@@ -20,6 +20,10 @@ public class Copy {
 
     public Book getTitle() {
         return book;
+    }
+
+    public void setTitle(Book book) {
+        this.book = book;
     }
 
     public Condition getCondition() {
@@ -38,4 +42,5 @@ public class Copy {
     public String toString() {
         return "#" + inventoryNumber + " (" + condition + ")";
     }
+
 }

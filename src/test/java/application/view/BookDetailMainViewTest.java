@@ -21,6 +21,7 @@ import org.junit.Test;
 import application.LibraryApp;
 import domain.Book;
 import domain.Library;
+import domain.Shelf;
 
 public class BookDetailMainViewTest extends AbstractFestTest {
     private static final String BOOK_PUBLISHER = "HSR Hochschule für Technik Rapperswil";
@@ -37,6 +38,7 @@ public class BookDetailMainViewTest extends AbstractFestTest {
         Book b = library.createAndAddBook(BOOK_TITLE);
         b.setAuthor(BOOK_AUTHOR);
         b.setPublisher(BOOK_PUBLISHER);
+        b.setShelf(Shelf.D1);
 
     }
 

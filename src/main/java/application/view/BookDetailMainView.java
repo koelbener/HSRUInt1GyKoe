@@ -2,6 +2,8 @@ package application.view;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,6 +16,8 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 import net.miginfocom.swing.MigLayout;
 import application.controller.BookDetailController;
@@ -50,6 +54,9 @@ public class BookDetailMainView extends MainViewBase<Book, BookDetailController>
     private JButton btnSave;
     private JButton btnCancel;
     private ValidationResultModel validationModel;
+    private JButton btnHinzufgen;
+    private JButton btnEntfernen;
+    private JList<Copy> copiesList;
 
     public BookDetailMainView(Book book) {
         super(book, NAME_BOOK_DETAIL_MAIN_VIEW);
@@ -160,19 +167,20 @@ public class BookDetailMainView extends MainViewBase<Book, BookDetailController>
         panel_2.add(tfNumberOfCopies, "flowx,cell 1 0");
         tfNumberOfCopies.setColumns(10);
 
-        JButton btnEntfernen = new JButton("Entfernen");
+        btnEntfernen = new JButton("Entfernen");
+        btnEntfernen.setEnabled(false);
         panel_2.add(btnEntfernen, "cell 2 0");
 
-        JButton btnHinzufgen = new JButton("Hinzuf\u00FCgen");
+        btnHinzufgen = new JButton("Hinzuf\u00FCgen");
         panel_2.add(btnHinzufgen, "cell 3 0");
 
         JPanel panel_3 = new JPanel();
         panel_1.add(panel_3, BorderLayout.CENTER);
         panel_3.setLayout(new BorderLayout(0, 0));
 
-        JList<Copy> list = new JList<Copy>();
-        list.setModel(copyListModel);
-        panel_3.add(list);
+        copiesList = new JList<Copy>();
+        copiesList.setModel(copyListModel);
+        panel_3.add(copiesList);
 
         JPanel panel_5 = new JPanel();
         getContentPane().add(panel_5, BorderLayout.SOUTH);
@@ -230,14 +238,38 @@ public class BookDetailMainView extends MainViewBase<Book, BookDetailController>
 
                 if (!validation.hasErrors()) {
                     Book bookToUpdate = extractViewValues(getReferenceObject());
-                    if (getController().saveBook(bookToUpdate)) {
+                    List<Copy> copies = copyListModel.getAll();
+                    if (getController().saveBook(bookToUpdate, copies)) {
                         BookDetailMainView.this.dispose();
                     }
                 }
 
             }
         });
+        btnHinzufgen.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                copyListModel.addCopy(new Copy(null));
+
+            }
+        });
+        btnEntfernen.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                copyListModel.removeCopy(copiesList.getSelectedValue());
+            }
+        });
+        copiesList.addListSelectionListener(new ListSelectionListener() {
+
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                // TODO this does not work when removing all copies
+                int selectedCopies = copiesList.getSelectedIndices().length;
+                btnEntfernen.setEnabled(selectedCopies == 1);
+            }
+        });
 
     }
-
 }
