@@ -24,6 +24,10 @@ public class BookValidator implements Validator<Book> {
             result.addError("Verlag darf nicht leer sein.");
         }
 
+        if (book.getShelf() == null) {
+            result.addError("Regal darf nicht leer sein.");
+        }
+
         return result;
     }
 

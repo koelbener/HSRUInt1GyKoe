@@ -9,6 +9,7 @@ import org.junit.Test;
 import com.jgoodies.validation.ValidationResult;
 
 import domain.Book;
+import domain.Shelf;
 
 public class BookValidatorTest {
 
@@ -21,7 +22,8 @@ public class BookValidatorTest {
         validBook = new Book();
         validBook.setName("Testing with JUnit 4");
         validBook.setAuthor("Michi Gysel");
-        validBook.setPublisher("HSR Hochschule für Technik Rapperswil");
+        validBook.setPublisher("HSR Hochschule fï¿½r Technik Rapperswil");
+        validBook.setShelf(Shelf.A1);
     }
 
     @Test
@@ -58,6 +60,19 @@ public class BookValidatorTest {
         assertTrue(validationResult.hasErrors());
         assertEquals(1, validationResult.size());
         assertEquals("Verlag darf nicht leer sein.", validationResult.get(0).formattedText());
+    }
+
+    @Test
+    public void validateBookShelfIsMandatory() {
+        // Setup fixtures
+        validBook.setShelf(null);
+        // Exercise SUT
+        ValidationResult validationResult = validator.validate(validBook);
+        // Validate result
+        assertTrue(validationResult.hasErrors());
+        assertEquals(1, validationResult.size());
+        assertEquals("Regal darf nicht leer sein.", validationResult.get(0).formattedText());
+
     }
 
 }
