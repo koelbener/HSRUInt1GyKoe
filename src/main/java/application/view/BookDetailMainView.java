@@ -79,6 +79,8 @@ public class BookDetailMainView extends MainViewBase<Book, BookDetailController>
             // select the correct shelf
             tfRegal.setSelectedItem(referenceObject.getShelf());
             tfNumberOfCopies.setText(String.valueOf(copyListModel.getSize()));
+        } else {
+            tfRegal.setSelectedItem(Shelf.A1);
         }
     }
 
