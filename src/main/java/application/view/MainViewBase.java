@@ -4,6 +4,8 @@ import java.awt.Frame;
 import java.awt.Point;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 
 import javax.swing.JFrame;
 
@@ -12,13 +14,14 @@ import org.slf4j.LoggerFactory;
 
 import application.controller.AbstractController;
 import application.core.Repository;
+import application.core.Texts;
 import domain.Library;
 
 /**
  * A MainView is a view inheriting from JFrame. Every window of the UI is a MainViewBase descendant.
  * 
  */
-public abstract class MainViewBase<R, T extends AbstractController> extends JFrame {
+public abstract class MainViewBase<R, T extends AbstractController> extends JFrame implements Observer {
 
     private static final Logger logger = LoggerFactory.getLogger(MainViewBase.class);
 
@@ -32,13 +35,23 @@ public abstract class MainViewBase<R, T extends AbstractController> extends JFra
         this.referenceObject = referenceObject;
         initModel();
         initUIElements();
+        setTexts();
         initListeners();
         controller = initController();
 
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         checkPositionAgainstActiveFrames();
         setVisible(true);
+
+        Texts.getInstance().addObserver(this);
     }
+
+    @Override
+    public void update(Observable arg0, Object arg1) {
+        setTexts();
+    }
+
+    protected abstract void setTexts();
 
     /**
      * checks if the JFrame is located on the same location as another frame. The method moves the frame until it finds a free location.

@@ -6,6 +6,7 @@ import javax.swing.JOptionPane;
 import javax.swing.table.AbstractTableModel;
 
 import application.core.Repository;
+import application.core.Texts;
 
 import com.jgoodies.validation.ValidationResult;
 
@@ -20,10 +21,17 @@ public class BookTableModel extends AbstractTableModel {
     public static final int COLUMN_TITLE = 0;
     private static final long serialVersionUID = -67214736125029646L;
     private List<Book> books;
-    private final String[] columnNames = new String[] { "Name", "Autor", "Verlag", "Kopien" };
+    private String[] columnNames;
 
     public BookTableModel(List<Book> books) {
         this.books = books;
+        setColumns();
+    }
+
+    public void setColumns() {
+        columnNames = new String[] { Texts.get("BookMasterMainView.table.column.name"), Texts.get("BookMasterMainView.table.column.author"),
+                Texts.get("BookMasterMainView.table.column.publisher"), Texts.get("BookMasterMainView.table.column.copies") };
+        this.fireTableStructureChanged();
     }
 
     @Override

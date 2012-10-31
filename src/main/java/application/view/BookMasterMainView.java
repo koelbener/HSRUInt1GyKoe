@@ -3,7 +3,6 @@ package application.view;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
@@ -11,6 +10,7 @@ import java.awt.event.FocusEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -35,10 +35,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import application.controller.BookMasterController;
+import application.core.Language;
 import application.core.LibraryActionListener;
 import application.core.Repository;
+import application.core.Texts;
 import application.presentationModel.BooksPMod;
-import application.viewModel.SearchFilterComboBoxModel;
 import application.viewModel.SearchFilterElement;
 import domain.Library;
 
@@ -46,7 +47,7 @@ public class BookMasterMainView extends MainViewBase<Library, BookMasterControll
 
     private static final Logger logger = LoggerFactory.getLogger(BookMasterMainView.class);
 
-    public static final String SEARCH_DEFAULT_VALUE = "Suche...";
+    public static String searchDefaultText;
 
     public static final String NAME_BOOK_MASTER_MAIN_VIEW = "BookMasterMainView";
     public static final String NAME_BUTTON_OPEN = "button.open";
@@ -67,53 +68,109 @@ public class BookMasterMainView extends MainViewBase<Library, BookMasterControll
 
     private JComboBox<SearchFilterElement> searchFilterComboBox;
 
+    private JComboBox<Language> languageComboBox;
+
+    private JPanel panel;
+
+    private JLabel lblAnzahlExemplare;
+
+    private JLabel lblLasd;
+
+    private JPanel panel_4;
+
+    private JLabel lblNewLabel_1;
+
+    private JLabel lblNurVerfgbare;
+
+    private JTabbedPane tabbedPane;
+
+    private JLabel lblSwingingLibrary;
+    private JPanel panel_3;
+
     public BookMasterMainView() {
         super(null, NAME_BOOK_MASTER_MAIN_VIEW);
         setMinimumSize(new Dimension(616, 445));
     }
 
     @Override
+    protected void setTexts() {
+        // title
+        setTitle(Texts.get("BookMasterMainView.this.title"));
+        // panel titles
+        panel.setBorder(new TitledBorder(null, Texts.get("BookMasterMainView.panel_3.borderTitle"), TitledBorder.LEADING, TitledBorder.TOP, null, null));
+        panel_4.setBorder(new TitledBorder(null, Texts.get("BookMasterMainView.panel_4.borderTitle"), TitledBorder.LEADING, TitledBorder.TOP, null, null));
+
+        // components
+        lblAnzahlExemplare.setText(Texts.get("BookMasterMainView.lblAnzahlExemplare.text"));
+        lblLasd.setText(Texts.get("BookMasterMainView.lblLasd.text"));
+        btnNewBook.setText(Texts.get("BookMasterMainView.btnNewBook.text"));
+        lblNewLabel_1.setText(Texts.get("BookMasterMainView.lblNewLabel_1.text"));
+        btnOpenBook.setText(Texts.get("BookMasterMainView.btnOpenBook.text"));
+        searchDefaultText = Texts.get("BookMasterMainView.searchDefault");
+        lblNurVerfgbare.setText(Texts.get("BookMasterMainView.lblNurVerfgbare.text"));
+        lblSwingingLibrary.setText(Texts.get("BookMasterMainView.lblSwingingLibrary.text"));
+
+        // Tooltips
+        btnOpenBook.setToolTipText(Texts.get("BookMasterMainView.btnOpenBook.toolTipText"));
+
+        // Tabs
+        tabbedPane.setTitleAt(0, Texts.get("BookMasterMainView.tab.books"));
+        tabbedPane.setTitleAt(1, Texts.get("BookMasterMainView.tab.lending"));
+
+        // table
+        booksPMod.getBookTableModel().setColumns();
+
+        // filter comboBox
+        booksPMod.getFilterComboBoxModel().updateTexts();
+
+        revalidate();
+    }
+
+    @Override
     protected void initUIElements() {
         super.initUIElements();
-        setTitle("Swinging Library");
         setBounds(100, 100, 616, 445);
         getContentPane().setLayout(new BorderLayout(0, 0));
 
-        JPanel panel = new JPanel();
-        FlowLayout flowLayout = (FlowLayout) panel.getLayout();
-        flowLayout.setAlignment(FlowLayout.LEFT);
+        panel = new JPanel();
         getContentPane().add(panel, BorderLayout.NORTH);
+        panel.setLayout(new MigLayout("", "[55px][28px][][][][][grow][][][][][][][][][][][][]", "[20px,grow]"));
 
-        JLabel lblSwingingLibrary = new JLabel("Swinging Library");
-        panel.add(lblSwingingLibrary);
+        lblSwingingLibrary = new JLabel();
+        panel.add(lblSwingingLibrary, "cell 0 0,alignx left,aligny center");
 
-        JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+        panel_3 = new JPanel();
+        panel.add(panel_3, "cell 6 0,grow");
+
+        languageComboBox = new JComboBox<Language>();
+        languageComboBox.setModel(new DefaultComboBoxModel<Language>(Language.values()));
+        panel.add(languageComboBox, "cell 18 0,alignx right,aligny top");
+
+        tabbedPane = new JTabbedPane(JTabbedPane.TOP);
         tabbedPane.setBorder(new CompoundBorder(new EmptyBorder(10, 5, 5, 5), new LineBorder(new Color(0, 0, 0), 1, true)));
         getContentPane().add(tabbedPane, BorderLayout.CENTER);
 
         JPanel panel_1 = new JPanel();
-        tabbedPane.addTab("B\u00FCcher", null, panel_1, null);
+        tabbedPane.addTab(Texts.get("BookMasterMainView.tab.books"), null, panel_1, null);
         panel_1.setLayout(new BorderLayout(0, 0));
 
-        JPanel panel_3 = new JPanel();
-        panel_3.setBorder(new TitledBorder(null, "Inventar Statistiken", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-        panel_1.add(panel_3, BorderLayout.NORTH);
-        panel_3.setLayout(new MigLayout("", "[][][fill][][]", "[]"));
+        panel = new JPanel();
+        panel_1.add(panel, BorderLayout.NORTH);
+        panel.setLayout(new MigLayout("", "[][][fill][][]", "[]"));
 
-        JLabel lblLasd = new JLabel("Anzahl B\u00FCcher:");
-        panel_3.add(lblLasd, "cell 0 0");
+        lblLasd = new JLabel();
+        panel.add(lblLasd, "cell 0 0");
         numberOfBooks = new JLabel(String.valueOf(booksPMod.getBookTableModel().getRowCount()));
         numberOfBooks.setName(NAME_LABEL_NUMBER_OF_BOOKS);
-        panel_3.add(numberOfBooks, "cell 1 0");
+        panel.add(numberOfBooks, "cell 1 0");
 
-        JLabel lblAnzahlExemplare = new JLabel("Anzahl Exemplare:");
-        panel_3.add(lblAnzahlExemplare, "cell 3 0");
+        lblAnzahlExemplare = new JLabel();
+        panel.add(lblAnzahlExemplare, "cell 3 0");
 
         numberOfCopies = new JLabel(String.valueOf(library.getCopies().size()));
-        panel_3.add(numberOfCopies, "cell 4 0");
+        panel.add(numberOfCopies, "cell 4 0");
 
-        JPanel panel_4 = new JPanel();
-        panel_4.setBorder(new TitledBorder(null, "Buch-Inventar", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+        panel_4 = new JPanel();
         panel_1.add(panel_4, BorderLayout.CENTER);
         panel_4.setLayout(new BorderLayout(0, 0));
 
@@ -121,24 +178,24 @@ public class BookMasterMainView extends MainViewBase<Library, BookMasterControll
         panel_4.add(panel_5, BorderLayout.NORTH);
         panel_5.setLayout(new MigLayout("", "[grow][][grow][]", "[][]"));
 
-        JLabel lblNewLabel_1 = new JLabel("Alle B\u00FCcher stehen in der untenstehenden Tabelle");
+        lblNewLabel_1 = new JLabel();
         panel_5.add(lblNewLabel_1, "cell 0 0");
 
         txtSuche = new JTextField();
         txtSuche.setName(NAME_SEARCH_FIELD);
-        txtSuche.setText(SEARCH_DEFAULT_VALUE);
+        txtSuche.setText(searchDefaultText);
         panel_5.add(txtSuche, "flowx,cell 0 1,growx");
         txtSuche.setColumns(10);
 
-        JCheckBox checkBox = new JCheckBox("");
+        JCheckBox checkBox = new JCheckBox();
         panel_5.add(checkBox, "cell 0 1");
 
-        JLabel lblNurVerfgbare = new JLabel("Nur Verf\u00FCgbare");
+        lblNurVerfgbare = new JLabel();
         panel_5.add(lblNurVerfgbare, "cell 1 1,alignx trailing");
 
         searchFilterComboBox = new JComboBox<SearchFilterElement>();
         searchFilterComboBox.setName(NAME_COMBOBOX_FILTER);
-        searchFilterComboBox.setModel(new SearchFilterComboBoxModel());
+        searchFilterComboBox.setModel(booksPMod.getFilterComboBoxModel());
         panel_5.add(searchFilterComboBox, "cell 2 1,growx");
 
         JPanel panel_6 = new JPanel();
@@ -159,20 +216,18 @@ public class BookMasterMainView extends MainViewBase<Library, BookMasterControll
         panel_6.add(panel_7, BorderLayout.EAST);
         panel_7.setLayout(new MigLayout("", "[]", "[23px][]"));
 
-        btnNewBook = new JButton("Neu");
+        btnNewBook = new JButton();
         btnNewBook.setMnemonic('n');
         panel_7.add(btnNewBook, "cell 0 0,growx,aligny center");
 
-        btnOpenBook = new JButton("\u00D6ffnen");
+        btnOpenBook = new JButton();
         btnOpenBook.setName(NAME_BUTTON_OPEN);
         btnOpenBook.setMnemonic('o');
         panel_7.add(btnOpenBook, "cell 0 1,growx,aligny center");
-        btnOpenBook.setToolTipText("Alle selektierten Bücher öffnen");
         btnOpenBook.setEnabled(false);
 
         JPanel panel_2 = new JPanel();
-        tabbedPane.addTab("Ausleihen", null, panel_2, null);
-
+        tabbedPane.addTab(Texts.get("BookMasterMainView.tab.lending"), null, panel_2, null);
     }
 
     @Override
@@ -208,7 +263,7 @@ public class BookMasterMainView extends MainViewBase<Library, BookMasterControll
             }
 
             private void search() {
-                if (!txtSuche.getText().equals(SEARCH_DEFAULT_VALUE)) {
+                if (!txtSuche.getText().equals(searchDefaultText)) {
                     getController().searchBooks(txtSuche.getText(), ((SearchFilterElement) searchFilterComboBox.getSelectedItem()).getBookTableModelColumn());
                 }
             }
@@ -238,6 +293,14 @@ public class BookMasterMainView extends MainViewBase<Library, BookMasterControll
             }
         });
 
+        languageComboBox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent arg0) {
+                Language selectedLanguage = (Language) languageComboBox.getSelectedItem();
+                Texts.getInstance().switchTo(selectedLanguage.getLocale());
+            }
+        });
+
         txtSuche.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void changedUpdate(DocumentEvent e) {
@@ -259,7 +322,7 @@ public class BookMasterMainView extends MainViewBase<Library, BookMasterControll
         txtSuche.addFocusListener(new FocusAdapter() {
             @Override
             public void focusGained(FocusEvent arg0) {
-                if (txtSuche.getText().equals(SEARCH_DEFAULT_VALUE)) {
+                if (txtSuche.getText().equals(searchDefaultText)) {
                     txtSuche.setText("");
                 }
             }
@@ -267,7 +330,7 @@ public class BookMasterMainView extends MainViewBase<Library, BookMasterControll
             @Override
             public void focusLost(FocusEvent arg0) {
                 if (txtSuche.getText().equals("")) {
-                    txtSuche.setText(SEARCH_DEFAULT_VALUE);
+                    txtSuche.setText(searchDefaultText);
                 }
             }
         });
@@ -275,8 +338,9 @@ public class BookMasterMainView extends MainViewBase<Library, BookMasterControll
     }
 
     private void search() {
-        if (!txtSuche.getText().equals(SEARCH_DEFAULT_VALUE)) {
+        if (!txtSuche.getText().equals(searchDefaultText)) {
             getController().searchBooks(txtSuche.getText(), ((SearchFilterElement) searchFilterComboBox.getSelectedItem()).getBookTableModelColumn());
         }
     }
+
 }

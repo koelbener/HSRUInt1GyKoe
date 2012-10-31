@@ -23,6 +23,7 @@ import net.miginfocom.swing.MigLayout;
 import application.controller.BookDetailController;
 import application.core.LibraryActionListener;
 import application.core.Repository;
+import application.core.Texts;
 import application.viewModel.CopyListModel;
 
 import com.jgoodies.validation.ValidationResult;
@@ -57,6 +58,13 @@ public class BookDetailMainView extends MainViewBase<Book, BookDetailController>
     private JButton btnHinzufgen;
     private JButton btnEntfernen;
     private JList<Copy> copiesList;
+    private JPanel panel;
+    private JLabel lblTitel;
+    private JLabel lblAutor;
+    private JLabel lblVerlag;
+    private JLabel lblRegal;
+    private JPanel panel_1;
+    private JLabel lblAnzahl;
 
     public BookDetailMainView(Book book) {
         super(book, NAME_BOOK_DETAIL_MAIN_VIEW);
@@ -102,13 +110,33 @@ public class BookDetailMainView extends MainViewBase<Book, BookDetailController>
         return book;
     }
 
+    @Override
+    protected void setTexts() {
+        // title
+        setTitle(Texts.get("BookDetailMainView.this.title")); //$NON-NLS-1$
+
+        // border of panels
+        panel.setBorder(new TitledBorder(null, Texts.get("BookDetailMainView.panel.borderTitle"), TitledBorder.LEADING, TitledBorder.TOP, null, null));
+        panel_1.setBorder(new TitledBorder(null, Texts.get("BookDetailMainView.panel_1.borderTitle"), TitledBorder.LEADING, TitledBorder.TOP, null, null)); //$NON-NLS-1$
+
+        // components
+        lblTitel.setText(Texts.get("BookDetailMainView.lblTitel.text"));
+        lblAutor.setText(Texts.get("BookDetailMainView.lblAutor.text"));
+        lblVerlag.setText(Texts.get("BookDetailMainView.lblVerlag.text"));
+        lblRegal.setText(Texts.get("BookDetailMainView.lblRegal.text"));
+        lblAnzahl.setText(Texts.get("BookDetailMainView.lblAnzahl.text"));
+        btnEntfernen.setText(Texts.get("BookDetailMainView.btnEntfernen.text"));
+        btnHinzufgen.setText(Texts.get("BookDetailMainView.btnHinzufgen.text"));
+        btnSave.setText(Texts.get("BookDetailMainView.btnSave.text"));
+        btnCancel.setText(Texts.get("BookDetailMainView.btnCancel.text"));
+    }
+
     /**
      * Initialize the contents of the frame.
      */
     @Override
     protected void initUIElements() {
         super.initUIElements();
-        setTitle("Buch Detailansicht");
         setBounds(100, 100, 450, 450);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         getContentPane().setLayout(new BorderLayout(0, 0));
@@ -117,12 +145,11 @@ public class BookDetailMainView extends MainViewBase<Book, BookDetailController>
         getContentPane().add(panel_4, BorderLayout.CENTER);
         panel_4.setLayout(new BorderLayout(0, 0));
 
-        JPanel panel = new JPanel();
+        panel = new JPanel();
         panel_4.add(panel, BorderLayout.NORTH);
-        panel.setBorder(new TitledBorder(null, "Buch Informationen", TitledBorder.LEADING, TitledBorder.TOP, null, null));
         panel.setLayout(new MigLayout("", "[][grow]", "[][][][]"));
 
-        JLabel lblTitel = new JLabel("Titel");
+        lblTitel = new JLabel();
         panel.add(lblTitel, "cell 0 0,alignx trailing");
 
         tfTitle = new JTextField();
@@ -130,36 +157,35 @@ public class BookDetailMainView extends MainViewBase<Book, BookDetailController>
         tfTitle.setColumns(10);
         tfTitle.setName(NAME_TEXTBOX_TITLE);
 
-        JLabel lblAutor = new JLabel("Autor");
+        lblAutor = new JLabel();
         panel.add(lblAutor, "cell 0 1,alignx trailing");
 
         tfAutor = new JTextField();
         panel.add(tfAutor, "cell 1 1,growx");
         tfAutor.setColumns(10);
 
-        JLabel lblVerlag = new JLabel("Verlag");
+        lblVerlag = new JLabel();
         panel.add(lblVerlag, "cell 0 2,alignx trailing");
 
         tfVerlag = new JTextField();
         panel.add(tfVerlag, "cell 1 2,growx");
         tfVerlag.setColumns(10);
 
-        JLabel lblRegal = new JLabel("Regal");
+        lblRegal = new JLabel();
         panel.add(lblRegal, "cell 0 3,alignx trailing");
 
         tfRegal = new JComboBox<Shelf>();
         panel.add(tfRegal, "cell 1 3,growx");
 
-        JPanel panel_1 = new JPanel();
+        panel_1 = new JPanel();
         panel_4.add(panel_1, BorderLayout.CENTER);
-        panel_1.setBorder(new TitledBorder(null, "Exemplare", TitledBorder.LEADING, TitledBorder.TOP, null, null));
         panel_1.setLayout(new BorderLayout(0, 0));
 
         JPanel panel_2 = new JPanel();
         panel_1.add(panel_2, BorderLayout.NORTH);
         panel_2.setLayout(new MigLayout("", "[][grow][][]", "[]"));
 
-        JLabel lblAnzahl = new JLabel("Anzahl");
+        lblAnzahl = new JLabel();
         panel_2.add(lblAnzahl, "cell 0 0,alignx trailing");
 
         tfNumberOfCopies = new JTextField();
@@ -167,11 +193,11 @@ public class BookDetailMainView extends MainViewBase<Book, BookDetailController>
         panel_2.add(tfNumberOfCopies, "flowx,cell 1 0");
         tfNumberOfCopies.setColumns(10);
 
-        btnEntfernen = new JButton("Entfernen");
+        btnEntfernen = new JButton();
         btnEntfernen.setEnabled(false);
         panel_2.add(btnEntfernen, "cell 2 0");
 
-        btnHinzufgen = new JButton("Hinzuf\u00FCgen");
+        btnHinzufgen = new JButton();
         panel_2.add(btnHinzufgen, "cell 3 0");
 
         JPanel panel_3 = new JPanel();
@@ -200,12 +226,12 @@ public class BookDetailMainView extends MainViewBase<Book, BookDetailController>
         panel_5.add(panel_8, BorderLayout.SOUTH);
         panel_8.setLayout(new MigLayout("", "[grow][85px][]", "[23px]"));
 
-        btnSave = new JButton("Speichern");
+        btnSave = new JButton();
         panel_8.add(btnSave, "cell 1 0,alignx left,aligny top");
         btnSave.setMnemonic('s');
         btnSave.setName(NAME_BUTTON_SAVE);
 
-        btnCancel = new JButton("Abbrechen");
+        btnCancel = new JButton(); //$NON-NLS-1$
         panel_8.add(btnCancel, "cell 2 0,alignx left,aligny top");
         btnCancel.setName(NAME_BUTTON_CANCEL);
         btnCancel.setMnemonic('c');
@@ -272,4 +298,5 @@ public class BookDetailMainView extends MainViewBase<Book, BookDetailController>
         });
 
     }
+
 }

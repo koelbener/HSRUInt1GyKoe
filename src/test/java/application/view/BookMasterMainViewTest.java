@@ -6,7 +6,7 @@ import static application.view.BookDetailMainView.NAME_TEXTBOX_TITLE;
 import static application.view.BookMasterMainView.NAME_BUTTON_OPEN;
 import static application.view.BookMasterMainView.NAME_SEARCH_FIELD;
 import static application.view.BookMasterMainView.NAME_TABLE_BOOKS;
-import static application.view.BookMasterMainView.SEARCH_DEFAULT_VALUE;
+import static application.view.BookMasterMainView.searchDefaultText;
 import static application.view.BookMasterMainView.NAME_COMBOBOX_FILTER;
 import static application.viewModel.BookTableModel.COLUMN_AMOUNT;
 import static application.viewModel.BookTableModel.COLUMN_TITLE;
@@ -103,11 +103,11 @@ public class BookMasterMainViewTest extends AbstractFestTest {
     @Test
     public void testFocusOnSearchField() {
         JTextComponentFixture searchField = window.textBox(NAME_SEARCH_FIELD);
-        searchField.requireText(SEARCH_DEFAULT_VALUE);
+        searchField.requireText(searchDefaultText);
         window.textBox(NAME_SEARCH_FIELD).focus();
         searchField.requireText("");
         window.table(NAME_TABLE_BOOKS).focus();
-        searchField.requireText(SEARCH_DEFAULT_VALUE);
+        searchField.requireText(searchDefaultText);
     }
 
     @Test

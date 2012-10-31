@@ -8,17 +8,24 @@ import org.slf4j.LoggerFactory;
 
 import application.core.Repository;
 import application.viewModel.BookTableModel;
+import application.viewModel.SearchFilterComboBoxModel;
 import domain.Book;
 
 public class BooksPMod extends pModBase {
 
     private final Logger logger = LoggerFactory.getLogger(BooksPMod.class);
     private final BookTableModel bookTableModel;
+    private final SearchFilterComboBoxModel filterComboBoxModel;
     private final TableRowSorter<BookTableModel> bookTableRowSorter;
 
     public BooksPMod() {
         bookTableModel = new BookTableModel(Repository.getInstance().getLibrary().getBooks());
         bookTableRowSorter = new TableRowSorter<BookTableModel>(bookTableModel);
+        filterComboBoxModel = new SearchFilterComboBoxModel();
+    }
+
+    public SearchFilterComboBoxModel getFilterComboBoxModel() {
+        return filterComboBoxModel;
     }
 
     public BookTableModel getBookTableModel() {
