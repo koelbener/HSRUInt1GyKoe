@@ -49,8 +49,8 @@ public class BookMasterMainView extends MainViewBase<Library, BookMasterControll
 
     public static String searchDefaultText;
 
-    public static final String NAME_BOOK_MASTER_MAIN_VIEW = "BookMasterMainView";
     public static final String NAME_BUTTON_OPEN = "button.open";
+    public static final String NAME_BUTTON_NEW = "button.new";
     public static final String NAME_TABLE_BOOKS = "table.books";
     public static final String NAME_LABEL_NUMBER_OF_BOOKS = "label.numberOfBooks";
     public static final String NAME_SEARCH_FIELD = "textField.search";
@@ -58,7 +58,7 @@ public class BookMasterMainView extends MainViewBase<Library, BookMasterControll
 
     private static final long serialVersionUID = -5636590532882178863L;
 
-    private JTextField txtSuche;
+    private JTextField txtFieldSearch;
     private JLabel numberOfCopies;
     private JLabel numberOfBooks;
     private JButton btnOpenBook;
@@ -67,28 +67,19 @@ public class BookMasterMainView extends MainViewBase<Library, BookMasterControll
     private JTable booksTable;
 
     private JComboBox<SearchFilterElement> searchFilterComboBox;
-
     private JComboBox<Language> languageComboBox;
-
     private JPanel panel;
-
     private JLabel lblAnzahlExemplare;
-
     private JLabel lblLasd;
-
     private JPanel panel_4;
-
     private JLabel lblNewLabel_1;
-
     private JLabel lblNurVerfgbare;
-
     private JTabbedPane tabbedPane;
-
     private JLabel lblSwingingLibrary;
     private JPanel panel_3;
 
     public BookMasterMainView() {
-        super(null, NAME_BOOK_MASTER_MAIN_VIEW);
+        super(null);
         setMinimumSize(new Dimension(616, 445));
     }
 
@@ -181,11 +172,11 @@ public class BookMasterMainView extends MainViewBase<Library, BookMasterControll
         lblNewLabel_1 = new JLabel();
         panel_5.add(lblNewLabel_1, "cell 0 0");
 
-        txtSuche = new JTextField();
-        txtSuche.setName(NAME_SEARCH_FIELD);
-        txtSuche.setText(searchDefaultText);
-        panel_5.add(txtSuche, "flowx,cell 0 1,growx");
-        txtSuche.setColumns(10);
+        txtFieldSearch = new JTextField();
+        txtFieldSearch.setName(NAME_SEARCH_FIELD);
+        txtFieldSearch.setText(searchDefaultText);
+        panel_5.add(txtFieldSearch, "flowx,cell 0 1,growx");
+        txtFieldSearch.setColumns(10);
 
         JCheckBox checkBox = new JCheckBox();
         panel_5.add(checkBox, "cell 0 1");
@@ -217,6 +208,7 @@ public class BookMasterMainView extends MainViewBase<Library, BookMasterControll
         panel_7.setLayout(new MigLayout("", "[]", "[23px][]"));
 
         btnNewBook = new JButton();
+        btnNewBook.setName(NAME_BUTTON_NEW);
         btnNewBook.setMnemonic('n');
         panel_7.add(btnNewBook, "cell 0 0,growx,aligny center");
 
@@ -263,8 +255,8 @@ public class BookMasterMainView extends MainViewBase<Library, BookMasterControll
             }
 
             private void search() {
-                if (!txtSuche.getText().equals(searchDefaultText)) {
-                    getController().searchBooks(txtSuche.getText(), ((SearchFilterElement) searchFilterComboBox.getSelectedItem()).getBookTableModelColumn());
+                if (!txtFieldSearch.getText().equals(searchDefaultText)) {
+                    getController().searchBooks(txtFieldSearch.getText(), ((SearchFilterElement) searchFilterComboBox.getSelectedItem()).getBookTableModelColumn());
                 }
             }
         });
@@ -301,7 +293,7 @@ public class BookMasterMainView extends MainViewBase<Library, BookMasterControll
             }
         });
 
-        txtSuche.getDocument().addDocumentListener(new DocumentListener() {
+        txtFieldSearch.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void changedUpdate(DocumentEvent e) {
                 search();
@@ -319,18 +311,18 @@ public class BookMasterMainView extends MainViewBase<Library, BookMasterControll
 
         });
 
-        txtSuche.addFocusListener(new FocusAdapter() {
+        txtFieldSearch.addFocusListener(new FocusAdapter() {
             @Override
             public void focusGained(FocusEvent arg0) {
-                if (txtSuche.getText().equals(searchDefaultText)) {
-                    txtSuche.setText("");
+                if (txtFieldSearch.getText().equals(searchDefaultText)) {
+                    txtFieldSearch.setText("");
                 }
             }
 
             @Override
             public void focusLost(FocusEvent arg0) {
-                if (txtSuche.getText().equals("")) {
-                    txtSuche.setText(searchDefaultText);
+                if (txtFieldSearch.getText().equals("")) {
+                    txtFieldSearch.setText(searchDefaultText);
                 }
             }
         });
@@ -338,8 +330,8 @@ public class BookMasterMainView extends MainViewBase<Library, BookMasterControll
     }
 
     private void search() {
-        if (!txtSuche.getText().equals(searchDefaultText)) {
-            getController().searchBooks(txtSuche.getText(), ((SearchFilterElement) searchFilterComboBox.getSelectedItem()).getBookTableModelColumn());
+        if (!txtFieldSearch.getText().equals(searchDefaultText)) {
+            getController().searchBooks(txtFieldSearch.getText(), ((SearchFilterElement) searchFilterComboBox.getSelectedItem()).getBookTableModelColumn());
         }
     }
 

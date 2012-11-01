@@ -5,7 +5,8 @@ import javax.swing.RowSorter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import application.view.BookDetailMainView;
+import application.view.EditBookDetailMainView;
+import application.view.NewBookDetailMainView;
 import application.viewModel.BookTableModel;
 import domain.Book;
 
@@ -19,7 +20,7 @@ public class BookMasterController extends AbstractController {
         for (int index : selectedIndices) {
             Book book = bookTableModel.getBook(sorter.convertRowIndexToModel(index));
             logger.debug("opening book {}", book.getName());
-            new BookDetailMainView(book);
+            new EditBookDetailMainView(book);
         }
 
     }
@@ -29,7 +30,7 @@ public class BookMasterController extends AbstractController {
     }
 
     public void openNewBook() {
-        new BookDetailMainView(null);
+        new NewBookDetailMainView();
     }
 
 }

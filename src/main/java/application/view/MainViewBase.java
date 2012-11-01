@@ -30,8 +30,8 @@ public abstract class MainViewBase<R, T extends AbstractController> extends JFra
     protected Library library;
     private final R referenceObject;
 
-    public MainViewBase(R referenceObject, String windowName) {
-        setName(windowName);
+    public MainViewBase(R referenceObject) {
+        setName(this.getClass().getSimpleName());
         this.referenceObject = referenceObject;
         initModel();
         initUIElements();

@@ -1,13 +1,12 @@
 package application.view;
 
-import static application.view.BookDetailMainView.NAME_BOOK_DETAIL_MAIN_VIEW;
-import static application.view.BookDetailMainView.NAME_BUTTON_CANCEL;
-import static application.view.BookDetailMainView.NAME_TEXTBOX_TITLE;
+import static application.view.BookDetailMainViewBase.NAME_BUTTON_CANCEL;
+import static application.view.BookDetailMainViewBase.NAME_TEXTBOX_TITLE;
 import static application.view.BookMasterMainView.NAME_BUTTON_OPEN;
+import static application.view.BookMasterMainView.NAME_COMBOBOX_FILTER;
 import static application.view.BookMasterMainView.NAME_SEARCH_FIELD;
 import static application.view.BookMasterMainView.NAME_TABLE_BOOKS;
 import static application.view.BookMasterMainView.searchDefaultText;
-import static application.view.BookMasterMainView.NAME_COMBOBOX_FILTER;
 import static application.viewModel.BookTableModel.COLUMN_AMOUNT;
 import static application.viewModel.BookTableModel.COLUMN_TITLE;
 import static org.fest.swing.data.TableCell.row;
@@ -126,12 +125,12 @@ public class BookMasterMainViewTest extends AbstractFestTest {
         window.table(NAME_TABLE_BOOKS).enterValue(row(3).column(COLUMN_TITLE), NEW_TITLE_VALUE);
         window.table(NAME_TABLE_BOOKS).click(row(3).column(COLUMN_AMOUNT), MouseClickInfo.leftButton().times(2));
 
-        FrameFixture bookDetailDialog = findFrame(window, NAME_BOOK_DETAIL_MAIN_VIEW);
+        FrameFixture bookDetailDialog = findFrame(window, EditBookDetailMainView.class.getSimpleName());
         bookDetailDialog.textBox(NAME_TEXTBOX_TITLE).requireText(NEW_TITLE_VALUE);
     }
-    
+
     @Test
-    public void testSearchFilterComboBox(){
+    public void testSearchFilterComboBox() {
         window.textBox(NAME_SEARCH_FIELD).setText("wiley");
         window.table(NAME_TABLE_BOOKS).requireRowCount(5);
         // select "Suche Titel" in comboBox
@@ -142,11 +141,11 @@ public class BookMasterMainViewTest extends AbstractFestTest {
         window.comboBox(NAME_COMBOBOX_FILTER).selectItem(3);
         // 5 books from wiley verlag should be found
         window.table(NAME_TABLE_BOOKS).requireRowCount(5);
-        
+
     }
 
     private void assertThatDetailViewIsVisible() {
-        FrameFixture bookDetailDialog = findFrame(window, NAME_BOOK_DETAIL_MAIN_VIEW);
+        FrameFixture bookDetailDialog = findFrame(window, EditBookDetailMainView.class.getSimpleName());
         bookDetailDialog.requireVisible();
         bookDetailDialog.button(NAME_BUTTON_CANCEL).click();
         bookDetailDialog.requireNotVisible();
