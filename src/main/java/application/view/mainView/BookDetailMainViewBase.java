@@ -1,6 +1,7 @@
-package application.view;
+package application.view.mainView;
 
 import java.awt.BorderLayout;
+import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -46,7 +47,6 @@ public abstract class BookDetailMainViewBase extends MainViewBase<Book, BookDeta
     public static final String NAME_TEXTBOX_PUBLISHER = "textbox.publisher";
     public static final String NAME_COMBOBOX_SHELF = "combobox.shelf";
 
-    private static final long serialVersionUID = 1L;
     protected JTextField txtFieldTitle;
     protected JTextField txtFieldAuthor;
     protected JTextField txtFieldPublisher;
@@ -117,7 +117,7 @@ public abstract class BookDetailMainViewBase extends MainViewBase<Book, BookDeta
     @Override
     protected void setTexts() {
         // title
-        setTitle(Texts.get("BookDetailMainView.this.title")); //$NON-NLS-1$
+        getContainer().setTitle(Texts.get("BookDetailMainView.this.title")); //$NON-NLS-1$
 
         // border of panels
         panel.setBorder(new TitledBorder(null, Texts.get("BookDetailMainView.panel.borderTitle"), TitledBorder.LEADING, TitledBorder.TOP, null, null));
@@ -141,12 +141,13 @@ public abstract class BookDetailMainViewBase extends MainViewBase<Book, BookDeta
     @Override
     protected void initUIElements() {
         super.initUIElements();
-        setBounds(100, 100, 450, 450);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        getContentPane().setLayout(new BorderLayout(0, 0));
+        getContainer().setBounds(100, 100, 450, 450);
+        getContainer().setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        Container contentPane = getContainer().getContentPane();
+        contentPane.setLayout(new BorderLayout(0, 0));
 
         JPanel panel_4 = new JPanel();
-        getContentPane().add(panel_4, BorderLayout.CENTER);
+        contentPane.add(panel_4, BorderLayout.CENTER);
         panel_4.setLayout(new BorderLayout(0, 0));
 
         panel = new JPanel();
@@ -216,7 +217,7 @@ public abstract class BookDetailMainViewBase extends MainViewBase<Book, BookDeta
         panel_3.add(copiesList);
 
         JPanel panel_5 = new JPanel();
-        getContentPane().add(panel_5, BorderLayout.SOUTH);
+        contentPane.add(panel_5, BorderLayout.SOUTH);
         panel_5.setLayout(new BorderLayout(0, 0));
 
         validationPanel = new JPanel();
@@ -256,7 +257,7 @@ public abstract class BookDetailMainViewBase extends MainViewBase<Book, BookDeta
 
             @Override
             protected void execute() {
-                BookDetailMainViewBase.this.dispose();
+                BookDetailMainViewBase.this.getContainer().dispose();
             }
         });
         btnSave.addActionListener(new LibraryActionListener() {
@@ -273,7 +274,7 @@ public abstract class BookDetailMainViewBase extends MainViewBase<Book, BookDeta
                     Book bookToUpdate = extractViewValues(getReferenceObject());
                     List<Copy> copies = copyListModel.getAll();
                     if (getController().saveBook(bookToUpdate, copies)) {
-                        BookDetailMainViewBase.this.dispose();
+                        BookDetailMainViewBase.this.getContainer().dispose();
                     }
                 }
 

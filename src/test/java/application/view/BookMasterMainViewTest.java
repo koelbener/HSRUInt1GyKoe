@@ -1,12 +1,12 @@
 package application.view;
 
-import static application.view.BookDetailMainViewBase.NAME_BUTTON_CANCEL;
-import static application.view.BookDetailMainViewBase.NAME_TEXTBOX_TITLE;
-import static application.view.BookMasterMainView.NAME_BUTTON_OPEN;
-import static application.view.BookMasterMainView.NAME_COMBOBOX_FILTER;
-import static application.view.BookMasterMainView.NAME_SEARCH_FIELD;
-import static application.view.BookMasterMainView.NAME_TABLE_BOOKS;
-import static application.view.BookMasterMainView.searchDefaultText;
+import static application.view.mainView.BookDetailMainViewBase.NAME_BUTTON_CANCEL;
+import static application.view.mainView.BookDetailMainViewBase.NAME_TEXTBOX_TITLE;
+import static application.view.subView.BookMasterSubView.NAME_BUTTON_OPEN;
+import static application.view.subView.BookMasterSubView.NAME_COMBOBOX_FILTER;
+import static application.view.subView.BookMasterSubView.NAME_SEARCH_FIELD;
+import static application.view.subView.BookMasterSubView.NAME_TABLE_BOOKS;
+import static application.view.subView.BookMasterSubView.searchDefaultText;
 import static application.viewModel.BookTableModel.COLUMN_AMOUNT;
 import static application.viewModel.BookTableModel.COLUMN_TITLE;
 import static org.fest.swing.data.TableCell.row;
@@ -29,6 +29,8 @@ import org.junit.Test;
 import application.LibraryApp;
 import application.data.DataLoder;
 import application.data.XmlDataLoader;
+import application.view.mainView.EditBookDetailMainView;
+import application.view.mainView.MasterMainView;
 import domain.Library;
 
 @GUITest
@@ -45,13 +47,13 @@ public class BookMasterMainViewTest extends AbstractFestTest {
 
     @Before
     public void setUp() throws Exception {
-        BookMasterMainView mainWindow = GuiActionRunner.execute(new GuiQuery<BookMasterMainView>() {
+        MasterMainView mainWindow = GuiActionRunner.execute(new GuiQuery<MasterMainView>() {
             @Override
-            protected BookMasterMainView executeInEDT() {
+            protected MasterMainView executeInEDT() {
                 return LibraryApp.createMainWindow(library);
             }
         });
-        window = new FrameFixture(mainWindow);
+        window = new FrameFixture(mainWindow.getContainer());
         window.show(); // shows the frame to test
     }
 

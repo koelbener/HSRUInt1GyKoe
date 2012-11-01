@@ -1,15 +1,15 @@
 package application.view;
 
-import static application.view.BookDetailMainViewBase.NAME_BUTTON_CANCEL;
-import static application.view.BookDetailMainViewBase.NAME_BUTTON_SAVE;
-import static application.view.BookDetailMainViewBase.NAME_COMBOBOX_SHELF;
-import static application.view.BookDetailMainViewBase.NAME_TEXTBOX_AUTHOR;
-import static application.view.BookDetailMainViewBase.NAME_TEXTBOX_PUBLISHER;
-import static application.view.BookDetailMainViewBase.NAME_TEXTBOX_TITLE;
-import static application.view.BookDetailMainViewBase.NAME_VALIDATION_PANEL;
-import static application.view.BookMasterMainView.NAME_BUTTON_NEW;
-import static application.view.BookMasterMainView.NAME_BUTTON_OPEN;
-import static application.view.BookMasterMainView.NAME_TABLE_BOOKS;
+import static application.view.mainView.BookDetailMainViewBase.NAME_BUTTON_CANCEL;
+import static application.view.mainView.BookDetailMainViewBase.NAME_BUTTON_SAVE;
+import static application.view.mainView.BookDetailMainViewBase.NAME_COMBOBOX_SHELF;
+import static application.view.mainView.BookDetailMainViewBase.NAME_TEXTBOX_AUTHOR;
+import static application.view.mainView.BookDetailMainViewBase.NAME_TEXTBOX_PUBLISHER;
+import static application.view.mainView.BookDetailMainViewBase.NAME_TEXTBOX_TITLE;
+import static application.view.mainView.BookDetailMainViewBase.NAME_VALIDATION_PANEL;
+import static application.view.subView.BookMasterSubView.NAME_BUTTON_NEW;
+import static application.view.subView.BookMasterSubView.NAME_BUTTON_OPEN;
+import static application.view.subView.BookMasterSubView.NAME_TABLE_BOOKS;
 import static org.fest.swing.data.TableCell.row;
 import static org.junit.Assert.assertEquals;
 
@@ -23,6 +23,9 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import application.LibraryApp;
+import application.view.mainView.EditBookDetailMainView;
+import application.view.mainView.MasterMainView;
+import application.view.mainView.NewBookDetailMainView;
 import domain.Book;
 import domain.Library;
 import domain.Shelf;
@@ -48,13 +51,13 @@ public class BookDetailMainViewTest extends AbstractFestTest {
 
     @Before
     public void setUp() throws Exception {
-        BookMasterMainView bookMasterMainView = GuiActionRunner.execute(new GuiQuery<BookMasterMainView>() {
+        MasterMainView bookMasterMainView = GuiActionRunner.execute(new GuiQuery<MasterMainView>() {
             @Override
-            protected BookMasterMainView executeInEDT() {
+            protected MasterMainView executeInEDT() {
                 return LibraryApp.createMainWindow(library);
             }
         });
-        bookMaster = new FrameFixture(bookMasterMainView);
+        bookMaster = new FrameFixture(bookMasterMainView.getContainer());
         bookMaster.show();
     }
 

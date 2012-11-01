@@ -5,12 +5,12 @@ import javax.swing.RowSorter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import application.view.EditBookDetailMainView;
-import application.view.NewBookDetailMainView;
+import application.view.mainView.EditBookDetailMainView;
+import application.view.mainView.NewBookDetailMainView;
 import application.viewModel.BookTableModel;
 import domain.Book;
 
-public class BookMasterController extends AbstractController {
+public class BookMasterController extends ControllerBase {
     private static final Logger logger = LoggerFactory.getLogger(BookMasterController.class);
 
     public void openBooks(int[] selectedIndices) {

@@ -1,4 +1,4 @@
-package application.view;
+package application.view.mainView;
 
 import java.awt.Component;
 import java.awt.event.FocusEvent;
@@ -9,8 +9,6 @@ import com.jgoodies.validation.view.ValidationResultViewFactory;
 import domain.Book;
 
 public class EditBookDetailMainView extends BookDetailMainViewBase {
-
-    private static final long serialVersionUID = 2631042605719223238L;
 
     public EditBookDetailMainView(Book book) {
         super(book);

@@ -13,7 +13,7 @@ import application.data.DataLoder;
 import application.data.XmlDataLoader;
 import application.presentationModel.BooksPMod;
 import application.presentationModel.ShelfPMod;
-import application.view.BookMasterMainView;
+import application.view.mainView.MasterMainView;
 import domain.Library;
 
 public class LibraryApp {
@@ -48,7 +48,7 @@ public class LibraryApp {
     /**
      * Must run in the <strong>AWT event dispatching thread</strong>!
      */
-    public static BookMasterMainView createMainWindow(Library library) {
+    public static MasterMainView createMainWindow(Library library) {
         Repository.getInstance().setLibrary(library);
 
         initPMods();
@@ -59,8 +59,7 @@ public class LibraryApp {
             logger.error("Unable to set a native look and feel.", e);
         }
 
-        BookMasterMainView bookMasterView = new BookMasterMainView();
-        bookMasterView.setVisible(true);
+        MasterMainView bookMasterView = new MasterMainView();
 
         return bookMasterView;
     }
