@@ -63,4 +63,5 @@ public abstract class ViewBase<R, T extends ControllerBase, S extends Component>
     public S getContainer() {
         return container;
     }
+
 }

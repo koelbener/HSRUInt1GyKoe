@@ -21,6 +21,7 @@ import application.controller.MasterController;
 import application.core.Language;
 import application.core.Texts;
 import application.view.subView.BookMasterSubView;
+import application.view.subView.LendingMasterSubView;
 import domain.Library;
 
 public class MasterMainView extends MainViewBase<Library, MasterController> {
@@ -33,6 +34,7 @@ public class MasterMainView extends MainViewBase<Library, MasterController> {
     public MasterMainView() {
         super(null);
         container.setMinimumSize(new Dimension(616, 445));
+        setIcon("book.gif");
     }
 
     @Override
@@ -76,11 +78,11 @@ public class MasterMainView extends MainViewBase<Library, MasterController> {
         tabbedPane = new JTabbedPane(JTabbedPane.TOP);
         tabbedPane.setBorder(new CompoundBorder(new EmptyBorder(10, 5, 5, 5), new LineBorder(new Color(0, 0, 0), 1, true)));
 
-        JPanel lendingMasterPanel = new JPanel();
+        LendingMasterSubView lendingMasterPanel = new LendingMasterSubView(library);
         BookMasterSubView bookMasterPanel = new BookMasterSubView(library);
 
         tabbedPane.addTab(Texts.get("BookMasterMainView.tab.books"), null, bookMasterPanel.getContainer(), null);
-        tabbedPane.addTab(Texts.get("BookMasterMainView.tab.lending"), null, lendingMasterPanel, null);
+        tabbedPane.addTab(Texts.get("BookMasterMainView.tab.lending"), null, lendingMasterPanel.getContainer(), null);
         contentPane.add(tabbedPane, BorderLayout.CENTER);
         container.pack();
     }

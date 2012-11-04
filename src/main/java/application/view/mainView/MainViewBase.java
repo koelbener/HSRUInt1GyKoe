@@ -2,10 +2,12 @@ package application.view.mainView;
 
 import java.awt.Frame;
 import java.awt.Point;
+import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Observer;
 
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 
 import org.slf4j.Logger;
@@ -13,6 +15,8 @@ import org.slf4j.LoggerFactory;
 
 import application.controller.ControllerBase;
 import application.view.ViewBase;
+
+import com.google.common.io.Resources;
 
 /**
  * A MainView is a view inheriting from JFrame. Every window of the UI is a MainViewBase descendant.
@@ -37,6 +41,20 @@ public abstract class MainViewBase<R, T extends ControllerBase> extends ViewBase
     @Override
     protected void initUIElements() {
         container.getContentPane().removeAll();
+    }
+
+    protected void setIcon(String file) {
+        ImageIcon myAppImage = loadIcon(file);
+        if (myAppImage != null)
+            container.setIconImage(myAppImage.getImage());
+    }
+
+    protected ImageIcon loadIcon(String strPath) {
+        URL imgURL = Resources.getResource("icons/" + strPath);
+        if (imgURL != null)
+            return new ImageIcon(imgURL);
+        else
+            return null;
     }
 
     /**
