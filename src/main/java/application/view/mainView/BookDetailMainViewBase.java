@@ -1,6 +1,7 @@
-package application.view;
+package application.view.mainView;
 
 import java.awt.BorderLayout;
+import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -23,6 +24,7 @@ import net.miginfocom.swing.MigLayout;
 import application.controller.BookDetailController;
 import application.core.LibraryActionListener;
 import application.core.Repository;
+import application.core.Texts;
 import application.viewModel.CopyListModel;
 
 import com.jgoodies.validation.ValidationResult;
@@ -35,31 +37,41 @@ import domain.Copy;
 import domain.Shelf;
 import domain.validator.BookValidator;
 
-public class BookDetailMainView extends MainViewBase<Book, BookDetailController> {
+public abstract class BookDetailMainViewBase extends MainViewBase<Book, BookDetailController> {
 
     public static final String NAME_VALIDATION_PANEL = "ValidationPanel";
-    public static final String NAME_BOOK_DETAIL_MAIN_VIEW = "BookDetailMainView";
     public static final String NAME_BUTTON_SAVE = "Save";
     public static final String NAME_BUTTON_CANCEL = "Cancel";
-    public static final String NAME_TEXTBOX_TITLE = "Title";
+    public static final String NAME_TEXTBOX_TITLE = "textbox.title";
+    public static final String NAME_TEXTBOX_AUTHOR = "textbox.author";
+    public static final String NAME_TEXTBOX_PUBLISHER = "textbox.publisher";
+    public static final String NAME_COMBOBOX_SHELF = "combobox.shelf";
 
-    private static final long serialVersionUID = 1L;
-    private JTextField tfTitle;
-    private JTextField tfAutor;
-    private JTextField tfVerlag;
-    private JComboBox<Shelf> tfRegal;
-    private JTextField tfNumberOfCopies;
-    private CopyListModel copyListModel;
+    protected JTextField txtFieldTitle;
+    protected JTextField txtFieldAuthor;
+    protected JTextField txtFieldPublisher;
+    protected JComboBox<Shelf> comboBoxShelf;
+    protected JTextField tfNumberOfCopies;
+    protected CopyListModel copyListModel;
 
     private JButton btnSave;
     private JButton btnCancel;
-    private ValidationResultModel validationModel;
     private JButton btnHinzufgen;
     private JButton btnEntfernen;
     private JList<Copy> copiesList;
+    private JPanel panel;
+    private JLabel lblTitel;
+    private JLabel lblAutor;
+    private JLabel lblVerlag;
+    private JLabel lblShelf;
+    private JPanel panel_1;
+    private JLabel lblAnzahl;
+    protected ValidationResultModel validationModel;
+    protected JComponent validationResultList;
+    protected JPanel validationPanel;
 
-    public BookDetailMainView(Book book) {
-        super(book, NAME_BOOK_DETAIL_MAIN_VIEW);
+    public BookDetailMainViewBase(Book book) {
+        super(book);
         updateViewValues();
     }
 
@@ -76,18 +88,18 @@ public class BookDetailMainView extends MainViewBase<Book, BookDetailController>
 
     private void updateViewValues() {
         // retrieve new possible shelves-data
-        tfRegal.setModel(Repository.getInstance().getShelfPMod().getShelfComboBoxModel());
+        comboBoxShelf.setModel(Repository.getInstance().getShelfPMod().getShelfComboBoxModel());
 
         Book referenceObject = getReferenceObject();
         if (referenceObject != null) {
-            tfTitle.setText(referenceObject.getName());
-            tfAutor.setText(referenceObject.getAuthor());
-            tfVerlag.setText(referenceObject.getPublisher());
+            txtFieldTitle.setText(referenceObject.getName());
+            txtFieldAuthor.setText(referenceObject.getAuthor());
+            txtFieldPublisher.setText(referenceObject.getPublisher());
             // select the correct shelf
-            tfRegal.setSelectedItem(referenceObject.getShelf());
+            comboBoxShelf.setSelectedItem(referenceObject.getShelf());
             tfNumberOfCopies.setText(String.valueOf(copyListModel.getSize()));
         } else {
-            tfRegal.setSelectedItem(Shelf.A1);
+            comboBoxShelf.setSelectedItem(Shelf.A1);
         }
     }
 
@@ -95,11 +107,32 @@ public class BookDetailMainView extends MainViewBase<Book, BookDetailController>
         if (book == null) {
             book = new Book();
         }
-        book.setAuthor(tfAutor.getText());
-        book.setName(tfTitle.getText());
-        book.setPublisher(tfVerlag.getText());
-        book.setShelf((Shelf) tfRegal.getSelectedItem());
+        book.setAuthor(txtFieldAuthor.getText());
+        book.setName(txtFieldTitle.getText());
+        book.setPublisher(txtFieldPublisher.getText());
+        book.setShelf((Shelf) comboBoxShelf.getSelectedItem());
         return book;
+    }
+
+    @Override
+    protected void setTexts() {
+        // title
+        getContainer().setTitle(Texts.get("BookDetailMainView.this.title")); //$NON-NLS-1$
+
+        // border of panels
+        panel.setBorder(new TitledBorder(null, Texts.get("BookDetailMainView.panel.borderTitle"), TitledBorder.LEADING, TitledBorder.TOP, null, null));
+        panel_1.setBorder(new TitledBorder(null, Texts.get("BookDetailMainView.panel_1.borderTitle"), TitledBorder.LEADING, TitledBorder.TOP, null, null)); //$NON-NLS-1$
+
+        // components
+        lblTitel.setText(Texts.get("BookDetailMainView.lblTitel.text"));
+        lblAutor.setText(Texts.get("BookDetailMainView.lblAutor.text"));
+        lblVerlag.setText(Texts.get("BookDetailMainView.lblVerlag.text"));
+        lblShelf.setText(Texts.get("BookDetailMainView.lblRegal.text"));
+        lblAnzahl.setText(Texts.get("BookDetailMainView.lblAnzahl.text"));
+        btnEntfernen.setText(Texts.get("BookDetailMainView.btnEntfernen.text"));
+        btnHinzufgen.setText(Texts.get("BookDetailMainView.btnHinzufgen.text"));
+        btnSave.setText(Texts.get("BookDetailMainView.btnSave.text"));
+        btnCancel.setText(Texts.get("BookDetailMainView.btnCancel.text"));
     }
 
     /**
@@ -108,58 +141,59 @@ public class BookDetailMainView extends MainViewBase<Book, BookDetailController>
     @Override
     protected void initUIElements() {
         super.initUIElements();
-        setTitle("Buch Detailansicht");
-        setBounds(100, 100, 450, 450);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        getContentPane().setLayout(new BorderLayout(0, 0));
+        getContainer().setBounds(100, 100, 450, 450);
+        getContainer().setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        Container contentPane = getContainer().getContentPane();
+        contentPane.setLayout(new BorderLayout(0, 0));
 
         JPanel panel_4 = new JPanel();
-        getContentPane().add(panel_4, BorderLayout.CENTER);
+        contentPane.add(panel_4, BorderLayout.CENTER);
         panel_4.setLayout(new BorderLayout(0, 0));
 
-        JPanel panel = new JPanel();
+        panel = new JPanel();
         panel_4.add(panel, BorderLayout.NORTH);
-        panel.setBorder(new TitledBorder(null, "Buch Informationen", TitledBorder.LEADING, TitledBorder.TOP, null, null));
         panel.setLayout(new MigLayout("", "[][grow]", "[][][][]"));
 
-        JLabel lblTitel = new JLabel("Titel");
+        lblTitel = new JLabel();
         panel.add(lblTitel, "cell 0 0,alignx trailing");
 
-        tfTitle = new JTextField();
-        panel.add(tfTitle, "cell 1 0,growx");
-        tfTitle.setColumns(10);
-        tfTitle.setName(NAME_TEXTBOX_TITLE);
+        txtFieldTitle = new JTextField();
+        panel.add(txtFieldTitle, "cell 1 0,growx");
+        txtFieldTitle.setColumns(10);
+        txtFieldTitle.setName(NAME_TEXTBOX_TITLE);
 
-        JLabel lblAutor = new JLabel("Autor");
+        lblAutor = new JLabel();
         panel.add(lblAutor, "cell 0 1,alignx trailing");
 
-        tfAutor = new JTextField();
-        panel.add(tfAutor, "cell 1 1,growx");
-        tfAutor.setColumns(10);
+        txtFieldAuthor = new JTextField();
+        txtFieldAuthor.setName(NAME_TEXTBOX_AUTHOR);
+        panel.add(txtFieldAuthor, "cell 1 1,growx");
+        txtFieldAuthor.setColumns(10);
 
-        JLabel lblVerlag = new JLabel("Verlag");
+        lblVerlag = new JLabel();
         panel.add(lblVerlag, "cell 0 2,alignx trailing");
 
-        tfVerlag = new JTextField();
-        panel.add(tfVerlag, "cell 1 2,growx");
-        tfVerlag.setColumns(10);
+        txtFieldPublisher = new JTextField();
+        txtFieldPublisher.setName(NAME_TEXTBOX_PUBLISHER);
+        panel.add(txtFieldPublisher, "cell 1 2,growx");
+        txtFieldPublisher.setColumns(10);
 
-        JLabel lblRegal = new JLabel("Regal");
-        panel.add(lblRegal, "cell 0 3,alignx trailing");
+        lblShelf = new JLabel();
+        panel.add(lblShelf, "cell 0 3,alignx trailing");
 
-        tfRegal = new JComboBox<Shelf>();
-        panel.add(tfRegal, "cell 1 3,growx");
+        comboBoxShelf = new JComboBox<Shelf>();
+        comboBoxShelf.setName(NAME_COMBOBOX_SHELF);
+        panel.add(comboBoxShelf, "cell 1 3,growx");
 
-        JPanel panel_1 = new JPanel();
+        panel_1 = new JPanel();
         panel_4.add(panel_1, BorderLayout.CENTER);
-        panel_1.setBorder(new TitledBorder(null, "Exemplare", TitledBorder.LEADING, TitledBorder.TOP, null, null));
         panel_1.setLayout(new BorderLayout(0, 0));
 
         JPanel panel_2 = new JPanel();
         panel_1.add(panel_2, BorderLayout.NORTH);
         panel_2.setLayout(new MigLayout("", "[][grow][][]", "[]"));
 
-        JLabel lblAnzahl = new JLabel("Anzahl");
+        lblAnzahl = new JLabel();
         panel_2.add(lblAnzahl, "cell 0 0,alignx trailing");
 
         tfNumberOfCopies = new JTextField();
@@ -167,11 +201,11 @@ public class BookDetailMainView extends MainViewBase<Book, BookDetailController>
         panel_2.add(tfNumberOfCopies, "flowx,cell 1 0");
         tfNumberOfCopies.setColumns(10);
 
-        btnEntfernen = new JButton("Entfernen");
+        btnEntfernen = new JButton();
         btnEntfernen.setEnabled(false);
         panel_2.add(btnEntfernen, "cell 2 0");
 
-        btnHinzufgen = new JButton("Hinzuf\u00FCgen");
+        btnHinzufgen = new JButton();
         panel_2.add(btnHinzufgen, "cell 3 0");
 
         JPanel panel_3 = new JPanel();
@@ -183,29 +217,29 @@ public class BookDetailMainView extends MainViewBase<Book, BookDetailController>
         panel_3.add(copiesList);
 
         JPanel panel_5 = new JPanel();
-        getContentPane().add(panel_5, BorderLayout.SOUTH);
+        contentPane.add(panel_5, BorderLayout.SOUTH);
         panel_5.setLayout(new BorderLayout(0, 0));
 
-        JPanel panel_7 = new JPanel();
-        panel_7.setMinimumSize(new Dimension(0, 0));
-        panel_7.setName(NAME_VALIDATION_PANEL);
-        panel_5.add(panel_7, BorderLayout.NORTH);
+        validationPanel = new JPanel();
+        validationPanel.setMinimumSize(new Dimension(0, 0));
+        validationPanel.setName(NAME_VALIDATION_PANEL);
 
         validationModel = new DefaultValidationResultModel();
-        panel_7.setLayout(new MigLayout("", "[grow]", "[40px,grow]"));
-        JComponent validationResultList = ValidationResultViewFactory.createReportList(validationModel);
-        panel_7.add(validationResultList, "cell 0 0,alignx right,growy");
+        validationPanel.setLayout(new MigLayout("", "[grow]", "[40px,grow]"));
+        validationResultList = ValidationResultViewFactory.createReportList(validationModel);
+        validationPanel.add(validationResultList, "cell 0 0,alignx right,growy");
+        panel_5.add(validationPanel, BorderLayout.NORTH);
 
         JPanel panel_8 = new JPanel();
-        panel_5.add(panel_8, BorderLayout.SOUTH);
         panel_8.setLayout(new MigLayout("", "[grow][85px][]", "[23px]"));
 
-        btnSave = new JButton("Speichern");
+        btnSave = new JButton();
         panel_8.add(btnSave, "cell 1 0,alignx left,aligny top");
         btnSave.setMnemonic('s');
         btnSave.setName(NAME_BUTTON_SAVE);
+        panel_5.add(panel_8, BorderLayout.SOUTH);
 
-        btnCancel = new JButton("Abbrechen");
+        btnCancel = new JButton();
         panel_8.add(btnCancel, "cell 2 0,alignx left,aligny top");
         btnCancel.setName(NAME_BUTTON_CANCEL);
         btnCancel.setMnemonic('c');
@@ -223,7 +257,7 @@ public class BookDetailMainView extends MainViewBase<Book, BookDetailController>
 
             @Override
             protected void execute() {
-                BookDetailMainView.this.dispose();
+                BookDetailMainViewBase.this.getContainer().dispose();
             }
         });
         btnSave.addActionListener(new LibraryActionListener() {
@@ -236,16 +270,17 @@ public class BookDetailMainView extends MainViewBase<Book, BookDetailController>
 
                 validationModel.setResult(validation);
 
-                if (!validation.hasErrors()) {
+                if (validateBook()) {
                     Book bookToUpdate = extractViewValues(getReferenceObject());
                     List<Copy> copies = copyListModel.getAll();
                     if (getController().saveBook(bookToUpdate, copies)) {
-                        BookDetailMainView.this.dispose();
+                        BookDetailMainViewBase.this.getContainer().dispose();
                     }
                 }
 
             }
         });
+
         btnHinzufgen.addActionListener(new ActionListener() {
 
             @Override
@@ -272,4 +307,13 @@ public class BookDetailMainView extends MainViewBase<Book, BookDetailController>
         });
 
     }
+
+    protected boolean validateBook() {
+        Book bookToValidate = extractViewValues(new Book());
+        ValidationResult validation = new BookValidator().validate(bookToValidate);
+
+        validationModel.setResult(validation);
+        return !validation.hasErrors();
+    }
+
 }

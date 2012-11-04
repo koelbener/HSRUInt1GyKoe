@@ -1,13 +1,12 @@
 package application.view;
 
-import static application.view.BookDetailMainView.NAME_BOOK_DETAIL_MAIN_VIEW;
-import static application.view.BookDetailMainView.NAME_BUTTON_CANCEL;
-import static application.view.BookDetailMainView.NAME_TEXTBOX_TITLE;
-import static application.view.BookMasterMainView.NAME_BUTTON_OPEN;
-import static application.view.BookMasterMainView.NAME_SEARCH_FIELD;
-import static application.view.BookMasterMainView.NAME_TABLE_BOOKS;
-import static application.view.BookMasterMainView.SEARCH_DEFAULT_VALUE;
-import static application.view.BookMasterMainView.NAME_COMBOBOX_FILTER;
+import static application.view.mainView.BookDetailMainViewBase.NAME_BUTTON_CANCEL;
+import static application.view.mainView.BookDetailMainViewBase.NAME_TEXTBOX_TITLE;
+import static application.view.subView.BookMasterSubView.NAME_BUTTON_OPEN;
+import static application.view.subView.BookMasterSubView.NAME_COMBOBOX_FILTER;
+import static application.view.subView.BookMasterSubView.NAME_SEARCH_FIELD;
+import static application.view.subView.BookMasterSubView.NAME_TABLE_BOOKS;
+import static application.view.subView.BookMasterSubView.searchDefaultText;
 import static application.viewModel.BookTableModel.COLUMN_AMOUNT;
 import static application.viewModel.BookTableModel.COLUMN_TITLE;
 import static org.fest.swing.data.TableCell.row;
@@ -28,9 +27,10 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import application.LibraryApp;
-import application.controller.BookMasterController;
 import application.data.DataLoder;
 import application.data.XmlDataLoader;
+import application.view.mainView.EditBookDetailMainView;
+import application.view.mainView.MasterMainView;
 import domain.Library;
 
 @GUITest
@@ -47,13 +47,13 @@ public class BookMasterMainViewTest extends AbstractFestTest {
 
     @Before
     public void setUp() throws Exception {
-        MainViewBase<Library, BookMasterController> mainWindow = GuiActionRunner.execute(new GuiQuery<BookMasterMainView>() {
+        MasterMainView mainWindow = GuiActionRunner.execute(new GuiQuery<MasterMainView>() {
             @Override
-            protected BookMasterMainView executeInEDT() {
+            protected MasterMainView executeInEDT() {
                 return LibraryApp.createMainWindow(library);
             }
         });
-        window = new FrameFixture(mainWindow);
+        window = new FrameFixture(mainWindow.getContainer());
         window.show(); // shows the frame to test
     }
 
@@ -104,11 +104,11 @@ public class BookMasterMainViewTest extends AbstractFestTest {
     @Test
     public void testFocusOnSearchField() {
         JTextComponentFixture searchField = window.textBox(NAME_SEARCH_FIELD);
-        searchField.requireText(SEARCH_DEFAULT_VALUE);
+        searchField.requireText(searchDefaultText);
         window.textBox(NAME_SEARCH_FIELD).focus();
         searchField.requireText("");
         window.table(NAME_TABLE_BOOKS).focus();
-        searchField.requireText(SEARCH_DEFAULT_VALUE);
+        searchField.requireText(searchDefaultText);
     }
 
     @Test
@@ -127,12 +127,12 @@ public class BookMasterMainViewTest extends AbstractFestTest {
         window.table(NAME_TABLE_BOOKS).enterValue(row(3).column(COLUMN_TITLE), NEW_TITLE_VALUE);
         window.table(NAME_TABLE_BOOKS).click(row(3).column(COLUMN_AMOUNT), MouseClickInfo.leftButton().times(2));
 
-        FrameFixture bookDetailDialog = findFrame(window, NAME_BOOK_DETAIL_MAIN_VIEW);
+        FrameFixture bookDetailDialog = findFrame(window, EditBookDetailMainView.class.getSimpleName());
         bookDetailDialog.textBox(NAME_TEXTBOX_TITLE).requireText(NEW_TITLE_VALUE);
     }
-    
+
     @Test
-    public void testSearchFilterComboBox(){
+    public void testSearchFilterComboBox() {
         window.textBox(NAME_SEARCH_FIELD).setText("wiley");
         window.table(NAME_TABLE_BOOKS).requireRowCount(5);
         // select "Suche Titel" in comboBox
@@ -143,11 +143,11 @@ public class BookMasterMainViewTest extends AbstractFestTest {
         window.comboBox(NAME_COMBOBOX_FILTER).selectItem(3);
         // 5 books from wiley verlag should be found
         window.table(NAME_TABLE_BOOKS).requireRowCount(5);
-        
+
     }
 
     private void assertThatDetailViewIsVisible() {
-        FrameFixture bookDetailDialog = findFrame(window, NAME_BOOK_DETAIL_MAIN_VIEW);
+        FrameFixture bookDetailDialog = findFrame(window, EditBookDetailMainView.class.getSimpleName());
         bookDetailDialog.requireVisible();
         bookDetailDialog.button(NAME_BUTTON_CANCEL).click();
         bookDetailDialog.requireNotVisible();

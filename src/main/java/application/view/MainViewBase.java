@@ -12,7 +12,7 @@ import javax.swing.JFrame;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import application.controller.AbstractController;
+import application.controller.ControllerBase;
 import application.core.Repository;
 
 import com.google.common.io.Resources;
@@ -23,7 +23,7 @@ import domain.Library;
  * A MainView is a view inheriting from JFrame. Every window of the UI is a MainViewBase descendant.
  * 
  */
-public abstract class MainViewBase<R, T extends AbstractController> extends JFrame {
+public abstract class MainViewBase<R, T extends ControllerBase> extends JFrame {
 
     private static final Logger logger = LoggerFactory.getLogger(MainViewBase.class);
 

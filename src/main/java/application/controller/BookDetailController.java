@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 import domain.Book;
 import domain.Copy;
 
-public class BookDetailController extends AbstractController {
+public class BookDetailController extends ControllerBase {
     private static final Logger logger = LoggerFactory.getLogger(BookDetailController.class);
 
     /**

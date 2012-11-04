@@ -5,11 +5,11 @@ import application.core.Repository;
 /**
  * Base class for all Controllers.
  */
-public abstract class AbstractController {
+public abstract class ControllerBase {
 
     private final Repository repository;
 
-    public AbstractController() {
+    public ControllerBase() {
         repository = Repository.getInstance();
     }
 
