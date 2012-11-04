@@ -2,9 +2,11 @@ package application.view;
 
 import java.awt.Frame;
 import java.awt.Point;
+import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 
 import org.slf4j.Logger;
@@ -12,6 +14,9 @@ import org.slf4j.LoggerFactory;
 
 import application.controller.AbstractController;
 import application.core.Repository;
+
+import com.google.common.io.Resources;
+
 import domain.Library;
 
 /**
@@ -88,5 +93,19 @@ public abstract class MainViewBase<R, T extends AbstractController> extends JFra
 
     protected boolean isNewEntity() {
         return referenceObject == null;
+    }
+
+    protected void setIcon(String file) {
+        ImageIcon myAppImage = loadIcon("icons/" + file);
+        if (myAppImage != null)
+            setIconImage(myAppImage.getImage());
+    }
+
+    protected ImageIcon loadIcon(String strPath) {
+        URL imgURL = Resources.getResource(strPath);
+        if (imgURL != null)
+            return new ImageIcon(imgURL);
+        else
+            return null;
     }
 }

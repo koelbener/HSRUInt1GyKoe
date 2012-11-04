@@ -76,6 +76,8 @@ public class BookMasterMainView extends MainViewBase<Library, BookMasterControll
     protected void initUIElements() {
         super.initUIElements();
         setTitle("Swinging Library");
+        setIcon("book.gif");
+
         setBounds(100, 100, 616, 445);
         getContentPane().setLayout(new BorderLayout(0, 0));
 

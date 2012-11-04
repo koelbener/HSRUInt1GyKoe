@@ -19,6 +19,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import application.LibraryApp;
+import application.controller.BookMasterController;
 import domain.Book;
 import domain.Library;
 import domain.Shelf;
@@ -44,7 +45,7 @@ public class BookDetailMainViewTest extends AbstractFestTest {
 
     @Before
     public void setUp() throws Exception {
-        BookMasterMainView bookMasterMainView = GuiActionRunner.execute(new GuiQuery<BookMasterMainView>() {
+        MainViewBase<Library, BookMasterController> bookMasterMainView = GuiActionRunner.execute(new GuiQuery<BookMasterMainView>() {
             @Override
             protected BookMasterMainView executeInEDT() {
                 return LibraryApp.createMainWindow(library);

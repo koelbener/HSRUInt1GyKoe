@@ -28,6 +28,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import application.LibraryApp;
+import application.controller.BookMasterController;
 import application.data.DataLoder;
 import application.data.XmlDataLoader;
 import domain.Library;
@@ -46,7 +47,7 @@ public class BookMasterMainViewTest extends AbstractFestTest {
 
     @Before
     public void setUp() throws Exception {
-        BookMasterMainView mainWindow = GuiActionRunner.execute(new GuiQuery<BookMasterMainView>() {
+        MainViewBase<Library, BookMasterController> mainWindow = GuiActionRunner.execute(new GuiQuery<BookMasterMainView>() {
             @Override
             protected BookMasterMainView executeInEDT() {
                 return LibraryApp.createMainWindow(library);
