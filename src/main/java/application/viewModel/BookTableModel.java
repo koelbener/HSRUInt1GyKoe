@@ -5,6 +5,9 @@ import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.AbstractTableModel;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import application.core.Repository;
 import application.core.Texts;
 
@@ -22,6 +25,7 @@ public class BookTableModel extends AbstractTableModel {
     private static final long serialVersionUID = -67214736125029646L;
     private List<Book> books;
     private String[] columnNames;
+    private final Logger logger = LoggerFactory.getLogger(BookTableModel.class);
 
     public BookTableModel(List<Book> books) {
         this.books = books;
@@ -29,8 +33,12 @@ public class BookTableModel extends AbstractTableModel {
     }
 
     public void setColumns() {
-        columnNames = new String[] { Texts.get("BookMasterMainView.table.column.name"), Texts.get("BookMasterMainView.table.column.author"),
-                Texts.get("BookMasterMainView.table.column.publisher"), Texts.get("BookMasterMainView.table.column.copies") };
+        columnNames = new String[] {
+                //
+                Texts.get("BookMasterMainView.table.column.name"), //
+                Texts.get("BookMasterMainView.table.column.author"), //
+                Texts.get("BookMasterMainView.table.column.publisher"), //
+                Texts.get("BookMasterMainView.table.column.copies") };
         this.fireTableStructureChanged();
     }
 
@@ -62,13 +70,18 @@ public class BookTableModel extends AbstractTableModel {
         switch (col) {
         case COLUMN_TITLE:
             result = String.class;
+            break;
         case COLUMN_AUTHOR:
-            result = Double.class;
+            result = String.class;
+            break;
         case COLUMN_PUBLISHER:
             result = String.class;
+            break;
         case COLUMN_AMOUNT:
             result = Integer.class;
+            break;
         default:
+            logger.warn("Unknown column ID: {}", col);
             result = String.class;
         }
 

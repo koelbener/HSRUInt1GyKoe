@@ -19,8 +19,6 @@ import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 
 import net.miginfocom.swing.MigLayout;
 
@@ -32,6 +30,7 @@ import application.core.LibraryActionListener;
 import application.core.Repository;
 import application.core.Texts;
 import application.presentationModel.BooksPMod;
+import application.view.helper.EnableCompontentOnTableSelectionListener;
 import application.viewModel.SearchFilterElement;
 import domain.Library;
 
@@ -187,18 +186,8 @@ public class BookMasterSubView extends SubViewBase<Library, BookMasterController
 
     @Override
     protected void initListeners() {
-        booksTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 
-            @Override
-            public void valueChanged(ListSelectionEvent e) {
-                int[] rows = booksTable.getSelectedRows();
-                if (rows != null && rows.length > 0) {
-                    btnOpenBook.setEnabled(true);
-                } else {
-                    btnOpenBook.setEnabled(false);
-                }
-            }
-        });
+        new EnableCompontentOnTableSelectionListener(booksTable, btnOpenBook);
 
         searchFilterComboBox.addActionListener(new ActionListener() {
             @Override
