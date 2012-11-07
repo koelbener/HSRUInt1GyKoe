@@ -10,6 +10,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 import net.miginfocom.swing.MigLayout;
 import application.controller.LendingMasterController;
@@ -17,6 +19,7 @@ import application.core.Repository;
 import application.core.Texts;
 import application.presentationModel.LoansPMod;
 import application.view.helper.EnableCompontentOnTableSelectionListener;
+import application.view.helper.HideTextOnFocusListener;
 import domain.Library;
 
 public class LendingMasterSubView extends SubViewBase<Library, LendingMasterController> {
@@ -47,6 +50,7 @@ public class LendingMasterSubView extends SubViewBase<Library, LendingMasterCont
     private JLabel valNumberOfLoans;
     private JLabel valCurrentLoans;
     private JLabel valOverdueLoans;
+    private HideTextOnFocusListener hideTextOnFocusListener;
 
     public LendingMasterSubView(Library referenceObject) {
         super(referenceObject);
@@ -110,6 +114,8 @@ public class LendingMasterSubView extends SubViewBase<Library, LendingMasterCont
         inventoryPanel.add(scrollPane_1, BorderLayout.CENTER);
 
         loansTable = new JTable(loansPMod.getLoanTableModel());
+        loansTable.setRowSorter(loansPMod.getLoanTableRowSorter());
+
         scrollPane_1.setViewportView(loansTable);
     }
 
@@ -125,7 +131,10 @@ public class LendingMasterSubView extends SubViewBase<Library, LendingMasterCont
         lblOverdueLoans.setText(Texts.get("LendingMasterMainView.lblberflligeAusleihen.text"));
 
         searchDefaultText = Texts.get("LendingMasterMainView.searchDefault");
-        // txtSearch.setText(Texts.get("LendingMasterMainView.searchDefault"));
+        txtSearch.setText(Texts.get("LendingMasterMainView.searchDefault"));
+        if (hideTextOnFocusListener != null)
+            hideTextOnFocusListener.updateText(searchDefaultText);
+
         chbkOnlyOverdue.setText(Texts.get("LendingMasterMainView.chbkOnlyOverdue.text"));
         btnNew.setText(Texts.get("LendingMasterMainView.btnNew.text"));
         btnOpen.setText(Texts.get("LendingMasterMainView.btnOpen.text"));
@@ -156,5 +165,32 @@ public class LendingMasterSubView extends SubViewBase<Library, LendingMasterCont
 
         new EnableCompontentOnTableSelectionListener(loansTable, btnOpen);
 
+        hideTextOnFocusListener = new HideTextOnFocusListener(txtSearch, searchDefaultText);
+
+        txtSearch.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                search();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                search();
+            }
+
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                search();
+            }
+
+        });
+
     }
+
+    private void search() {
+        if (!txtSearch.getText().equals(searchDefaultText)) {
+            getController().searchBooks(txtSearch.getText());
+        }
+    }
+
 }

@@ -3,8 +3,6 @@ package application.view.subView;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -31,6 +29,7 @@ import application.core.Repository;
 import application.core.Texts;
 import application.presentationModel.BooksPMod;
 import application.view.helper.EnableCompontentOnTableSelectionListener;
+import application.view.helper.HideTextOnFocusListener;
 import application.viewModel.SearchFilterElement;
 import domain.Library;
 
@@ -61,6 +60,7 @@ public class BookMasterSubView extends SubViewBase<Library, BookMasterController
     public JLabel lblNewLabel_1;
     public JLabel lblNurVerfgbare;
     public JPanel statisticsPanel;
+    private HideTextOnFocusListener hideTextOnFocusListener;
 
     public BookMasterSubView(Library referenceObject) {
         super(referenceObject);
@@ -101,7 +101,6 @@ public class BookMasterSubView extends SubViewBase<Library, BookMasterController
 
         txtFieldSearch = new JTextField();
         txtFieldSearch.setName(NAME_SEARCH_FIELD);
-        txtFieldSearch.setText(searchDefaultText);
         panel_5.add(txtFieldSearch, "flowx,cell 0 1,growx");
         txtFieldSearch.setColumns(10);
 
@@ -159,6 +158,9 @@ public class BookMasterSubView extends SubViewBase<Library, BookMasterController
         lblNewLabel_1.setText(Texts.get("BookMasterMainView.lblNewLabel_1.text"));
         btnOpenBook.setText(Texts.get("BookMasterMainView.btnOpenBook.text"));
         searchDefaultText = Texts.get("BookMasterMainView.searchDefault");
+        txtFieldSearch.setText(searchDefaultText);
+        if (hideTextOnFocusListener != null)
+            hideTextOnFocusListener.updateText(searchDefaultText);
         lblNurVerfgbare.setText(Texts.get("BookMasterMainView.lblNurVerfgbare.text"));
 
         // Tooltips
@@ -243,21 +245,8 @@ public class BookMasterSubView extends SubViewBase<Library, BookMasterController
 
         });
 
-        txtFieldSearch.addFocusListener(new FocusAdapter() {
-            @Override
-            public void focusGained(FocusEvent arg0) {
-                if (txtFieldSearch.getText().equals(searchDefaultText)) {
-                    txtFieldSearch.setText("");
-                }
-            }
+        hideTextOnFocusListener = new HideTextOnFocusListener(txtFieldSearch, searchDefaultText);
 
-            @Override
-            public void focusLost(FocusEvent arg0) {
-                if (txtFieldSearch.getText().equals("")) {
-                    txtFieldSearch.setText(searchDefaultText);
-                }
-            }
-        });
     }
 
     private void search() {
