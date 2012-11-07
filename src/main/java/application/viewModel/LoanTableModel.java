@@ -1,6 +1,6 @@
 package application.viewModel;
 
-import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
@@ -11,9 +11,13 @@ import domain.Loan;
 
 public class LoanTableModel extends AbstractTableModel {
 
+    private static final int COLUMN_LENT_TO = 4;
+    private static final int COLUMN_LENT_UNTIL = 3;
+    private static final int COLUMN_BOOK_TITLE = 2;
+    private static final int COLUMN_COPY_ID = 1;
+    private static final int COLUMN_STATUS = 0;
     private static final long serialVersionUID = 1L;
     private final List<Loan> loans;
-    private final SimpleDateFormat dateFormatter = new SimpleDateFormat();
     private String[] columnNames;
 
     public LoanTableModel(List<Loan> loans) {
@@ -48,6 +52,33 @@ public class LoanTableModel extends AbstractTableModel {
     }
 
     @Override
+    public Class<?> getColumnClass(int columnIndex) {
+        Class<?> result = String.class;
+
+        switch (columnIndex) {
+        case COLUMN_STATUS:
+            result = String.class;
+            break;
+        case COLUMN_COPY_ID:
+            result = Long.class;
+            break;
+        case COLUMN_BOOK_TITLE:
+            result = String.class;
+            break;
+        case COLUMN_LENT_UNTIL:
+            result = Date.class;
+            break;
+        case COLUMN_LENT_TO:
+            result = String.class;
+            break;
+        default:
+            break;
+        }
+
+        return result;
+    }
+
+    @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
 
         Loan loan = loans.get(rowIndex);
@@ -55,22 +86,22 @@ public class LoanTableModel extends AbstractTableModel {
         Object result = null;
 
         switch (columnIndex) {
-        case 0:
+        case COLUMN_STATUS:
             result = loan.isOverdue() ? "fällig" : "ok";
             break;
-        case 1:
+        case COLUMN_COPY_ID:
             result = loan.getCopy().getInventoryNumber();
             break;
-        case 2:
-            result = loan.getCopy().getTitle();
+        case COLUMN_BOOK_TITLE:
+            result = loan.getCopy().getTitle().getName();
             break;
-        case 3:
+        case COLUMN_LENT_UNTIL:
             GregorianCalendar returnDate = loan.getReturnDate();
             if (returnDate != null) {
-                result = dateFormatter.format(returnDate.getGregorianChange()); // TODO replace with cellrenderer
+                result = returnDate.getTime();
             }
             break;
-        case 4:
+        case COLUMN_LENT_TO:
             result = loan.getCustomer().getSurname() + " " + loan.getCustomer().getName();
             break;
 
