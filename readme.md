@@ -1,5 +1,5 @@
 
-Stuff used
+Libraries used
 =====
 
 This project uses:
