@@ -1,4 +1,4 @@
-package application.view;
+package application.view.subView;
 
 import static application.view.mainView.BookDetailMainViewBase.NAME_BUTTON_CANCEL;
 import static application.view.mainView.BookDetailMainViewBase.NAME_TEXTBOX_TITLE;
@@ -29,12 +29,13 @@ import org.junit.Test;
 import application.LibraryApp;
 import application.data.DataLoder;
 import application.data.XmlDataLoader;
+import application.view.AbstractFestTest;
 import application.view.mainView.EditBookDetailMainView;
 import application.view.mainView.MasterMainView;
 import domain.Library;
 
 @GUITest
-public class BookMasterMainViewTest extends AbstractFestTest {
+public class BookMasterSubViewTest extends AbstractFestTest {
     FrameFixture window;
     private static Library library;
 
@@ -143,7 +144,6 @@ public class BookMasterMainViewTest extends AbstractFestTest {
         window.comboBox(NAME_COMBOBOX_FILTER).selectItem(3);
         // 5 books from wiley verlag should be found
         window.table(NAME_TABLE_BOOKS).requireRowCount(5);
-
     }
 
     private void assertThatDetailViewIsVisible() {

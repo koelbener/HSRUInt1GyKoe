@@ -1,4 +1,4 @@
-package application.view;
+package application.view.mainView;
 
 import static application.view.mainView.BookDetailMainViewBase.NAME_BUTTON_CANCEL;
 import static application.view.mainView.BookDetailMainViewBase.NAME_BUTTON_SAVE;
@@ -23,9 +23,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import application.LibraryApp;
-import application.view.mainView.EditBookDetailMainView;
-import application.view.mainView.MasterMainView;
-import application.view.mainView.NewBookDetailMainView;
+import application.view.AbstractFestTest;
 import domain.Book;
 import domain.Library;
 import domain.Shelf;
