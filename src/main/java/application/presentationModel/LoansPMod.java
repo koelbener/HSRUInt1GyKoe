@@ -17,7 +17,6 @@ public class LoansPMod extends pModBase {
     public LoansPMod() {
         loanTableModel = new LoanTableModel(Repository.getInstance().getLibrary().getLoans());
         loanTableRowSorter = new TableRowSorter<LoanTableModel>(loanTableModel);
-
     }
 
     public LoanTableModel getLoanTableModel() {

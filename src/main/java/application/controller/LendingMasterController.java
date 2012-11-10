@@ -30,4 +30,9 @@ public class LendingMasterController extends ControllerBase {
 
     }
 
+    public void newLoan() {
+        new LoanDetailMainViewBase(null);
+
+    }
+
 }

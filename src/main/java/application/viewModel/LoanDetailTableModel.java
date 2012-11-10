@@ -72,9 +72,7 @@ public class LoanDetailTableModel extends AbstractTableModel {
     public Object getValueAt(int rowIndex, int columnIndex) {
 
         Loan loan = loans.get(rowIndex);
-
         Object result = null;
-
         switch (columnIndex) {
         case COLUMN_COPY_ID:
             result = loan.getCopy().getInventoryNumber();
