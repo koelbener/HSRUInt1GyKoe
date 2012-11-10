@@ -1,6 +1,8 @@
 package application.view.subView;
 
 import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -166,6 +168,14 @@ public class LendingMasterSubView extends SubViewBase<Library, LendingMasterCont
         new EnableCompontentOnTableSelectionListener(loansTable, btnOpen);
 
         hideTextOnFocusListener = new HideTextOnFocusListener(txtSearch, searchDefaultText);
+
+        btnOpen.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent arg0) {
+                getController().openLoans(loansTable.getSelectedRows());
+            }
+        });
 
         txtSearch.getDocument().addDocumentListener(new DocumentListener() {
             @Override

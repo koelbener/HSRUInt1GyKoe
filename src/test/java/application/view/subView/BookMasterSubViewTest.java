@@ -18,7 +18,7 @@ import org.fest.swing.core.MouseClickInfo;
 import org.fest.swing.edt.FailOnThreadViolationRepaintManager;
 import org.fest.swing.edt.GuiActionRunner;
 import org.fest.swing.edt.GuiQuery;
-import org.fest.swing.fixture.FrameFixture;
+import org.fest.swing.fixture.DialogFixture;
 import org.fest.swing.fixture.JTableFixture;
 import org.fest.swing.fixture.JTextComponentFixture;
 import org.junit.After;
@@ -36,7 +36,7 @@ import domain.Library;
 
 @GUITest
 public class BookMasterSubViewTest extends AbstractFestTest {
-    FrameFixture window;
+    DialogFixture window;
     private static Library library;
 
     @BeforeClass
@@ -54,7 +54,7 @@ public class BookMasterSubViewTest extends AbstractFestTest {
                 return LibraryApp.createMainWindow(library);
             }
         });
-        window = new FrameFixture(mainWindow.getContainer());
+        window = new DialogFixture(mainWindow.getContainer());
         window.show(); // shows the frame to test
     }
 
@@ -128,7 +128,7 @@ public class BookMasterSubViewTest extends AbstractFestTest {
         window.table(NAME_TABLE_BOOKS).enterValue(row(3).column(COLUMN_TITLE), NEW_TITLE_VALUE);
         window.table(NAME_TABLE_BOOKS).click(row(3).column(COLUMN_AMOUNT), MouseClickInfo.leftButton().times(2));
 
-        FrameFixture bookDetailDialog = findFrame(window, EditBookDetailMainView.class.getSimpleName());
+        DialogFixture bookDetailDialog = findDialog(window, EditBookDetailMainView.class.getSimpleName());
         bookDetailDialog.textBox(NAME_TEXTBOX_TITLE).requireText(NEW_TITLE_VALUE);
     }
 
@@ -147,7 +147,7 @@ public class BookMasterSubViewTest extends AbstractFestTest {
     }
 
     private void assertThatDetailViewIsVisible() {
-        FrameFixture bookDetailDialog = findFrame(window, EditBookDetailMainView.class.getSimpleName());
+        DialogFixture bookDetailDialog = findDialog(window, EditBookDetailMainView.class.getSimpleName());
         bookDetailDialog.requireVisible();
         bookDetailDialog.button(NAME_BUTTON_CANCEL).click();
         bookDetailDialog.requireNotVisible();

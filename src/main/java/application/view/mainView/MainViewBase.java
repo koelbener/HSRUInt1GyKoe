@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Observer;
 
 import javax.swing.ImageIcon;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 
 import org.slf4j.Logger;
@@ -22,7 +23,7 @@ import com.google.common.io.Resources;
  * A MainView is a view inheriting from JFrame. Every window of the UI is a MainViewBase descendant.
  * 
  */
-public abstract class MainViewBase<R, T extends ControllerBase> extends ViewBase<R, T, JFrame> implements Observer {
+public abstract class MainViewBase<R, T extends ControllerBase> extends ViewBase<R, T, JDialog> implements Observer {
 
     private static final Logger logger = LoggerFactory.getLogger(MainViewBase.class);
 
@@ -34,8 +35,8 @@ public abstract class MainViewBase<R, T extends ControllerBase> extends ViewBase
     }
 
     @Override
-    protected JFrame initContainer() {
-        return new JFrame();
+    protected JDialog initContainer() {
+        return new JDialog();
     }
 
     @Override

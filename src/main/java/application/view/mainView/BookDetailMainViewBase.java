@@ -142,7 +142,7 @@ public abstract class BookDetailMainViewBase extends MainViewBase<Book, BookDeta
     protected void initUIElements() {
         super.initUIElements();
         getContainer().setBounds(100, 100, 450, 450);
-        getContainer().setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        getContainer().setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         Container contentPane = getContainer().getContentPane();
         contentPane.setLayout(new BorderLayout(0, 0));
 

@@ -4,14 +4,14 @@ import org.fest.swing.core.MouseClickInfo;
 import org.fest.swing.core.Robot;
 import org.fest.swing.data.TableCell;
 import org.fest.swing.finder.WindowFinder;
-import org.fest.swing.fixture.FrameFixture;
+import org.fest.swing.fixture.DialogFixture;
 import org.fest.swing.fixture.JTableFixture;
 
 public class AbstractFestTest {
 
-    protected FrameFixture findFrame(FrameFixture parent, String frameName) {
-        Robot robot = parent.robot;
-        return WindowFinder.findFrame(frameName).using(robot);
+    protected DialogFixture findDialog(DialogFixture bookMaster, String dialogName) {
+        Robot robot = bookMaster.robot;
+        return WindowFinder.findDialog(dialogName).using(robot);
     }
 
     protected void doubleClickOnCell(JTableFixture table, String cellValue) {
