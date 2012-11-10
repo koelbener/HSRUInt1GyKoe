@@ -17,6 +17,7 @@ import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.table.TableColumn;
 
 import net.miginfocom.swing.MigLayout;
 
@@ -30,6 +31,7 @@ import application.core.Texts;
 import application.presentationModel.BooksPMod;
 import application.view.helper.EnableCompontentOnTableSelectionListener;
 import application.view.helper.HideTextOnFocusListener;
+import application.viewModel.BookTableModel;
 import application.viewModel.SearchFilterElement;
 import domain.Library;
 
@@ -68,6 +70,11 @@ public class BookMasterSubView extends SubViewBase<Library, BookMasterController
 
     /**
      * @wbp.parser.entryPoint
+     */
+    /*
+     * (non-Javadoc)
+     * 
+     * @see application.view.subView.SubViewBase#initUIElements()
      */
     @Override
     public void initUIElements() {
@@ -126,6 +133,7 @@ public class BookMasterSubView extends SubViewBase<Library, BookMasterController
         booksTable = new JTable(booksPMod.getBookTableModel());
         booksTable.setRowSorter(booksPMod.getBookTableRowSorter());
         booksTable.setName(NAME_TABLE_BOOKS);
+        setBookTableColumnWidths();
 
         scrollPane.setViewportView(booksTable);
 
@@ -143,6 +151,20 @@ public class BookMasterSubView extends SubViewBase<Library, BookMasterController
         btnOpenBook.setMnemonic('o');
         panel_7.add(btnOpenBook, "cell 0 1,growx,aligny center");
         btnOpenBook.setEnabled(false);
+    }
+
+    // TODO: Code doesn't work
+    private void setBookTableColumnWidths() {
+        TableColumn column = null;
+        for (int i = 0; i < 5; i++) {
+            column = booksTable.getColumnModel().getColumn(i);
+            if (i == BookTableModel.COLUMN_SHELF || i == BookTableModel.COLUMN_AMOUNT) {
+                column.setPreferredWidth(30);
+            } else {
+                column.setPreferredWidth(100);
+            }
+        }
+        booksTable.doLayout();
     }
 
     @Override

@@ -18,7 +18,8 @@ import domain.validator.BookValidator;
 
 public class BookTableModel extends AbstractTableModel {
 
-    public static final int COLUMN_AMOUNT = 3;
+    public static final int COLUMN_AMOUNT = 4;
+    public static final int COLUMN_SHELF = 3;
     public static final int COLUMN_PUBLISHER = 2;
     public static final int COLUMN_AUTHOR = 1;
     public static final int COLUMN_TITLE = 0;
@@ -38,6 +39,7 @@ public class BookTableModel extends AbstractTableModel {
                 Texts.get("BookMasterMainView.table.column.name"), //
                 Texts.get("BookMasterMainView.table.column.author"), //
                 Texts.get("BookMasterMainView.table.column.publisher"), //
+                Texts.get("BookMasterMainView.table.column.shelf"), //
                 Texts.get("BookMasterMainView.table.column.copies") };
         this.fireTableStructureChanged();
     }
@@ -56,6 +58,10 @@ public class BookTableModel extends AbstractTableModel {
             result = true;
             break;
         case COLUMN_AMOUNT:
+            result = false;
+            break;
+        case COLUMN_SHELF:
+            // Todo: in-place edit?
             result = false;
             break;
         default:
@@ -79,6 +85,9 @@ public class BookTableModel extends AbstractTableModel {
             break;
         case COLUMN_AMOUNT:
             result = Integer.class;
+            break;
+        case COLUMN_SHELF:
+            result = String.class;
             break;
         default:
             logger.warn("Unknown column ID: {}", col);
@@ -142,7 +151,7 @@ public class BookTableModel extends AbstractTableModel {
 
     @Override
     public int getColumnCount() {
-        return 4;
+        return 5;
     }
 
     @Override
@@ -171,6 +180,9 @@ public class BookTableModel extends AbstractTableModel {
             break;
         case COLUMN_AMOUNT:
             result = Repository.getInstance().getLibrary().getCopiesOfBook(book).size();
+            break;
+        case COLUMN_SHELF:
+            result = book.getShelf();
             break;
         }
         return result;
