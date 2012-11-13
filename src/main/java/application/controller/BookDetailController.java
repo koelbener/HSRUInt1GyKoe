@@ -6,6 +6,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import application.core.Repository;
 import domain.Book;
 import domain.Copy;
 
@@ -50,4 +51,7 @@ public class BookDetailController extends ControllerBase {
         return copy.getTitle() == null;
     }
 
+    public void filterCustomers(String text) {
+        Repository.getInstance().getCutomerPMod().getCustomerComboBoxModel().filterContent(text);
+    }
 }

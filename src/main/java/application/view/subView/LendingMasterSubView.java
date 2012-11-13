@@ -1,6 +1,10 @@
 package application.view.subView;
 
 import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -14,6 +18,10 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 import net.miginfocom.swing.MigLayout;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import application.controller.LendingMasterController;
 import application.core.Repository;
 import application.core.Texts;
@@ -23,6 +31,8 @@ import application.view.helper.HideTextOnFocusListener;
 import domain.Library;
 
 public class LendingMasterSubView extends SubViewBase<Library, LendingMasterController> {
+
+    private static final Logger logger = LoggerFactory.getLogger(LendingMasterSubView.class);
 
     public static final String NAME_BUTTON_OPEN = "button.open";
     public static final String NAME_BUTTON_NEW = "button.new";
@@ -166,6 +176,32 @@ public class LendingMasterSubView extends SubViewBase<Library, LendingMasterCont
         new EnableCompontentOnTableSelectionListener(loansTable, btnOpen);
 
         hideTextOnFocusListener = new HideTextOnFocusListener(txtSearch, searchDefaultText);
+
+        btnNew.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent arg0) {
+                getController().newLoan();
+            }
+        });
+
+        btnOpen.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent arg0) {
+                getController().openLoans(loansTable.getSelectedRows());
+            }
+        });
+
+        loansTable.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() == 2) {
+                    logger.trace("doubleClick detected");
+                    getController().openLoans(new int[] { loansTable.rowAtPoint(e.getPoint()) });
+                }
+            }
+        });
 
         txtSearch.getDocument().addDocumentListener(new DocumentListener() {
             @Override

@@ -112,4 +112,8 @@ public class LoanTableModel extends AbstractTableModel {
         return result;
     }
 
+    public Loan getLoan(int index) {
+        return loans.get(index);
+    }
+
 }

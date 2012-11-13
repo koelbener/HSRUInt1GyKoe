@@ -3,7 +3,7 @@ package application.view.subView;
 import org.fest.swing.edt.FailOnThreadViolationRepaintManager;
 import org.fest.swing.edt.GuiActionRunner;
 import org.fest.swing.edt.GuiQuery;
-import org.fest.swing.fixture.FrameFixture;
+import org.fest.swing.fixture.DialogFixture;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -17,7 +17,7 @@ import application.view.mainView.MasterMainView;
 import domain.Library;
 
 public class LendingMasterSubViewTest extends AbstractFestTest {
-    FrameFixture window;
+    DialogFixture window;
     private static Library library;
 
     @BeforeClass
@@ -35,7 +35,7 @@ public class LendingMasterSubViewTest extends AbstractFestTest {
                 return LibraryApp.createMainWindow(library);
             }
         });
-        window = new FrameFixture(mainWindow.getContainer());
+        window = new DialogFixture(mainWindow.getContainer());
         window.show(); // shows the frame to test
         window.tabbedPane().selectTab(Texts.get("BookMasterMainView.tab.lending"));
 

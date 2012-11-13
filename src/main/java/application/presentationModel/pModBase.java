@@ -1,5 +1,7 @@
 package application.presentationModel;
 
-public class pModBase {
+import java.util.Observable;
+
+public class pModBase extends Observable {
 
 }
