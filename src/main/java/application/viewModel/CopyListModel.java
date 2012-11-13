@@ -6,7 +6,9 @@ import javax.swing.AbstractListModel;
 
 import domain.Copy;
 
-public class CopyListModel extends AbstractListModel<Copy> {
+@SuppressWarnings("rawtypes")
+// is not supported by Java6
+public class CopyListModel extends AbstractListModel {
 
     private static final long serialVersionUID = 1L;
     List<Copy> copyList;

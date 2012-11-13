@@ -14,7 +14,9 @@ import org.slf4j.LoggerFactory;
 import application.core.Repository;
 import domain.Customer;
 
-public class CustomerComboBoxModel extends AbstractListModel<Customer> implements MutableComboBoxModel<Customer> {
+@SuppressWarnings("rawtypes")
+// is not supported by Java6
+public class CustomerComboBoxModel extends AbstractListModel implements MutableComboBoxModel {
 
     private static final Logger logger = LoggerFactory.getLogger(CustomerComboBoxModel.class);
     private static final long serialVersionUID = -3087379838481895619L;
@@ -86,13 +88,13 @@ public class CustomerComboBoxModel extends AbstractListModel<Customer> implement
     }
 
     @Override
-    public void addElement(Customer arg0) {
-        customers.add(arg0);
+    public void addElement(Object arg0) {
+        customers.add((Customer) arg0);
     }
 
     @Override
-    public void insertElementAt(Customer arg0, int arg1) {
-        customers.add(arg1, arg0);
+    public void insertElementAt(Object arg0, int arg1) {
+        customers.add(arg1, (Customer) arg0);
     }
 
     @Override

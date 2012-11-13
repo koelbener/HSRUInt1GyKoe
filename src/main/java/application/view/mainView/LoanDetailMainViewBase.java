@@ -8,6 +8,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 
+import javax.swing.AbstractListModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
@@ -122,6 +123,10 @@ public class LoanDetailMainViewBase extends MainViewBase<Loan, BookDetailControl
 
     }
 
+    /**
+     * <code>@SuppressWarnings("unchecked")</code> because Java 1.6 does not support typed {@linkplain AbstractListModel}
+     */
+    @SuppressWarnings("unchecked")
     private void createCustomerSelectionSection(JPanel panel_4) {
         panel = new JPanel();
         panel_4.add(panel, "cell 0 0,growx,aligny top");

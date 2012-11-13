@@ -8,7 +8,9 @@ import javax.swing.ComboBoxModel;
 
 import application.core.Texts;
 
-public class SearchFilterComboBoxModel extends AbstractListModel<SearchFilterElement> implements ComboBoxModel<SearchFilterElement> {
+@SuppressWarnings("rawtypes")
+// is not supported by Java6
+public class SearchFilterComboBoxModel extends AbstractListModel implements ComboBoxModel {
 
     private static final long serialVersionUID = 592368359539347695L;
     List<SearchFilterElement> elements;
