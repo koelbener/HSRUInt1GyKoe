@@ -28,6 +28,7 @@ import application.core.LibraryActionListener;
 import application.core.Repository;
 import application.core.Texts;
 import application.presentationModel.BooksPMod;
+import application.view.helper.BooksTableContextMenuListener;
 import application.view.helper.EnableCompontentOnTableSelectionListener;
 import application.view.helper.HideTextOnFocusListener;
 import application.viewModel.SearchFilterElement;
@@ -70,7 +71,7 @@ public class BookMasterSubView extends SubViewBase<Library, BookMasterController
      * @wbp.parser.entryPoint
      */
     @Override
-    public void initUIElements() {
+    protected void initUIElements() {
         container.setLayout(new BorderLayout());
         statisticsPanel = new JPanel();
         container.add(statisticsPanel, BorderLayout.NORTH);
@@ -246,6 +247,20 @@ public class BookMasterSubView extends SubViewBase<Library, BookMasterController
         });
 
         hideTextOnFocusListener = new HideTextOnFocusListener(txtFieldSearch, searchDefaultText);
+
+        booksTable.addMouseListener(new BooksTableContextMenuListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                getController().openNewBook();
+            }
+        }, new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                getController().openBooks(booksTable.getSelectedRows());
+            }
+        }));
 
     }
 
