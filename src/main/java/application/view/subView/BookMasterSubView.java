@@ -6,7 +6,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-import javax.swing.AbstractListModel;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -71,14 +70,13 @@ public class BookMasterSubView extends SubViewBase<Library, BookMasterController
     }
 
     /**
-     * Initialize the contents of the frame. <br />
-     * <br />
-     * <code>@SuppressWarnings("unchecked")</code> because Java 1.6 does not support typed {@linkplain AbstractListModel}
-     * 
      * @wbp.parser.entryPoint
-     * 
      */
-    @SuppressWarnings("unchecked")
+    /*
+     * (non-Javadoc)
+     * 
+     * @see application.view.subView.SubViewBase#initUIElements()
+     */
     @Override
     protected void initUIElements() {
         container.setLayout(new BorderLayout());

@@ -8,7 +8,6 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.AbstractListModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
@@ -137,12 +136,8 @@ public abstract class BookDetailMainViewBase extends MainViewBase<Book, BookDeta
     }
 
     /**
-     * Initialize the contents of the frame. <br />
-     * <br />
-     * <code>@SuppressWarnings("unchecked")</code> because Java 1.6 does not support typed {@linkplain AbstractListModel}
-     * 
+     * Initialize the contents of the frame.
      */
-    @SuppressWarnings("unchecked")
     @Override
     protected void initUIElements() {
         super.initUIElements();
@@ -218,7 +213,6 @@ public abstract class BookDetailMainViewBase extends MainViewBase<Book, BookDeta
         panel_3.setLayout(new BorderLayout(0, 0));
 
         copiesList = new JList<Copy>();
-
         copiesList.setModel(copyListModel);
         panel_3.add(copiesList);
 
