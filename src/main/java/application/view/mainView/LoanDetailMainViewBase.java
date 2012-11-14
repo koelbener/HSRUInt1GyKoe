@@ -27,7 +27,7 @@ import net.miginfocom.swing.MigLayout;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import application.controller.BookDetailController;
+import application.controller.LoanDetailController;
 import application.core.Repository;
 import application.core.Texts;
 import application.view.helper.CustomerComboBoxRenderer;
@@ -36,7 +36,7 @@ import application.viewModel.LoanDetailTableModel;
 import domain.Customer;
 import domain.Loan;
 
-public class LoanDetailMainViewBase extends MainViewBase<Loan, BookDetailController> {
+public class LoanDetailMainViewBase extends MainViewBase<Loan, LoanDetailController> {
 
     private static final Logger logger = LoggerFactory.getLogger(LoanDetailMainViewBase.class);
     private static String defaultSearchValue;
@@ -57,8 +57,6 @@ public class LoanDetailMainViewBase extends MainViewBase<Loan, BookDetailControl
     private JLabel numberOfLoansLabel;
     private JLabel numberOfLoansNumberLabel;
     private JTable loansTable;
-    private JPanel spacerPanel3;
-    private JPanel spacerPanel4;
     private HideTextOnFocusListener hideTextOnFocusListener;
 
     public LoanDetailMainViewBase(Loan loan) {
@@ -113,7 +111,7 @@ public class LoanDetailMainViewBase extends MainViewBase<Loan, BookDetailControl
     @Override
     protected void initUIElements() {
         super.initUIElements();
-        getContainer().setBounds(100, 100, 450, 450);
+        getContainer().setBounds(100, 100, 600, 500);
         getContainer().setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         getContainer().setModalityType(ModalityType.APPLICATION_MODAL);
         Container contentPane = getContainer().getContentPane();
@@ -175,7 +173,7 @@ public class LoanDetailMainViewBase extends MainViewBase<Loan, BookDetailControl
     private void createNewLoanSection(JPanel panel_4) {
         panel_2 = new JPanel();
         panel_4.add(panel_2, "cell 0 1,growx,aligny top");
-        panel_2.setLayout(new MigLayout("", "[][100.00][][][grow]", "[grow][grow]"));
+        panel_2.setLayout(new MigLayout("", "[][100.00][][][grow][][]", "[grow]"));
 
         copyIdLabel = new JLabel();
         panel_2.add(copyIdLabel, "cell 0 0,alignx left");
@@ -184,24 +182,19 @@ public class LoanDetailMainViewBase extends MainViewBase<Loan, BookDetailControl
         panel_2.add(copyIdTextField, "cell 1 0,alignx left");
         copyIdTextField.setColumns(10);
 
-        copyOkLabel = new JLabel("OK");
-        panel_2.add(copyOkLabel, "cell 2 0,alignx left");
-
-        buttonMakeLoan = new JButton();
-        panel_2.add(buttonMakeLoan, "cell 3 0,alignx left");
-
-        spacerPanel3 = new JPanel();
-        panel_2.add(spacerPanel3, "cell 4 0,grow");
-
         backDateLabel = new JLabel();
-        panel_2.add(backDateLabel, "cell 0 1,alignx trailing");
+        panel_2.add(backDateLabel, "cell 2 0,alignx trailing");
 
         backDateTextField = new JTextField();
-        panel_2.add(backDateTextField, "cell 1 1 3 1,alignx left,aligny bottom");
+        panel_2.add(backDateTextField, "cell 3 0,alignx left,aligny bottom");
         backDateTextField.setColumns(10);
 
-        spacerPanel4 = new JPanel();
-        panel_2.add(spacerPanel4, "cell 4 1,grow");
+        copyOkLabel = new JLabel("OK");
+        panel_2.add(copyOkLabel, "cell 4 0,alignx left");
+
+        buttonMakeLoan = new JButton();
+        panel_2.add(buttonMakeLoan, "cell 5 0,alignx left");
+
     }
 
     private void initLoanTable() {
@@ -218,8 +211,8 @@ public class LoanDetailMainViewBase extends MainViewBase<Loan, BookDetailControl
     }
 
     @Override
-    protected BookDetailController initController() {
-        return new BookDetailController();
+    protected LoanDetailController initController() {
+        return new LoanDetailController();
 
     }
 
@@ -283,6 +276,17 @@ public class LoanDetailMainViewBase extends MainViewBase<Loan, BookDetailControl
                 setTexts();
             }
 
+        });
+
+        buttonMakeLoan.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Loan loan = null;
+                copyOkLabel.setText("Date missing");
+                getController().saveLoan(loan);
+                logger.debug("save loan.");
+            }
         });
     }
 }
