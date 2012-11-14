@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 
 import application.core.Repository;
 import application.viewModel.LoanTableModel;
+import domain.Loan;
 
 public class LoansPMod extends pModBase {
     private final LoanTableModel loanTableModel;
@@ -33,4 +34,7 @@ public class LoansPMod extends pModBase {
 
     }
 
+    public void addLoan(Loan loan) {
+        loanTableModel.addLoan(loan);
+    }
 }

@@ -135,19 +135,29 @@ public class Library {
     }
 
     public List<Copy> getCopies() {
-        return copies;
+        return new ArrayList<Copy>(copies);
+    }
+
+    public Copy getCopyByInventoryNr(long id) {
+        Copy result = null;
+        for (Copy copy : copies) {
+            if (copy.getInventoryNumber() == id) {
+                result = copy;
+            }
+        }
+        return result;
     }
 
     public List<Loan> getLoans() {
-        return loans;
+        return new ArrayList<Loan>(loans);
     }
 
     public List<Book> getBooks() {
-        return books;
+        return new ArrayList<Book>(books);
     }
 
     public List<Customer> getCustomers() {
-        return customers;
+        return new ArrayList<Customer>(customers);
     }
 
 }

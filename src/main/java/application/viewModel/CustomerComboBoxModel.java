@@ -8,15 +8,11 @@ import java.util.List;
 import javax.swing.AbstractListModel;
 import javax.swing.MutableComboBoxModel;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import application.core.Repository;
 import domain.Customer;
 
 public class CustomerComboBoxModel extends AbstractListModel<Customer> implements MutableComboBoxModel<Customer> {
 
-    private static final Logger logger = LoggerFactory.getLogger(CustomerComboBoxModel.class);
     private static final long serialVersionUID = -3087379838481895619L;
     List<Customer> customers;
     int selectedElement;
@@ -31,7 +27,6 @@ public class CustomerComboBoxModel extends AbstractListModel<Customer> implement
     }
 
     public void setCustomers(List<Customer> customers) {
-        logger.debug("load new customers to customerComboBox: " + customers);
         sortCustomers(customers);
         this.customers = customers;
         fireContentsChanged(this, 0, customers.size() - 1);

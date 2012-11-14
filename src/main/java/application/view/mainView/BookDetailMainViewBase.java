@@ -273,9 +273,8 @@ public abstract class BookDetailMainViewBase extends MainViewBase<Book, BookDeta
                 if (validateBook()) {
                     Book bookToUpdate = extractViewValues(getReferenceObject());
                     List<Copy> copies = copyListModel.getAll();
-                    if (getController().saveBook(bookToUpdate, copies)) {
-                        BookDetailMainViewBase.this.getContainer().dispose();
-                    }
+                    BookDetailMainViewBase.this.getContainer().dispose();
+                    getController().saveBook(bookToUpdate, copies);
                 }
 
             }

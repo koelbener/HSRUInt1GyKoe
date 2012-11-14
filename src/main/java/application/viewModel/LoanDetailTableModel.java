@@ -1,5 +1,6 @@
 package application.viewModel;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.table.AbstractTableModel;
@@ -19,7 +20,7 @@ public class LoanDetailTableModel extends AbstractTableModel {
     private final List<Loan> loans;
 
     public LoanDetailTableModel(Customer customer) {
-        this.loans = Repository.getInstance().getLibrary().getCustomerLoans(customer);
+        this.loans = new ArrayList<Loan>();
         setColumns();
     }
 
@@ -88,4 +89,14 @@ public class LoanDetailTableModel extends AbstractTableModel {
         return result;
     }
 
+    public void addLoan(Loan loan) {
+        loans.add(loan);
+        fireTableDataChanged();
+    }
+
+    public void updateLoans(Customer customer) {
+        loans.clear();
+        loans.addAll(Repository.getInstance().getLibrary().getCustomerLoans(customer));
+        fireTableDataChanged();
+    }
 }

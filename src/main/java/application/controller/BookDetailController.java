@@ -12,10 +12,7 @@ import domain.Copy;
 public class BookDetailController extends ControllerBase {
     private static final Logger logger = LoggerFactory.getLogger(BookDetailController.class);
 
-    /**
-     * @return <code>true</code> if the book was successfully persisted and the calling dialog can be closed
-     */
-    public boolean saveBook(Book book, List<Copy> copies) {
+    public void saveBook(Book book, List<Copy> copies) {
 
         String title = book.getName();
         Book existingBook = getRepository().getLibrary().findByBookTitle(title);
@@ -42,8 +39,6 @@ public class BookDetailController extends ControllerBase {
         }
 
         getRepository().getBooksPMod().updateBook(book);
-
-        return true; // TODO remove return val?
     }
 
     private boolean newlyAdded(Copy copy) {

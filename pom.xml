@@ -50,11 +50,6 @@
 			<version>1.9.5-rc1</version>
 			<scope>test</scope>
 		</dependency>
-		<dependency>
-			<groupId>com.toedter</groupId>
-			<artifactId>jcalendar</artifactId>
-			<version>1.3.2</version>
-		</dependency>
 	</dependencies>
 	<build>
 		<plugins>

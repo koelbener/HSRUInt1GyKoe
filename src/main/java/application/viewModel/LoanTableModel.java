@@ -11,8 +11,9 @@ import domain.Loan;
 
 public class LoanTableModel extends AbstractTableModel {
 
-    private static final int COLUMN_LENT_TO = 4;
-    private static final int COLUMN_LENT_UNTIL = 3;
+    private static final int COLUMN_LENT_TO = 5;
+    private static final int COLUMN_LENT_UNTIL = 4;
+    private static final int COLUMN_LENT_FROM = 3;
     private static final int COLUMN_BOOK_TITLE = 2;
     private static final int COLUMN_COPY_ID = 1;
     private static final int COLUMN_STATUS = 0;
@@ -31,6 +32,7 @@ public class LoanTableModel extends AbstractTableModel {
                 Texts.get("LendingMasterMainView.table.column.status"), //
                 Texts.get("LendingMasterMainView.table.column.copy"), //
                 Texts.get("LendingMasterMainView.table.column.title"), //
+                Texts.get("LendingMasterMainView.table.column.lentFrom"), //
                 Texts.get("LendingMasterMainView.table.column.lentUntil"), //
                 Texts.get("LendingMasterMainView.table.column.lentTo") };
         this.fireTableStructureChanged();
@@ -43,7 +45,7 @@ public class LoanTableModel extends AbstractTableModel {
 
     @Override
     public int getColumnCount() {
-        return 5;
+        return 6;
     }
 
     @Override
@@ -64,6 +66,9 @@ public class LoanTableModel extends AbstractTableModel {
             break;
         case COLUMN_BOOK_TITLE:
             result = String.class;
+            break;
+        case COLUMN_LENT_FROM:
+            result = Date.class;
             break;
         case COLUMN_LENT_UNTIL:
             result = Date.class;
@@ -87,7 +92,13 @@ public class LoanTableModel extends AbstractTableModel {
 
         switch (columnIndex) {
         case COLUMN_STATUS:
-            result = loan.isOverdue() ? "fällig" : "ok";
+            if (loan.isOverdue()) {
+                result = "fällig";
+            } else if (loan.isLent()) {
+                result = "verliehen";
+            } else {
+                result = "zurück";
+            }
             break;
         case COLUMN_COPY_ID:
             result = loan.getCopy().getInventoryNumber();
@@ -99,6 +110,12 @@ public class LoanTableModel extends AbstractTableModel {
             GregorianCalendar returnDate = loan.getReturnDate();
             if (returnDate != null) {
                 result = returnDate.getTime();
+            }
+            break;
+        case COLUMN_LENT_FROM:
+            GregorianCalendar pickupDate = loan.getPickupDate();
+            if (pickupDate != null) {
+                result = pickupDate.getTime();
             }
             break;
         case COLUMN_LENT_TO:
@@ -114,6 +131,11 @@ public class LoanTableModel extends AbstractTableModel {
 
     public Loan getLoan(int index) {
         return loans.get(index);
+    }
+
+    public void addLoan(Loan loan) {
+        loans.add(loan);
+        fireTableDataChanged();
     }
 
 }
