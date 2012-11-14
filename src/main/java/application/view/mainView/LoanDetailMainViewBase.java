@@ -5,6 +5,7 @@ import java.awt.Container;
 import java.awt.Dialog.ModalityType;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Date;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -33,6 +34,9 @@ import application.core.Texts;
 import application.view.helper.CustomerComboBoxRenderer;
 import application.view.helper.HideTextOnFocusListener;
 import application.viewModel.LoanDetailTableModel;
+
+import com.toedter.calendar.JDateChooser;
+
 import domain.Customer;
 import domain.Loan;
 
@@ -53,7 +57,7 @@ public class LoanDetailMainViewBase extends MainViewBase<Loan, LoanDetailControl
     private JTextField copyIdTextField;
     private JButton buttonMakeLoan;
     private JLabel copyOkLabel;
-    private JTextField backDateTextField;
+    private JDateChooser backDateTextField;
     private JLabel numberOfLoansLabel;
     private JLabel numberOfLoansNumberLabel;
     private JTable loansTable;
@@ -185,9 +189,9 @@ public class LoanDetailMainViewBase extends MainViewBase<Loan, LoanDetailControl
         backDateLabel = new JLabel();
         panel_2.add(backDateLabel, "cell 2 0,alignx trailing");
 
-        backDateTextField = new JTextField();
+        backDateTextField = new JDateChooser(new Date());
         panel_2.add(backDateTextField, "cell 3 0,alignx left,aligny bottom");
-        backDateTextField.setColumns(10);
+        // backDateTextField.setColumns(10);
 
         copyOkLabel = new JLabel("OK");
         panel_2.add(copyOkLabel, "cell 4 0,alignx left");
