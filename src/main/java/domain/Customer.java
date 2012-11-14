@@ -56,9 +56,17 @@ public class Customer {
         this.zip = zip;
     }
 
+    public String getFullName() {
+        return getSurname() + " " + getName();
+    }
+
     @Override
     public String toString() {
         return name + " " + surname + " , " + street + " , " + zip + " " + city;
+    }
+
+    public String getFullNameAndAddress() {
+        return name + " " + surname + ", " + street + ", " + zip + " " + city;
     }
 
 }

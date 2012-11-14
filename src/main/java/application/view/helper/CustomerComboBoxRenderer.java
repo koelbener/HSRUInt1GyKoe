@@ -26,6 +26,7 @@ public class CustomerComboBoxRenderer extends JLabel implements ListCellRenderer
     public Component getListCellRendererComponent(JList<? extends Object> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
         boolean newLoanAllowed = false;
         if (value instanceof Customer) {
+            Customer customer = (Customer) value;
             newLoanAllowed = true;
             List<Loan> customerLoans = Repository.getInstance().getLibrary().getCustomerLoans((Customer) value);
             if (customerLoans.size() >= 3) {
@@ -39,6 +40,7 @@ public class CustomerComboBoxRenderer extends JLabel implements ListCellRenderer
                 }
             }
 
+            setText(customer.getFullNameAndAddress());
         }
 
         if (newLoanAllowed) {
@@ -46,7 +48,6 @@ public class CustomerComboBoxRenderer extends JLabel implements ListCellRenderer
         } else {
             setIcon(IconUtil.loadIcon("warning.png"));
         }
-        setText(value.toString());
 
         return this;
     }

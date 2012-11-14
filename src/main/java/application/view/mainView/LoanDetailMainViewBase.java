@@ -5,8 +5,6 @@ import java.awt.Container;
 import java.awt.Dialog.ModalityType;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -33,6 +31,7 @@ import application.controller.BookDetailController;
 import application.core.Repository;
 import application.core.Texts;
 import application.view.helper.CustomerComboBoxRenderer;
+import application.view.helper.HideTextOnFocusListener;
 import application.viewModel.LoanDetailTableModel;
 import domain.Customer;
 import domain.Loan;
@@ -60,6 +59,7 @@ public class LoanDetailMainViewBase extends MainViewBase<Loan, BookDetailControl
     private JTable loansTable;
     private JPanel spacerPanel3;
     private JPanel spacerPanel4;
+    private HideTextOnFocusListener hideTextOnFocusListener;
 
     public LoanDetailMainViewBase(Loan loan) {
         super(loan);
@@ -76,15 +76,12 @@ public class LoanDetailMainViewBase extends MainViewBase<Loan, BookDetailControl
         getContainer().setTitle(Texts.get("BookDetailMainView.this.title")); //$NON-NLS-1$
 
         defaultSearchValue = Texts.get("LoanDetailMainViewBase.defaultSearchValue");
+        if (hideTextOnFocusListener != null) {
+            hideTextOnFocusListener.updateText(defaultSearchValue);
+        }
 
         // border of panels
-        String overViewTitle;
-        if (customerComboBox.getSelectedItem() instanceof Customer) {
-            overViewTitle = Texts.get("LoanDetailMainViewBase.loansOverview.title") + " " + ((Customer) customerComboBox.getSelectedItem()).getName();
-        } else {
-            overViewTitle = Texts.get("LoanDetailMainViewBase.loansOverview.titleAlone");
-        }
-        panel_3.setBorder(new TitledBorder(null, overViewTitle, TitledBorder.LEADING, TitledBorder.TOP, null, null));
+        updateLoansPanelTitle();
         panel_2.setBorder(new TitledBorder(null, Texts.get("LoanDetailMainViewBase.newLoan.title"), TitledBorder.LEADING, TitledBorder.TOP, null, null));
         panel.setBorder(new TitledBorder(null, Texts.get("LoanDetailMainViewBase.customerSelection.title"), TitledBorder.LEADING, TitledBorder.TOP, null, null));
 
@@ -95,6 +92,17 @@ public class LoanDetailMainViewBase extends MainViewBase<Loan, BookDetailControl
         buttonMakeLoan.setText(Texts.get("LoanDetailMainViewBase.newLoan.lendCopyButton"));
         customerLabel.setText(Texts.get("LoanDetailMainViewBase.customerSelection.customerLabel"));
         searchLabel.setText(Texts.get("LoanDetailMainViewBase.customerSelection.searchLabel"));
+    }
+
+    private void updateLoansPanelTitle() {
+        String overViewTitle;
+        if (customerComboBox.getSelectedItem() instanceof Customer) {
+            String customerName = ((Customer) customerComboBox.getSelectedItem()).getFullName();
+            overViewTitle = Texts.get("LoanDetailMainViewBase.loansOverview.title") + " " + customerName;
+        } else {
+            overViewTitle = Texts.get("LoanDetailMainViewBase.loansOverview.titleAlone");
+        }
+        panel_3.setBorder(new TitledBorder(null, overViewTitle, TitledBorder.LEADING, TitledBorder.TOP, null, null));
     }
 
     /**
@@ -146,13 +154,13 @@ public class LoanDetailMainViewBase extends MainViewBase<Loan, BookDetailControl
     private void createLoanOverviewSection(JPanel panel_4) {
         panel_3 = new JPanel();
         panel_4.add(panel_3, "cell 0 2,grow");
-        panel_3.setLayout(new MigLayout("", "[grow][]", "[][grow]"));
+        panel_3.setLayout(new MigLayout("", "[][grow]", "[grow][grow]"));
 
         numberOfLoansLabel = new JLabel();
         panel_3.add(numberOfLoansLabel, "cell 0 0");
 
         numberOfLoansNumberLabel = new JLabel("1");
-        panel_3.add(numberOfLoansNumberLabel, "cell 1 0,aligny center");
+        panel_3.add(numberOfLoansNumberLabel, "cell 1 0");
 
         loansTable = new JTable();
         if (customerComboBox.getSelectedItem() instanceof Customer) {
@@ -161,7 +169,7 @@ public class LoanDetailMainViewBase extends MainViewBase<Loan, BookDetailControl
             loansTable.setModel(new LoanDetailTableModel(null));
         }
         initLoanTable();
-        panel_3.add(new JScrollPane(loansTable), "cell 0 1,grow");
+        panel_3.add(new JScrollPane(loansTable), "cell 0 1 2 1,grow");
     }
 
     private void createNewLoanSection(JPanel panel_4) {
@@ -241,25 +249,7 @@ public class LoanDetailMainViewBase extends MainViewBase<Loan, BookDetailControl
                 }
             }
         });
-
-        searchTextField.addFocusListener(new FocusListener() {
-
-            @Override
-            public void focusLost(FocusEvent arg0) {
-                logger.debug("searchField focus lost");
-                if (searchTextField.getText().equals("")) {
-                    searchTextField.setText(defaultSearchValue);
-                }
-            }
-
-            @Override
-            public void focusGained(FocusEvent arg0) {
-                logger.debug("searchField focus gained");
-                if (searchTextField.getText().equals(defaultSearchValue)) {
-                    searchTextField.setText("");
-                }
-            }
-        });
+        hideTextOnFocusListener = new HideTextOnFocusListener(searchTextField, defaultSearchValue);
 
         Repository.getInstance().getCutomerPMod().getCustomerComboBoxModel().addListDataListener(new ListDataListener() {
 
