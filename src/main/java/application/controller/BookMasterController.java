@@ -5,8 +5,8 @@ import javax.swing.RowSorter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import application.view.mainView.EditBookDetailMainView;
-import application.view.mainView.NewBookDetailMainView;
+import application.view.mainView.dialogView.EditBookDetailMainView;
+import application.view.mainView.dialogView.NewBookDetailMainView;
 import application.viewModel.BookTableModel;
 import domain.Book;
 

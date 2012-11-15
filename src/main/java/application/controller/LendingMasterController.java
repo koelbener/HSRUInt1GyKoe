@@ -5,7 +5,7 @@ import javax.swing.RowSorter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import application.view.mainView.LoanDetailMainViewBase;
+import application.view.mainView.dialogView.LoanDetailMainViewBase;
 import application.viewModel.LoanTableModel;
 import domain.Loan;
 

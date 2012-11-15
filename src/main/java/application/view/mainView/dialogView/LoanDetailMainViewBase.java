@@ -1,4 +1,4 @@
-package application.view.mainView;
+package application.view.mainView.dialogView;
 
 import java.awt.BorderLayout;
 import java.awt.Container;
@@ -8,7 +8,6 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -36,7 +35,7 @@ import domain.Copy;
 import domain.Customer;
 import domain.Loan;
 
-public class LoanDetailMainViewBase extends MainViewBase<Loan, LoanDetailController> {
+public class LoanDetailMainViewBase extends DialogViewBase<Loan, LoanDetailController> {
 
     private static String defaultSearchValue;
 
@@ -115,10 +114,10 @@ public class LoanDetailMainViewBase extends MainViewBase<Loan, LoanDetailControl
     @Override
     protected void initUIElements() {
         super.initUIElements();
-        getContainer().setBounds(100, 100, 600, 500);
-        getContainer().setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-        getContainer().setModalityType(ModalityType.APPLICATION_MODAL);
+
         Container contentPane = getContainer().getContentPane();
+        getContainer().setBounds(100, 100, 600, 500);
+        getContainer().setModalityType(ModalityType.APPLICATION_MODAL);
 
         JPanel mainPanel = new JPanel();
         contentPane.add(mainPanel, BorderLayout.CENTER);

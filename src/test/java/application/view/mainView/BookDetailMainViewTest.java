@@ -1,12 +1,12 @@
 package application.view.mainView;
 
-import static application.view.mainView.BookDetailMainViewBase.NAME_BUTTON_CANCEL;
-import static application.view.mainView.BookDetailMainViewBase.NAME_BUTTON_SAVE;
-import static application.view.mainView.BookDetailMainViewBase.NAME_COMBOBOX_SHELF;
-import static application.view.mainView.BookDetailMainViewBase.NAME_TEXTBOX_AUTHOR;
-import static application.view.mainView.BookDetailMainViewBase.NAME_TEXTBOX_PUBLISHER;
-import static application.view.mainView.BookDetailMainViewBase.NAME_TEXTBOX_TITLE;
-import static application.view.mainView.BookDetailMainViewBase.NAME_VALIDATION_PANEL;
+import static application.view.mainView.dialogView.BookDetailMainViewBase.NAME_BUTTON_CANCEL;
+import static application.view.mainView.dialogView.BookDetailMainViewBase.NAME_BUTTON_SAVE;
+import static application.view.mainView.dialogView.BookDetailMainViewBase.NAME_COMBOBOX_SHELF;
+import static application.view.mainView.dialogView.BookDetailMainViewBase.NAME_TEXTBOX_AUTHOR;
+import static application.view.mainView.dialogView.BookDetailMainViewBase.NAME_TEXTBOX_PUBLISHER;
+import static application.view.mainView.dialogView.BookDetailMainViewBase.NAME_TEXTBOX_TITLE;
+import static application.view.mainView.dialogView.BookDetailMainViewBase.NAME_VALIDATION_PANEL;
 import static application.view.subView.BookMasterSubView.NAME_BUTTON_NEW;
 import static application.view.subView.BookMasterSubView.NAME_BUTTON_OPEN;
 import static application.view.subView.BookMasterSubView.NAME_TABLE_BOOKS;
@@ -17,6 +17,7 @@ import org.fest.swing.edt.FailOnThreadViolationRepaintManager;
 import org.fest.swing.edt.GuiActionRunner;
 import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.fixture.DialogFixture;
+import org.fest.swing.fixture.FrameFixture;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -24,6 +25,8 @@ import org.junit.Test;
 
 import application.LibraryApp;
 import application.view.AbstractFestTest;
+import application.view.mainView.dialogView.EditBookDetailMainView;
+import application.view.mainView.dialogView.NewBookDetailMainView;
 import domain.Book;
 import domain.Library;
 import domain.Shelf;
@@ -32,7 +35,7 @@ public class BookDetailMainViewTest extends AbstractFestTest {
     private static final String BOOK_PUBLISHER = "HSR Hochschule für Technik Rapperswil";
     private static final String BOOK_AUTHOR = "Michi Gysel";
     private static final String BOOK_TITLE = "Testing with JUnit 4";
-    private DialogFixture bookMaster;
+    private FrameFixture bookMaster;
     private DialogFixture bookDetail;
     private static Library library;
 
@@ -49,13 +52,13 @@ public class BookDetailMainViewTest extends AbstractFestTest {
 
     @Before
     public void setUp() throws Exception {
-        MasterMainView bookMasterMainView = GuiActionRunner.execute(new GuiQuery<MasterMainView>() {
+        MasterMainView masterMainView = GuiActionRunner.execute(new GuiQuery<MasterMainView>() {
             @Override
             protected MasterMainView executeInEDT() {
                 return LibraryApp.createMainWindow(library);
             }
         });
-        bookMaster = new DialogFixture(bookMasterMainView.getContainer());
+        bookMaster = new FrameFixture(masterMainView.getContainer());
         bookMaster.show();
     }
 

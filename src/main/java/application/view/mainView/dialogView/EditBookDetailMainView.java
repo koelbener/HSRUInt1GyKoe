@@ -1,4 +1,4 @@
-package application.view.mainView;
+package application.view.mainView.dialogView;
 
 import java.awt.Component;
 import java.awt.event.FocusEvent;

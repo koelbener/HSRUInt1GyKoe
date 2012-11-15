@@ -1,4 +1,4 @@
-package application.view.mainView;
+package application.view.mainView.dialogView;
 
 import java.awt.BorderLayout;
 import java.awt.Container;
@@ -11,7 +11,6 @@ import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
@@ -37,7 +36,7 @@ import domain.Copy;
 import domain.Shelf;
 import domain.validator.BookValidator;
 
-public abstract class BookDetailMainViewBase extends MainViewBase<Book, BookDetailController> {
+public abstract class BookDetailMainViewBase extends DialogViewBase<Book, BookDetailController> {
 
     public static final String NAME_VALIDATION_PANEL = "ValidationPanel";
     public static final String NAME_BUTTON_SAVE = "Save";
@@ -142,7 +141,6 @@ public abstract class BookDetailMainViewBase extends MainViewBase<Book, BookDeta
     protected void initUIElements() {
         super.initUIElements();
         getContainer().setBounds(100, 100, 450, 450);
-        getContainer().setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         Container contentPane = getContainer().getContentPane();
         contentPane.setLayout(new BorderLayout(0, 0));
 

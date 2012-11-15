@@ -1,7 +1,7 @@
 package application.view.subView;
 
-import static application.view.mainView.BookDetailMainViewBase.NAME_BUTTON_CANCEL;
-import static application.view.mainView.BookDetailMainViewBase.NAME_TEXTBOX_TITLE;
+import static application.view.mainView.dialogView.BookDetailMainViewBase.NAME_BUTTON_CANCEL;
+import static application.view.mainView.dialogView.BookDetailMainViewBase.NAME_TEXTBOX_TITLE;
 import static application.view.subView.BookMasterSubView.NAME_BUTTON_OPEN;
 import static application.view.subView.BookMasterSubView.NAME_COMBOBOX_FILTER;
 import static application.view.subView.BookMasterSubView.NAME_SEARCH_FIELD;
@@ -19,6 +19,7 @@ import org.fest.swing.edt.FailOnThreadViolationRepaintManager;
 import org.fest.swing.edt.GuiActionRunner;
 import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.fixture.DialogFixture;
+import org.fest.swing.fixture.FrameFixture;
 import org.fest.swing.fixture.JTableFixture;
 import org.fest.swing.fixture.JTextComponentFixture;
 import org.junit.After;
@@ -30,13 +31,13 @@ import application.LibraryApp;
 import application.data.DataLoder;
 import application.data.XmlDataLoader;
 import application.view.AbstractFestTest;
-import application.view.mainView.EditBookDetailMainView;
 import application.view.mainView.MasterMainView;
+import application.view.mainView.dialogView.EditBookDetailMainView;
 import domain.Library;
 
 @GUITest
 public class BookMasterSubViewTest extends AbstractFestTest {
-    DialogFixture window;
+    FrameFixture window;
     private static Library library;
 
     @BeforeClass
@@ -54,7 +55,7 @@ public class BookMasterSubViewTest extends AbstractFestTest {
                 return LibraryApp.createMainWindow(library);
             }
         });
-        window = new DialogFixture(mainWindow.getContainer());
+        window = new FrameFixture(mainWindow.getContainer());
         window.show(); // shows the frame to test
     }
 

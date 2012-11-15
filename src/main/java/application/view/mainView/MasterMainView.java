@@ -9,6 +9,7 @@ import java.awt.event.ActionListener;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
@@ -24,7 +25,7 @@ import application.view.subView.BookMasterSubView;
 import application.view.subView.LendingMasterSubView;
 import domain.Library;
 
-public class MasterMainView extends MainViewBase<Library, MasterController> {
+public class MasterMainView extends MainViewBase<Library, MasterController, JFrame> {
 
     private JComboBox<Language> languageComboBox;
     private JTabbedPane tabbedPane;
@@ -56,7 +57,8 @@ public class MasterMainView extends MainViewBase<Library, MasterController> {
      * @wbp.parser.entryPoint
      */
     protected void initUIElements() {
-        super.initUIElements();
+        container.getContentPane().removeAll();
+
         container.setBounds(100, 100, 616, 445);
         Container contentPane = container.getContentPane();
         contentPane.setLayout(new BorderLayout());
@@ -101,6 +103,11 @@ public class MasterMainView extends MainViewBase<Library, MasterController> {
     @Override
     protected MasterController initController() {
         return new MasterController();
+    }
+
+    @Override
+    protected JFrame initContainer() {
+        return new JFrame();
     }
 
 }

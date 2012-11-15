@@ -5,11 +5,12 @@ import org.fest.swing.core.Robot;
 import org.fest.swing.data.TableCell;
 import org.fest.swing.finder.WindowFinder;
 import org.fest.swing.fixture.DialogFixture;
+import org.fest.swing.fixture.FrameFixture;
 import org.fest.swing.fixture.JTableFixture;
 
 public class AbstractFestTest {
 
-    protected DialogFixture findDialog(DialogFixture bookMaster, String dialogName) {
+    protected DialogFixture findDialog(FrameFixture bookMaster, String dialogName) {
         Robot robot = bookMaster.robot;
         return WindowFinder.findDialog(dialogName).using(robot);
     }
