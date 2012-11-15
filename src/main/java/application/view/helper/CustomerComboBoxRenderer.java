@@ -1,7 +1,6 @@
 package application.view.helper;
 
 import java.awt.Component;
-import java.util.List;
 
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -10,7 +9,6 @@ import javax.swing.ListCellRenderer;
 import application.core.Repository;
 import application.util.IconUtil;
 import domain.Customer;
-import domain.Loan;
 
 public class CustomerComboBoxRenderer extends JLabel implements ListCellRenderer<Object> {
 
@@ -27,18 +25,7 @@ public class CustomerComboBoxRenderer extends JLabel implements ListCellRenderer
         boolean newLoanAllowed = false;
         if (value instanceof Customer) {
             Customer customer = (Customer) value;
-            newLoanAllowed = true;
-            List<Loan> customerLoans = Repository.getInstance().getLibrary().getCustomerLoans((Customer) value);
-            if (customerLoans.size() >= 3) {
-                newLoanAllowed = false;
-            } else {
-                for (Loan loan : customerLoans) {
-                    if (loan.isOverdue()) {
-                        newLoanAllowed = false;
-                        break;
-                    }
-                }
-            }
+            newLoanAllowed = Repository.getInstance().getLibrary().canCustomerMakeMoreLoans(customer);
 
             setText(customer.getFullNameAndAddress());
         }

@@ -24,6 +24,7 @@ import application.controller.BookDetailController;
 import application.core.LibraryActionListener;
 import application.core.Repository;
 import application.core.Texts;
+import application.view.helper.CopiesListCellRenderer;
 import application.viewModel.CopyListModel;
 
 import com.jgoodies.validation.ValidationResult;
@@ -212,6 +213,7 @@ public abstract class BookDetailMainViewBase extends DialogViewBase<Book, BookDe
 
         copiesList = new JList<Copy>();
         copiesList.setModel(copyListModel);
+        copiesList.setCellRenderer(new CopiesListCellRenderer());
         panel_3.add(copiesList);
 
         JPanel panel_5 = new JPanel();

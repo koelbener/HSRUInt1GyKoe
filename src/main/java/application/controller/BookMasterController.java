@@ -25,8 +25,16 @@ public class BookMasterController extends ControllerBase {
 
     }
 
-    public void searchBooks(String filter, int columnIndex) {
-        getRepository().getBooksPMod().setSearchString(filter, columnIndex);
+    public void searchBooks(String filter) {
+        getRepository().getBooksPMod().setSearchString(filter);
+    }
+
+    public void setSearchFilter(int columnIndex) {
+        getRepository().getBooksPMod().setFilterColumn(columnIndex);
+    }
+
+    public void setSearchOnlyAvailableBooks(boolean onlyAvailableBooks) {
+        getRepository().getBooksPMod().setOnlyAvailableBooks(onlyAvailableBooks);
     }
 
     public void openNewBook() {

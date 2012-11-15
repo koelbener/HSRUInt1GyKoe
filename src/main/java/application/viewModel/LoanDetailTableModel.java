@@ -1,6 +1,8 @@
 package application.viewModel;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import javax.swing.table.AbstractTableModel;
@@ -15,6 +17,7 @@ public class LoanDetailTableModel extends AbstractTableModel {
     private static final int COLUMN_COPY_ID = 0;
     private static final int COLUMN_TITLE = 1;
     private static final int COLUMN_AUTHOR = 2;
+    private static final int COLUMN_ENDDATE = 3;
     private static final long serialVersionUID = 1L;
     private String[] columnNames;
     private final List<Loan> loans;
@@ -29,7 +32,7 @@ public class LoanDetailTableModel extends AbstractTableModel {
                 //
                 Texts.get("LoanDetailMainView.table.column.copyId"), //
                 Texts.get("LoanDetailMainView.table.column.title"), //
-                Texts.get("LoanDetailMainView.table.column.author") };
+                Texts.get("LoanDetailMainView.table.column.author"), Texts.get("LoanDetailMainView.table.column.endDate") };
         this.fireTableStructureChanged();
     }
 
@@ -40,7 +43,7 @@ public class LoanDetailTableModel extends AbstractTableModel {
 
     @Override
     public int getColumnCount() {
-        return 3;
+        return 4;
     }
 
     @Override
@@ -60,6 +63,9 @@ public class LoanDetailTableModel extends AbstractTableModel {
             result = String.class;
             break;
         case COLUMN_AUTHOR:
+            result = String.class;
+            break;
+        case COLUMN_ENDDATE:
             result = String.class;
             break;
         default:
@@ -84,6 +90,11 @@ public class LoanDetailTableModel extends AbstractTableModel {
         case COLUMN_TITLE:
             result = loan.getCopy().getTitle().getName();
             break;
+        case COLUMN_ENDDATE:
+            GregorianCalendar dueDate = loan.getDueDate();
+            SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy");
+            result = format.format(dueDate.getTime());
+            break;
         }
 
         return result;
@@ -96,7 +107,7 @@ public class LoanDetailTableModel extends AbstractTableModel {
 
     public void updateLoans(Customer customer) {
         loans.clear();
-        loans.addAll(Repository.getInstance().getLibrary().getCustomerLoans(customer));
+        loans.addAll(Repository.getInstance().getLibrary().getCustomerOpenLoans(customer));
         fireTableDataChanged();
     }
 }

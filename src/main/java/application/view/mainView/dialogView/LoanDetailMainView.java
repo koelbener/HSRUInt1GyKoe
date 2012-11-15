@@ -3,8 +3,11 @@ package application.view.mainView.dialogView;
 import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.Dialog.ModalityType;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -21,9 +24,14 @@ import javax.swing.event.ListDataEvent;
 import javax.swing.event.ListDataListener;
 
 import net.miginfocom.swing.MigLayout;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import application.controller.LoanDetailController;
 import application.core.Repository;
 import application.core.Texts;
+import application.util.IconUtil;
 import application.view.component.JNumberTextField;
 import application.view.helper.CustomerComboBoxRenderer;
 import application.view.helper.HideTextOnFocusListener;
@@ -35,7 +43,7 @@ import domain.Copy;
 import domain.Customer;
 import domain.Loan;
 
-public class LoanDetailMainViewBase extends DialogViewBase<Loan, LoanDetailController> {
+public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailController> {
 
     private static String defaultSearchValue;
 
@@ -52,28 +60,40 @@ public class LoanDetailMainViewBase extends DialogViewBase<Loan, LoanDetailContr
     private JLabel lblNumberOfLoansNumber;
     private JTable tblLoans;
     private JButton btnCreateLoan;
-    private JTextField txtSearch;
-    private JTextField txtCondition;
-    private JTextField txtCopyDescription;
+    private JTextField txtCustomerSearch;
+    private JLabel lblConditionValue;
+    private JLabel lblCopyDescription;
     private JNumberTextField txtCopyId;
     private JComboBox<Customer> cbCustomer;
 
     private HideTextOnFocusListener hideTextOnFocusListener;
     private LoanDetailTableModel loanDetailTableModel;
 
-    public LoanDetailMainViewBase(Loan loan) {
+    private static final Logger logger = LoggerFactory.getLogger(LoanDetailMainView.class);
+
+    public LoanDetailMainView(Loan loan) {
         super(loan);
     }
 
     @Override
     protected void initModel() {
         super.initModel();
+        SwingUtilities.invokeLater(new Runnable() {
+
+            @Override
+            public void run() {
+                // set initial data
+                if (getReferenceObject() != null) {
+                    txtCustomerSearch.setText(getReferenceObject().getCustomer().getFullName());
+                }
+            }
+        });
     }
 
     @Override
     protected void setTexts() {
         // title
-        getContainer().setTitle(Texts.get("BookDetailMainView.this.title")); //$NON-NLS-1$
+        getContainer().setTitle(Texts.get("LoanDetailMainView.this.title")); //$NON-NLS-1$
 
         defaultSearchValue = Texts.get("LoanDetailMainViewBase.defaultSearchValue");
         if (hideTextOnFocusListener != null) {
@@ -86,24 +106,13 @@ public class LoanDetailMainViewBase extends DialogViewBase<Loan, LoanDetailContr
         panel.setBorder(new TitledBorder(null, Texts.get("LoanDetailMainViewBase.customerSelection.title"), TitledBorder.LEADING, TitledBorder.TOP, null, null));
 
         // components
-        lblCopyTitle.setText(Texts.get("LoanDetailMainViewBase.newLoan.copyDescriptionLabel"));
+        lblCopyTitle.setText(Texts.get("LoanDetailMainViewBase.newLoan.bookDescriptionLabel"));
         lblNumberOfLoans.setText(Texts.get("LoanDetailMainViewBase.loansOverview.numberOfLoans"));
         lblCopyId.setText(Texts.get("LoanDetailMainViewBase.newLoan.copyId"));
         btnCreateLoan.setText(Texts.get("LoanDetailMainViewBase.newLoan.lendCopyButton"));
         lblCustomer.setText(Texts.get("LoanDetailMainViewBase.customerSelection.customerLabel"));
         lblSearch.setText(Texts.get("LoanDetailMainViewBase.customerSelection.searchLabel"));
         lblCondition.setText(Texts.get("LoanDetailMainViewBase.newLoan.copyCondition"));
-    }
-
-    private void updateLoansPanelTitle() {
-        String overViewTitle;
-        if (cbCustomer.getSelectedItem() instanceof Customer) {
-            String customerName = getCurrentCustomerSelection().getFullName();
-            overViewTitle = Texts.get("LoanDetailMainViewBase.loansOverview.title") + " " + customerName;
-        } else {
-            overViewTitle = Texts.get("LoanDetailMainViewBase.loansOverview.titleAlone");
-        }
-        panel_3.setBorder(new TitledBorder(null, overViewTitle, TitledBorder.LEADING, TitledBorder.TOP, null, null));
     }
 
     /**
@@ -117,6 +126,7 @@ public class LoanDetailMainViewBase extends DialogViewBase<Loan, LoanDetailContr
 
         Container contentPane = getContainer().getContentPane();
         getContainer().setBounds(100, 100, 600, 500);
+        // TODO Modality interferes with minSize and ESC-Listener
         getContainer().setModalityType(ModalityType.APPLICATION_MODAL);
 
         JPanel mainPanel = new JPanel();
@@ -139,10 +149,10 @@ public class LoanDetailMainViewBase extends DialogViewBase<Loan, LoanDetailContr
         lblSearch = new JLabel();
         panel.add(lblSearch, "cell 0 0,alignx trailing");
 
-        txtSearch = new JTextField();
-        panel.add(txtSearch, "cell 1 0,growx");
-        txtSearch.setColumns(10);
-        txtSearch.setToolTipText(defaultSearchValue);
+        txtCustomerSearch = new JTextField();
+        panel.add(txtCustomerSearch, "cell 1 0,growx");
+        txtCustomerSearch.setColumns(10);
+        txtCustomerSearch.setToolTipText(defaultSearchValue);
 
         lblCustomer = new JLabel();
         panel.add(lblCustomer, "cell 0 1,alignx trailing");
@@ -150,6 +160,7 @@ public class LoanDetailMainViewBase extends DialogViewBase<Loan, LoanDetailContr
         cbCustomer = new JComboBox<Customer>(Repository.getInstance().getCutomerPMod().getCustomerComboBoxModel());
         cbCustomer.setRenderer(new CustomerComboBoxRenderer());
         panel.add(cbCustomer, "cell 1 1 2 1,growx");
+
     }
 
     private void createLoanOverviewSection(JPanel panel_4) {
@@ -176,60 +187,74 @@ public class LoanDetailMainViewBase extends DialogViewBase<Loan, LoanDetailContr
     private void createNewLoanSection(JPanel panel_4) {
         panel_2 = new JPanel();
         panel_4.add(panel_2, "cell 0 1,growx,aligny top");
-        panel_2.setLayout(new MigLayout("", "[][][][grow][][]", "[][]"));
+        panel_2.setLayout(new MigLayout("", "[54px][54px][54px][:250px:250px][54px][54px][54px][54px]", "[20px][]"));
 
         lblCopyId = new JLabel();
-        panel_2.add(lblCopyId, "cell 0 0,alignx left");
+        panel_2.add(lblCopyId, "cell 0 0,grow");
 
         txtCopyId = new JNumberTextField();
-        panel_2.add(txtCopyId, "cell 1 0");
+        txtCopyId.setMaximumSize(new Dimension(40, 20));
+        txtCopyId.setPreferredSize(new Dimension(40, 20));
+        txtCopyId.setMinimumSize(new Dimension(40, 20));
+        panel_2.add(txtCopyId, "cell 1 0,grow");
         txtCopyId.setColumns(10);
 
         lblCopyTitle = new JLabel();
-        panel_2.add(lblCopyTitle, "cell 2 0,alignx trailing");
 
-        txtCopyDescription = new JTextField();
-        txtCopyDescription.setEditable(false);
-        txtCopyDescription.setColumns(5);
-        // txtCopyDescription.setEnabled(false);
-        panel_2.add(txtCopyDescription, "flowx,cell 3 0,growx");
+        panel_2.add(lblCopyTitle, "cell 2 0,grow");
+
+        lblCopyDescription = new JLabel();
+        // lblCopyDescription.setMaximumSize(new Dimension(250, 20));
+        panel_2.add(lblCopyDescription, "cell 3 0,alignx left,growy");
 
         lblCondition = new JLabel();
-        panel_2.add(lblCondition, "cell 4 0");
+        panel_2.add(lblCondition, "cell 2 1,alignx left,growy");
 
-        txtCondition = new JTextField();
-        txtCondition.setEditable(false);
-        txtCondition.setColumns(8);
-        panel_2.add(txtCondition, "cell 5 0,growx");
-
-        btnCreateLoan = new JButton();
-        panel_2.add(btnCreateLoan, "cell 0 1");
+        lblConditionValue = new JLabel();
+        panel_2.add(lblConditionValue, "cell 3 1,alignx left,growy");
 
         lblLoanStatus = new JLabel();
-        panel_2.add(lblLoanStatus, "cell 1 1 5,alignx left");
+        panel_2.add(lblLoanStatus, "cell 2 2,span,alignx left,growy");
+
+        btnCreateLoan = new JButton();
+        panel_2.add(btnCreateLoan, "cell 0 1,grow");
     }
 
     private void updateLoanTable() {
-        Customer customer = null;
-        if (cbCustomer.getSelectedItem() instanceof Customer) {
-            customer = getCurrentCustomerSelection();
+        Customer customer = getCurrentCustomerSelection();
+        if (customer != null) {
+            loanDetailTableModel.updateLoans(customer);
         }
-        loanDetailTableModel.updateLoans(customer);
     }
 
     private Customer getCurrentCustomerSelection() {
-        return (Customer) cbCustomer.getSelectedItem();
+        if (cbCustomer.getSelectedItem() instanceof Customer) {
+            return (Customer) cbCustomer.getSelectedItem();
+        } else {
+            return null;
+        }
     }
 
     @Override
     protected LoanDetailController initController() {
         return new LoanDetailController();
+    }
 
+    private void updateLoansPanelTitle() {
+        String overViewTitle;
+        Customer customer = getCurrentCustomerSelection();
+        if (customer != null) {
+            String customerName = getCurrentCustomerSelection().getFullName();
+            overViewTitle = Texts.get("LoanDetailMainViewBase.loansOverview.title") + " " + customerName;
+        } else {
+            overViewTitle = Texts.get("LoanDetailMainViewBase.loansOverview.titleAlone");
+        }
+        panel_3.setBorder(new TitledBorder(null, overViewTitle, TitledBorder.LEADING, TitledBorder.TOP, null, null));
     }
 
     @Override
     protected void initListeners() {
-        txtSearch.getDocument().addDocumentListener(new DocumentListener() {
+        txtCustomerSearch.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void changedUpdate(DocumentEvent e) {
                 search();
@@ -246,14 +271,22 @@ public class LoanDetailMainViewBase extends DialogViewBase<Loan, LoanDetailContr
             }
 
             private void search() {
-                if (txtSearch.getText().equals(defaultSearchValue)) {
+                logger.debug("search for value " + txtCustomerSearch.getText());
+                if (txtCustomerSearch.getText().equals(defaultSearchValue)) {
                     getController().filterCustomers("");
                 } else {
-                    getController().filterCustomers(txtSearch.getText());
+                    getController().filterCustomers(txtCustomerSearch.getText());
                 }
             }
         });
-        hideTextOnFocusListener = new HideTextOnFocusListener(txtSearch, defaultSearchValue);
+        hideTextOnFocusListener = new HideTextOnFocusListener(txtCustomerSearch, defaultSearchValue);
+
+        txtCustomerSearch.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusGained(FocusEvent arg0) {
+                txtCustomerSearch.selectAll();
+            }
+        });
 
         Repository.getInstance().getCutomerPMod().getCustomerComboBoxModel().addListDataListener(new ListDataListener() {
 
@@ -274,6 +307,7 @@ public class LoanDetailMainViewBase extends DialogViewBase<Loan, LoanDetailContr
                     public void run() {
                         updateLoanTable();
                         setTexts();
+                        setMakeLoanButtonVisibility();
                     }
                 });
             }
@@ -285,6 +319,7 @@ public class LoanDetailMainViewBase extends DialogViewBase<Loan, LoanDetailContr
             public void actionPerformed(ActionEvent arg0) {
                 updateLoanTable();
                 setTexts();
+                setMakeLoanButtonVisibility();
             }
 
         });
@@ -322,23 +357,35 @@ public class LoanDetailMainViewBase extends DialogViewBase<Loan, LoanDetailContr
                     updateCopy(null);
                 }
             }
-
         });
+    }
 
+    private void setMakeLoanButtonVisibility() {
+        boolean hasErrors = getController().validateLoan(txtCopyId.getNumber(), getCurrentCustomerSelection()).hasErrors();
+        btnCreateLoan.setEnabled(!hasErrors);
     }
 
     private void updateCopy(Copy searchCopy) {
         if (searchCopy == null) {
-            txtCopyDescription.setText("");
-            txtCondition.setText("");
+            lblCopyDescription.setText("");
+            lblConditionValue.setText("");
+            lblLoanStatus.setIcon(null);
         } else {
             String titleName = searchCopy.getTitle().getName();
-            txtCopyDescription.setText(titleName);
+            lblCopyDescription.setText(titleName);
             // set it as title as well in case the content is too long
-            txtCopyDescription.setToolTipText(titleName);
-            txtCondition.setText(searchCopy.getCondition().name());
-            lblLoanStatus.setText("");
+            lblCopyDescription.setToolTipText(titleName);
+            lblConditionValue.setText(searchCopy.getCondition().name());
+            // lblLoanStatus
+            boolean isCopyLent = Repository.getInstance().getLibrary().isCopyLent(searchCopy);
+            if (!isCopyLent) {
+                lblLoanStatus.setIcon(IconUtil.loadIcon("check.png"));
+            } else {
+                lblLoanStatus.setIcon(IconUtil.loadIcon("warning.png"));
+            }
+            lblLoanStatus.setText(Texts.get("validation.copy.isLent." + isCopyLent));
         }
+        setMakeLoanButtonVisibility();
     }
 
     private void saveLoan() {

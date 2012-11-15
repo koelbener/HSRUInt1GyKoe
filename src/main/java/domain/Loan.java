@@ -6,8 +6,8 @@ import java.util.GregorianCalendar;
 
 public class Loan {
 
-    private Copy copy;
-    private Customer customer;
+    private final Copy copy;
+    private final Customer customer;
     private GregorianCalendar pickupDate, returnDate;
     private final static int DAYS_TO_RETURN_BOOK = 30;
 
@@ -94,12 +94,15 @@ public class Loan {
         if (!isLent())
             return false;
 
+        return (new GregorianCalendar().after(getDueDate()));
+    }
+
+    public GregorianCalendar getDueDate() {
         GregorianCalendar dueDate = (GregorianCalendar) pickupDate.clone();
         dueDate.add(GregorianCalendar.DAY_OF_YEAR, DAYS_TO_RETURN_BOOK);
         dueDate.add(GregorianCalendar.HOUR_OF_DAY, 23);
         dueDate.add(GregorianCalendar.MINUTE, 59);
         dueDate.add(GregorianCalendar.SECOND, 59);
-
-        return (new GregorianCalendar().after(dueDate));
+        return dueDate;
     }
 }

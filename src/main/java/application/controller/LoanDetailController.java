@@ -19,12 +19,19 @@ public class LoanDetailController extends ControllerBase {
         ValidationResult result = new ValidationResult();
         Library library = getRepository().getLibrary();
 
-        Copy copy = library.getCopyByInventoryNr(copyNr);
+        Copy copy = null;
+        if (copyNr != null) {
+            copy = library.getCopyByInventoryNr(copyNr);
+        }
 
         if (copy == null) {
             result.addError(Texts.get("validation.noCopyFound"));
         } else if (library.isCopyLent(copy)) {
             result.addError(Texts.get("validation.copyLent"));
+        } else if (!library.canCustomerMakeMoreLoans(customer)) {
+            result.addError(Texts.get("validation.noMoreLoansAllowed"));
+        } else if (customer == null) {
+            result.addError(Texts.get("validation.noCustomerSelected"));
         }
 
         return result;

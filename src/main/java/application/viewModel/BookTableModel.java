@@ -84,7 +84,7 @@ public class BookTableModel extends AbstractTableModel {
             result = String.class;
             break;
         case COLUMN_AMOUNT:
-            result = Integer.class;
+            result = String.class;
             break;
         case COLUMN_SHELF:
             result = String.class;
@@ -147,6 +147,7 @@ public class BookTableModel extends AbstractTableModel {
 
     public void setData(List<Book> books) {
         this.books = books;
+        fireTableDataChanged();
     }
 
     @Override
@@ -179,7 +180,9 @@ public class BookTableModel extends AbstractTableModel {
             result = book.getPublisher();
             break;
         case COLUMN_AMOUNT:
-            result = Repository.getInstance().getLibrary().getCopiesOfBook(book).size();
+            int numberOfCopies = Repository.getInstance().getLibrary().getCopiesOfBook(book).size();
+            int numberOfLentCopies = Repository.getInstance().getLibrary().getLentCopiesOfBook(book).size();
+            result = (numberOfCopies - numberOfLentCopies) + "/" + numberOfCopies;
             break;
         case COLUMN_SHELF:
             result = book.getShelf();

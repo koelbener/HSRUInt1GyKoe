@@ -12,6 +12,7 @@ public class HideTextOnFocusListener {
 
     public HideTextOnFocusListener(JTextField textFieldP, String textP) {
 
+        // TODO: P??
         this.textField = textFieldP;
         this.text = textP;
 

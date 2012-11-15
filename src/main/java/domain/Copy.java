@@ -40,6 +40,7 @@ public class Copy {
 
     @Override
     public String toString() {
+
         return "#" + inventoryNumber + " (" + condition + ")";
     }
 

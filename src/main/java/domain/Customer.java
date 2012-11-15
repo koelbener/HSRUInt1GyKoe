@@ -57,16 +57,16 @@ public class Customer {
     }
 
     public String getFullName() {
-        return getSurname() + " " + getName();
+        return getName() + " " + getSurname();
     }
 
     @Override
     public String toString() {
-        return name + " " + surname + " , " + street + " , " + zip + " " + city;
+        return getFullNameAndAddress();
     }
 
     public String getFullNameAndAddress() {
-        return name + " " + surname + ", " + street + ", " + zip + " " + city;
+        return getName() + " " + getSurname() + ", " + getStreet() + ", " + getZip() + " " + getCity();
     }
 
 }

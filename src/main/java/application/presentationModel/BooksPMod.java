@@ -17,6 +17,8 @@ public class BooksPMod extends pModBase {
     private final BookTableModel bookTableModel;
     private final SearchFilterComboBoxModel filterComboBoxModel;
     private final TableRowSorter<BookTableModel> bookTableRowSorter;
+    private String searchString = "";
+    private int filterColumn = 0;
 
     public BooksPMod() {
         bookTableModel = new BookTableModel(Repository.getInstance().getLibrary().getBooks());
@@ -40,12 +42,26 @@ public class BooksPMod extends pModBase {
         bookTableModel.fireTableDataChanged();
     }
 
-    public void setSearchString(String filter, int columnIndex) {
+    public void setSearchString(String filter) {
         logger.debug("Filter books table for \"{}\"", filter);
-        if (columnIndex < 0) {
-            bookTableRowSorter.setRowFilter(RowFilter.regexFilter("(?i)" + filter));
+        searchString = filter;
+        updateFilter();
+    }
+
+    public void setOnlyAvailableBooks(boolean onlyAvailableBooks) {
+        if (onlyAvailableBooks) {
+            bookTableModel.setData(Repository.getInstance().getLibrary().getAvailableBooks());
         } else {
-            bookTableRowSorter.setRowFilter(RowFilter.regexFilter("(?i)" + filter, columnIndex));
+            bookTableModel.setData(Repository.getInstance().getLibrary().getBooks());
         }
     }
+
+    public void setFilterColumn(int filterColumn) {
+        this.filterColumn = filterColumn;
+    }
+
+    private void updateFilter() {
+        bookTableRowSorter.setRowFilter(RowFilter.regexFilter("(?i)" + searchString, filterColumn));
+    }
+
 }

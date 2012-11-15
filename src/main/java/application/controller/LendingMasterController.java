@@ -5,7 +5,7 @@ import javax.swing.RowSorter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import application.view.mainView.dialogView.LoanDetailMainViewBase;
+import application.view.mainView.dialogView.LoanDetailMainView;
 import application.viewModel.LoanTableModel;
 import domain.Loan;
 
@@ -25,13 +25,13 @@ public class LendingMasterController extends ControllerBase {
         for (int index : selectedRows) {
             Loan loan = loanTableModel.getLoan(sorter.convertRowIndexToModel(index));
             logger.debug("opening loan {}", loan.getCopy().getInventoryNumber());
-            new LoanDetailMainViewBase(loan);
+            new LoanDetailMainView(loan);
         }
 
     }
 
     public void newLoan() {
-        new LoanDetailMainViewBase(null);
+        new LoanDetailMainView(null);
 
     }
 

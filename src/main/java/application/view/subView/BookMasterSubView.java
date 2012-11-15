@@ -15,6 +15,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.TableColumn;
@@ -64,6 +66,7 @@ public class BookMasterSubView extends SubViewBase<Library, BookMasterController
     public JLabel lblNurVerfgbare;
     public JPanel statisticsPanel;
     private HideTextOnFocusListener hideTextOnFocusListener;
+    private JCheckBox checkBoxOnlyAvailable;
 
     public BookMasterSubView(Library referenceObject) {
         super(referenceObject);
@@ -112,8 +115,9 @@ public class BookMasterSubView extends SubViewBase<Library, BookMasterController
         panel_5.add(txtFieldSearch, "flowx,cell 0 1,growx");
         txtFieldSearch.setColumns(10);
 
-        JCheckBox checkBox = new JCheckBox();
-        panel_5.add(checkBox, "cell 0 1");
+        checkBoxOnlyAvailable = new JCheckBox();
+
+        panel_5.add(checkBoxOnlyAvailable, "cell 0 1");
 
         lblNurVerfgbare = new JLabel();
         panel_5.add(lblNurVerfgbare, "cell 1 1,alignx trailing");
@@ -222,7 +226,7 @@ public class BookMasterSubView extends SubViewBase<Library, BookMasterController
 
             private void search() {
                 if (!txtFieldSearch.getText().equals(searchDefaultText)) {
-                    getController().searchBooks(txtFieldSearch.getText(), ((SearchFilterElement) searchFilterComboBox.getSelectedItem()).getBookTableModelColumn());
+                    getController().setSearchFilter(((SearchFilterElement) searchFilterComboBox.getSelectedItem()).getBookTableModelColumn());
                 }
             }
         });
@@ -250,6 +254,14 @@ public class BookMasterSubView extends SubViewBase<Library, BookMasterController
                 getController().openNewBook();
             }
         });
+
+        checkBoxOnlyAvailable.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent arg0) {
+                getController().setSearchOnlyAvailableBooks(checkBoxOnlyAvailable.isSelected());
+            }
+        });
+
         txtFieldSearch.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void changedUpdate(DocumentEvent e) {
@@ -288,7 +300,7 @@ public class BookMasterSubView extends SubViewBase<Library, BookMasterController
 
     private void search() {
         if (!txtFieldSearch.getText().equals(searchDefaultText)) {
-            getController().searchBooks(txtFieldSearch.getText(), ((SearchFilterElement) searchFilterComboBox.getSelectedItem()).getBookTableModelColumn());
+            getController().searchBooks(txtFieldSearch.getText());
         }
     }
 

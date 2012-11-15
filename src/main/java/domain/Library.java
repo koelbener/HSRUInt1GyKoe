@@ -107,6 +107,29 @@ public class Library {
         return lentCopies;
     }
 
+    public List<Loan> getCustomerOpenLoans(Customer customer) {
+        List<Loan> lentCopies = new ArrayList<Loan>();
+        for (Loan l : loans) {
+            if (l.getCustomer().equals(customer) && l.isLent()) {
+                lentCopies.add(l);
+            }
+        }
+        return lentCopies;
+    }
+
+    public boolean canCustomerMakeMoreLoans(Customer customer) {
+        List<Loan> openLoans = getCustomerOpenLoans(customer);
+        if (openLoans.size() >= 3) {
+            return false;
+        }
+        for (Loan loan : openLoans) {
+            if (loan.isOverdue()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     public List<Loan> getOverdueLoans() {
         List<Loan> overdueLoans = new ArrayList<Loan>();
         for (Loan l : getLoans()) {
@@ -158,6 +181,16 @@ public class Library {
 
     public List<Customer> getCustomers() {
         return new ArrayList<Customer>(customers);
+    }
+
+    public List<Book> getAvailableBooks() {
+        List<Book> availableBooks = new ArrayList<Book>();
+        for (Book book : books) {
+            if (getLentCopiesOfBook(book).size() < getCopiesOfBook(book).size()) {
+                availableBooks.add(book);
+            }
+        }
+        return availableBooks;
     }
 
 }

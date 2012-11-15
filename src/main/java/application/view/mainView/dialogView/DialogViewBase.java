@@ -1,5 +1,6 @@
 package application.view.mainView.dialogView;
 
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
@@ -19,6 +20,7 @@ public abstract class DialogViewBase<R, T extends ControllerBase> extends MainVi
     public DialogViewBase(R referenceObject) {
         super(referenceObject);
         getContainer().setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+        container.setMinimumSize(new Dimension(616, 445));
         installEscapeCloseOperation();
     }
 
