@@ -18,7 +18,7 @@ public class LoanTableModel extends AbstractTableModel {
     private static final int COLUMN_COPY_ID = 1;
     private static final int COLUMN_STATUS = 0;
     private static final long serialVersionUID = 1L;
-    private final List<Loan> loans;
+    private List<Loan> loans;
     private String[] columnNames;
 
     public LoanTableModel(List<Loan> loans) {
@@ -127,6 +127,11 @@ public class LoanTableModel extends AbstractTableModel {
         }
 
         return result;
+    }
+
+    public void setData(List<Loan> loans) {
+        this.loans = loans;
+        fireTableDataChanged();
     }
 
     public Loan getLoan(int index) {

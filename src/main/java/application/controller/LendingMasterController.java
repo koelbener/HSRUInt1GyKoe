@@ -35,4 +35,8 @@ public class LendingMasterController extends ControllerBase {
 
     }
 
+    public void filterElementSelected(Runnable selectedItem) {
+        selectedItem.run();
+    }
+
 }

@@ -175,6 +175,16 @@ public class Library {
         return new ArrayList<Loan>(loans);
     }
 
+    public List<Loan> getOpenLoans() {
+        List<Loan> openLoans = new ArrayList<Loan>();
+        for (Loan loan : loans) {
+            if (loan.isLent()) {
+                openLoans.add(loan);
+            }
+        }
+        return openLoans;
+    }
+
     public List<Book> getBooks() {
         return new ArrayList<Book>(books);
     }

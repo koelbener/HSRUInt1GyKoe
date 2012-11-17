@@ -7,7 +7,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -28,6 +28,7 @@ import application.core.Texts;
 import application.presentationModel.LoansPMod;
 import application.view.helper.EnableCompontentOnTableSelectionListener;
 import application.view.helper.HideTextOnFocusListener;
+import application.viewModel.LoanSearchFilterComboBoxModel;
 import domain.Library;
 
 public class LendingMasterSubView extends SubViewBase<Library, LendingMasterController> {
@@ -51,7 +52,7 @@ public class LendingMasterSubView extends SubViewBase<Library, LendingMasterCont
     private JLabel lblOverdueLoans;
 
     private JTextField txtSearch;
-    private JCheckBox chbkOnlyOverdue;
+    private JComboBox<Runnable> comboBoxSearchFilter;
     private JButton btnNew;
     private JButton btnOpen;
     private LoansPMod loansPMod;
@@ -107,8 +108,8 @@ public class LendingMasterSubView extends SubViewBase<Library, LendingMasterCont
         searchPanel.add(txtSearch, "flowx,cell 0 0,growx");
         txtSearch.setColumns(10);
 
-        chbkOnlyOverdue = new JCheckBox();
-        searchPanel.add(chbkOnlyOverdue, "cell 0 0");
+        comboBoxSearchFilter = new JComboBox<Runnable>(new LoanSearchFilterComboBoxModel());
+        searchPanel.add(comboBoxSearchFilter, "cell 0 0");
 
         JPanel panel_13 = new JPanel();
         panel_13.setLayout(new MigLayout("", "[]", "[23px][]"));
@@ -145,7 +146,6 @@ public class LendingMasterSubView extends SubViewBase<Library, LendingMasterCont
         if (hideTextOnFocusListener != null)
             hideTextOnFocusListener.updateText(searchDefaultText);
 
-        chbkOnlyOverdue.setText(Texts.get("LendingMasterMainView.chbkOnlyOverdue.text"));
         btnNew.setText(Texts.get("LendingMasterMainView.btnNew.text"));
         btnOpen.setText(Texts.get("LendingMasterMainView.btnOpen.text"));
 
@@ -190,6 +190,14 @@ public class LendingMasterSubView extends SubViewBase<Library, LendingMasterCont
             @Override
             public void actionPerformed(ActionEvent arg0) {
                 getController().openLoans(loansTable.getSelectedRows());
+            }
+        });
+
+        comboBoxSearchFilter.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent arg0) {
+                getController().filterElementSelected((Runnable) comboBoxSearchFilter.getSelectedItem());
             }
         });
 

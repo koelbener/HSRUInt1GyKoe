@@ -7,8 +7,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import application.core.Repository;
-import application.viewModel.BookTableModel;
 import application.viewModel.BookSearchFilterComboBoxModel;
+import application.viewModel.BookTableModel;
 import domain.Book;
 
 public class BooksPMod extends pModBase {
@@ -18,7 +18,7 @@ public class BooksPMod extends pModBase {
     private final BookSearchFilterComboBoxModel filterComboBoxModel;
     private final TableRowSorter<BookTableModel> bookTableRowSorter;
     private String searchString = "";
-    private int filterColumn = 0;
+    private int filterColumn = -1;
 
     public BooksPMod() {
         bookTableModel = new BookTableModel(Repository.getInstance().getLibrary().getBooks());
@@ -58,10 +58,15 @@ public class BooksPMod extends pModBase {
 
     public void setFilterColumn(int filterColumn) {
         this.filterColumn = filterColumn;
+        updateFilter();
     }
 
     private void updateFilter() {
-        bookTableRowSorter.setRowFilter(RowFilter.regexFilter("(?i)" + searchString, filterColumn));
+        if (filterColumn >= 0) {
+            bookTableRowSorter.setRowFilter(RowFilter.regexFilter("(?i)" + searchString, filterColumn));
+        } else {
+            bookTableRowSorter.setRowFilter(RowFilter.regexFilter("(?i)" + searchString));
+        }
     }
 
 }

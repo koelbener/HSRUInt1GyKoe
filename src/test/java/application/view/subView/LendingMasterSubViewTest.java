@@ -46,7 +46,7 @@ public class LendingMasterSubViewTest extends AbstractFestTest {
         window.textBox().requireText(Texts.get("LendingMasterMainView.searchDefault"));
         window.textBox().focus();
         window.textBox().requireText("");
-        window.comboBox().focus();
+        window.focus();
         window.textBox().requireText(Texts.get("LendingMasterMainView.searchDefault"));
     }
 
