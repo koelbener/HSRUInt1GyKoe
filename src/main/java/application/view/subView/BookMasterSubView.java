@@ -226,7 +226,7 @@ public class BookMasterSubView extends SubViewBase<Library, BookMasterController
 
             private void search() {
                 if (!txtFieldSearch.getText().equals(searchDefaultText)) {
-                    getController().setSearchFilter(((SearchFilterElement) searchFilterComboBox.getSelectedItem()).getBookTableModelColumn());
+                    getController().setSearchFilter(((SearchFilterElement) searchFilterComboBox.getSelectedItem()).getTableModelColumn());
                 }
             }
         });

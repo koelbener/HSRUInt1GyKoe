@@ -3,12 +3,12 @@ package application.viewModel;
 public class SearchFilterElement {
 
     private String title;
-    private int bookTableModelColumn;
+    private int tableModelColumn;
 
-    public SearchFilterElement(String title, int bookTableModelColumn) {
+    public SearchFilterElement(String title, int tableModelColumn) {
         super();
         this.title = title;
-        this.bookTableModelColumn = bookTableModelColumn;
+        this.tableModelColumn = tableModelColumn;
     }
 
     public String getTitle() {
@@ -19,12 +19,12 @@ public class SearchFilterElement {
         this.title = title;
     }
 
-    public int getBookTableModelColumn() {
-        return bookTableModelColumn;
+    public int getTableModelColumn() {
+        return tableModelColumn;
     }
 
-    public void setBookTableModelColumn(int bookTableModelColumn) {
-        this.bookTableModelColumn = bookTableModelColumn;
+    public void setTableModelColumn(int tableModelColumn) {
+        this.tableModelColumn = tableModelColumn;
     }
 
     @Override
@@ -36,7 +36,7 @@ public class SearchFilterElement {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + bookTableModelColumn;
+        result = prime * result + tableModelColumn;
         result = prime * result + ((title == null) ? 0 : title.hashCode());
         return result;
     }
@@ -50,7 +50,7 @@ public class SearchFilterElement {
         if (getClass() != obj.getClass())
             return false;
         SearchFilterElement other = (SearchFilterElement) obj;
-        if (bookTableModelColumn != other.bookTableModelColumn)
+        if (tableModelColumn != other.tableModelColumn)
             return false;
         if (title == null) {
             if (other.title != null)

@@ -8,14 +8,14 @@ import org.slf4j.LoggerFactory;
 
 import application.core.Repository;
 import application.viewModel.BookTableModel;
-import application.viewModel.SearchFilterComboBoxModel;
+import application.viewModel.BookSearchFilterComboBoxModel;
 import domain.Book;
 
 public class BooksPMod extends pModBase {
 
     private final Logger logger = LoggerFactory.getLogger(BooksPMod.class);
     private final BookTableModel bookTableModel;
-    private final SearchFilterComboBoxModel filterComboBoxModel;
+    private final BookSearchFilterComboBoxModel filterComboBoxModel;
     private final TableRowSorter<BookTableModel> bookTableRowSorter;
     private String searchString = "";
     private int filterColumn = 0;
@@ -23,10 +23,10 @@ public class BooksPMod extends pModBase {
     public BooksPMod() {
         bookTableModel = new BookTableModel(Repository.getInstance().getLibrary().getBooks());
         bookTableRowSorter = new TableRowSorter<BookTableModel>(bookTableModel);
-        filterComboBoxModel = new SearchFilterComboBoxModel();
+        filterComboBoxModel = new BookSearchFilterComboBoxModel();
     }
 
-    public SearchFilterComboBoxModel getFilterComboBoxModel() {
+    public BookSearchFilterComboBoxModel getFilterComboBoxModel() {
         return filterComboBoxModel;
     }
 

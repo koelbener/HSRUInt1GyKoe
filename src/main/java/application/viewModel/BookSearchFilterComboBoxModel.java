@@ -8,13 +8,13 @@ import javax.swing.ComboBoxModel;
 
 import application.core.Texts;
 
-public class SearchFilterComboBoxModel extends AbstractListModel<SearchFilterElement> implements ComboBoxModel<SearchFilterElement> {
+public class BookSearchFilterComboBoxModel extends AbstractListModel<SearchFilterElement> implements ComboBoxModel<SearchFilterElement> {
 
     private static final long serialVersionUID = 592368359539347695L;
     List<SearchFilterElement> elements;
     int selectedElement;
 
-    public SearchFilterComboBoxModel() {
+    public BookSearchFilterComboBoxModel() {
         initContents();
 
         selectedElement = 0;
