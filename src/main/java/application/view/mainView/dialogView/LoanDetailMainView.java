@@ -379,6 +379,7 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
                 } else {
                     updateCopy(null);
                 }
+                setMakeLoanButtonVisibility();
             }
         });
     }
