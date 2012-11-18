@@ -34,6 +34,7 @@ import application.core.Texts;
 import application.util.IconUtil;
 import application.view.component.JNumberTextField;
 import application.view.helper.CustomerComboBoxRenderer;
+import application.view.helper.EnableCompontentOnTableSelectionListener;
 import application.view.helper.HideTextOnFocusListener;
 import application.viewModel.LoanDetailTableModel;
 
@@ -67,9 +68,10 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
     private JComboBox<Customer> cbCustomer;
 
     private HideTextOnFocusListener hideTextOnFocusListener;
-    private LoanDetailTableModel loanDetailTableModel;
 
     private static final Logger logger = LoggerFactory.getLogger(LoanDetailMainView.class);
+    private JButton btnReturnButton;
+    private JLabel lblReturnFeedbackLabel;
 
     public LoanDetailMainView(Loan loan) {
         super(loan);
@@ -113,6 +115,8 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
         lblCustomer.setText(Texts.get("LoanDetailMainViewBase.customerSelection.customerLabel"));
         lblSearch.setText(Texts.get("LoanDetailMainViewBase.customerSelection.searchLabel"));
         lblCondition.setText(Texts.get("LoanDetailMainViewBase.newLoan.copyCondition"));
+        btnReturnButton.setText(Texts.get("LoanDetailMainViewBase.loansOverview.returnButton"));
+        lblReturnFeedbackLabel.setText("");
     }
 
     /**
@@ -166,7 +170,7 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
     private void createLoanOverviewSection(JPanel panel_4) {
         panel_3 = new JPanel();
         panel_4.add(panel_3, "cell 0 2,grow");
-        panel_3.setLayout(new MigLayout("", "[][grow]", "[grow][grow]"));
+        panel_3.setLayout(new MigLayout("", "[][grow]", "[grow][grow][][]"));
 
         lblNumberOfLoans = new JLabel();
         panel_3.add(lblNumberOfLoans, "cell 0 0");
@@ -174,7 +178,7 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
         lblNumberOfLoansNumber = new JLabel("1");
         panel_3.add(lblNumberOfLoansNumber, "cell 1 0");
 
-        loanDetailTableModel = new LoanDetailTableModel(null);
+        LoanDetailTableModel loanDetailTableModel = Repository.getInstance().getLoansPMod().getLoanDetailTableModel();
         tblLoans = new JTable(loanDetailTableModel);
         Object selectedItem = cbCustomer.getSelectedItem();
         if (selectedItem instanceof Customer) {
@@ -182,6 +186,12 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
         }
         updateLoanTable();
         panel_3.add(new JScrollPane(tblLoans), "cell 0 1 2 1,grow");
+
+        btnReturnButton = new JButton();
+        panel_3.add(btnReturnButton, "cell 1 2");
+
+        lblReturnFeedbackLabel = new JLabel();
+        panel_3.add(lblReturnFeedbackLabel, "cell 1 3");
     }
 
     private void createNewLoanSection(JPanel panel_4) {
@@ -223,7 +233,7 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
     private void updateLoanTable() {
         Customer customer = getCurrentCustomerSelection();
         if (customer != null) {
-            loanDetailTableModel.updateLoans(customer);
+            Repository.getInstance().getLoansPMod().getLoanDetailTableModel().updateLoans(customer);
         }
     }
 
@@ -254,6 +264,19 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
 
     @Override
     protected void initListeners() {
+
+        new EnableCompontentOnTableSelectionListener(tblLoans, btnReturnButton);
+
+        btnReturnButton.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String returnedCopies = getController().returnCopies(tblLoans.getSelectedRows());
+                updateLoanTable();
+                lblReturnFeedbackLabel.setText("Copies " + returnedCopies + " returned");
+            }
+        });
+
         txtCustomerSearch.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void changedUpdate(DocumentEvent e) {
@@ -406,7 +429,7 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
                 txtCopyId.setText("");
                 updateCopy(null);
                 Loan loan = getController().saveLoan(copyId, getCurrentCustomerSelection());
-                loanDetailTableModel.addLoan(loan);
+                Repository.getInstance().getLoansPMod().getLoanDetailTableModel().addLoan(loan);
             }
         }
     }

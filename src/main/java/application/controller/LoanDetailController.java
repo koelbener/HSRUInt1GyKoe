@@ -1,5 +1,6 @@
 package application.controller;
 
+import application.core.Repository;
 import application.core.Texts;
 
 import com.jgoodies.validation.ValidationResult;
@@ -47,5 +48,16 @@ public class LoanDetailController extends ControllerBase {
 
     public Copy searchCopy(Long copyId) {
         return getRepository().getLibrary().getCopyByInventoryNr(copyId);
+    }
+
+    public String returnCopies(int[] selectedRows) {
+        String returnedCopies = "";
+        for (int row : selectedRows) {
+            Loan loan = Repository.getInstance().getLoansPMod().getLoanDetailTableModel().getLoan(row);
+            if (loan.returnCopy()) {
+                returnedCopies += loan.getCopy().getInventoryNumber() + " ";
+            }
+        }
+        return returnedCopies;
     }
 }

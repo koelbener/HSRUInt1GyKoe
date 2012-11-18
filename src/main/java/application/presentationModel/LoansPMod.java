@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import application.core.Repository;
+import application.viewModel.LoanDetailTableModel;
 import application.viewModel.LoanTableModel;
 import domain.Loan;
 
@@ -14,10 +15,16 @@ public class LoansPMod extends pModBase {
     private final LoanTableModel loanTableModel;
     private final TableRowSorter<LoanTableModel> loanTableRowSorter;
     private final Logger logger = LoggerFactory.getLogger(LoansPMod.class);
+    private final LoanDetailTableModel loanDetailTableModel;
 
     public LoansPMod() {
         loanTableModel = new LoanTableModel(Repository.getInstance().getLibrary().getLoans());
         loanTableRowSorter = new TableRowSorter<LoanTableModel>(loanTableModel);
+        loanDetailTableModel = new LoanDetailTableModel(null);
+    }
+
+    public LoanDetailTableModel getLoanDetailTableModel() {
+        return loanDetailTableModel;
     }
 
     public LoanTableModel getLoanTableModel() {

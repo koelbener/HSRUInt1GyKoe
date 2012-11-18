@@ -14,10 +14,10 @@ import domain.Loan;
 
 public class LoanDetailTableModel extends AbstractTableModel {
 
-    private static final int COLUMN_COPY_ID = 0;
-    private static final int COLUMN_TITLE = 1;
-    private static final int COLUMN_AUTHOR = 2;
-    private static final int COLUMN_ENDDATE = 3;
+    public static final int COLUMN_COPY_ID = 0;
+    public static final int COLUMN_TITLE = 1;
+    public static final int COLUMN_AUTHOR = 2;
+    public static final int COLUMN_ENDDATE = 3;
     private static final long serialVersionUID = 1L;
     private String[] columnNames;
     private final List<Loan> loans;
@@ -73,6 +73,10 @@ public class LoanDetailTableModel extends AbstractTableModel {
         }
 
         return result;
+    }
+
+    public Loan getLoan(int row) {
+        return loans.get(row);
     }
 
     @Override
