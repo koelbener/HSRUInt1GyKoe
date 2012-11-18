@@ -143,4 +143,13 @@ public class LoanTableModel extends AbstractTableModel {
         fireTableDataChanged();
     }
 
+    public void updateLoan(Loan loan) {
+        for (int i = 0; i < loans.size(); i++) {
+            if (loans.get(i).equals(loan)) {
+                loans.set(i, loan);
+                fireTableRowsUpdated(i, i);
+            }
+        }
+    }
+
 }

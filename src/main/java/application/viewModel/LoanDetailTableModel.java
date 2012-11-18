@@ -114,4 +114,14 @@ public class LoanDetailTableModel extends AbstractTableModel {
         loans.addAll(Repository.getInstance().getLibrary().getCustomerOpenLoans(customer));
         fireTableDataChanged();
     }
+
+    public void updateLoans(Loan loan) {
+        for (int i = 0; i < loans.size(); i++) {
+            if (loans.get(i).equals(loan)) {
+                loans.set(i, loan);
+                fireTableRowsUpdated(i, i);
+            }
+        }
+
+    }
 }

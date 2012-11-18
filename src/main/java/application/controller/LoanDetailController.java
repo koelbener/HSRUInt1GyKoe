@@ -56,6 +56,7 @@ public class LoanDetailController extends ControllerBase {
             Loan loan = Repository.getInstance().getLoansPMod().getLoanDetailTableModel().getLoan(row);
             if (loan.returnCopy()) {
                 returnedCopies += loan.getCopy().getInventoryNumber() + " ";
+                getRepository().getLoansPMod().updateLoan(loan);
             }
         }
         return returnedCopies;
