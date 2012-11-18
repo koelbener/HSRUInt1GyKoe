@@ -5,6 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.Observable;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -84,20 +85,22 @@ public class LendingMasterSubView extends SubViewBase<Library, LendingMasterCont
         lblNumberOfLoans = new JLabel();
         statisticsPanel.add(lblNumberOfLoans, "cell 0 0");
 
-        valNumberOfLoans = new JLabel(String.valueOf(library.getLoans().size()));
+        valNumberOfLoans = new JLabel();
         statisticsPanel.add(valNumberOfLoans, "cell 1 0");
 
         lblCurrentLoans = new JLabel();
         statisticsPanel.add(lblCurrentLoans, "cell 3 0");
 
-        valCurrentLoans = new JLabel("TODO");
+        valCurrentLoans = new JLabel();
         statisticsPanel.add(valCurrentLoans, "cell 4 0");
 
         lblOverdueLoans = new JLabel();
         statisticsPanel.add(lblOverdueLoans, "cell 6 0");
 
-        valOverdueLoans = new JLabel(String.valueOf(library.getOverdueLoans().size()));
+        valOverdueLoans = new JLabel();
         statisticsPanel.add(valOverdueLoans, "cell 7 0");
+
+        updateStatistics();
 
         inventoryPanel = new JPanel();
         container.add(inventoryPanel, BorderLayout.CENTER);
@@ -167,7 +170,7 @@ public class LendingMasterSubView extends SubViewBase<Library, LendingMasterCont
     protected void initModel() {
         super.initModel();
         loansPMod = Repository.getInstance().getLoansPMod();
-
+        loansPMod.addObserver(this);
     }
 
     @Override
@@ -240,6 +243,22 @@ public class LendingMasterSubView extends SubViewBase<Library, LendingMasterCont
         if (!txtSearch.getText().equals(searchDefaultText)) {
             getController().searchBooks(txtSearch.getText());
         }
+    }
+
+    @Override
+    public void update(Observable observable, Object arg1) {
+        // TODO remove instanceof
+        if (observable instanceof LoansPMod) {
+            updateStatistics();
+        } else {
+            super.update(observable, arg1);
+        }
+    }
+
+    private void updateStatistics() {
+        valNumberOfLoans.setText(String.valueOf(loansPMod.getLoansCount()));
+        valCurrentLoans.setText(String.valueOf(loansPMod.getCurrentLoansCount()));
+        valOverdueLoans.setText(String.valueOf(loansPMod.getOverdueLoansCount()));
     }
 
 }

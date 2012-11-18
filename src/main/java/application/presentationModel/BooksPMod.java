@@ -38,10 +38,6 @@ public class BooksPMod extends pModBase {
         return bookTableRowSorter;
     }
 
-    public void updateBook(Book book) {
-        bookTableModel.fireTableDataChanged();
-    }
-
     public void setSearchString(String filter) {
         logger.debug("Filter books table for \"{}\"", filter);
         searchString = filter;
@@ -67,6 +63,26 @@ public class BooksPMod extends pModBase {
         } else {
             bookTableRowSorter.setRowFilter(RowFilter.regexFilter("(?i)" + searchString));
         }
+    }
+
+    public void addBook(Book book) {
+        bookTableModel.addBook(book);
+        setChanged();
+        notifyObservers();
+    }
+
+    public void updateBook(Book book) {
+        bookTableModel.fireTableDataChanged();
+        setChanged();
+        notifyObservers();
+    }
+
+    public int getBooksCount() {
+        return bookTableModel.getRowCount();
+    }
+
+    public int getCopiesCount() {
+        return Repository.getInstance().getLibrary().getCopies().size();
     }
 
 }

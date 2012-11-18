@@ -20,8 +20,10 @@ public class BookDetailController extends ControllerBase {
             logger.debug("Creating new book \"{}\"", title);
             existingBook = getRepository().getLibrary().createAndAddBook(title);
             existingBook.updateFrom(book);
+            getRepository().getBooksPMod().addBook(book);
         } else {
             logger.debug("Updating book \"{}\"", title);
+            getRepository().getBooksPMod().updateBook(book);
         }
 
         List<Copy> existingCopies = new ArrayList<Copy>(getRepository().getLibrary().getCopiesOfBook(existingBook));

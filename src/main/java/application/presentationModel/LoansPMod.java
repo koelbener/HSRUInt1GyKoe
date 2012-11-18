@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import application.core.Repository;
 import application.viewModel.LoanDetailTableModel;
 import application.viewModel.LoanTableModel;
+import domain.Library;
 import domain.Loan;
 
 public class LoansPMod extends pModBase {
@@ -16,9 +17,11 @@ public class LoansPMod extends pModBase {
     private final TableRowSorter<LoanTableModel> loanTableRowSorter;
     private final Logger logger = LoggerFactory.getLogger(LoansPMod.class);
     private final LoanDetailTableModel loanDetailTableModel;
+    private final Library library;
 
     public LoansPMod() {
-        loanTableModel = new LoanTableModel(Repository.getInstance().getLibrary().getLoans());
+        library = Repository.getInstance().getLibrary();
+        loanTableModel = new LoanTableModel(library.getLoans());
         loanTableRowSorter = new TableRowSorter<LoanTableModel>(loanTableModel);
         loanDetailTableModel = new LoanDetailTableModel(null);
     }
@@ -43,10 +46,26 @@ public class LoansPMod extends pModBase {
 
     public void addLoan(Loan loan) {
         loanTableModel.addLoan(loan);
+        setChanged();
+        notifyObservers();
     }
 
     public void updateLoan(Loan loan) {
         loanTableModel.updateLoan(loan);
         loanDetailTableModel.updateLoans(loan);
+        setChanged();
+        notifyObservers();
+    }
+
+    public int getLoansCount() {
+        return loanTableModel.getRowCount();
+    }
+
+    public int getCurrentLoansCount() {
+        return library.getOpenLoans().size();
+    }
+
+    public int getOverdueLoansCount() {
+        return library.getOverdueLoans().size();
     }
 }

@@ -5,6 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.Observable;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -89,15 +90,17 @@ public class BookMasterSubView extends SubViewBase<Library, BookMasterController
 
         lblLasd = new JLabel();
         statisticsPanel.add(lblLasd, "cell 0 0");
-        numberOfBooks = new JLabel(String.valueOf(booksPMod.getBookTableModel().getRowCount()));
+        numberOfBooks = new JLabel();
         numberOfBooks.setName(NAME_LABEL_NUMBER_OF_BOOKS);
         statisticsPanel.add(numberOfBooks, "cell 1 0");
 
         lblAnzahlExemplare = new JLabel();
         statisticsPanel.add(lblAnzahlExemplare, "cell 3 0");
 
-        numberOfCopies = new JLabel(String.valueOf(library.getCopies().size()));
+        numberOfCopies = new JLabel();
         statisticsPanel.add(numberOfCopies, "cell 4 0");
+
+        updateStatistics();
 
         inventoryPanel = new JPanel();
         container.add(inventoryPanel, BorderLayout.CENTER);
@@ -205,6 +208,7 @@ public class BookMasterSubView extends SubViewBase<Library, BookMasterController
     protected void initModel() {
         super.initModel();
         booksPMod = Repository.getInstance().getBooksPMod();
+        booksPMod.addObserver(this);
     }
 
     @Override
@@ -301,6 +305,23 @@ public class BookMasterSubView extends SubViewBase<Library, BookMasterController
         if (!txtFieldSearch.getText().equals(searchDefaultText)) {
             getController().searchBooks(txtFieldSearch.getText());
         }
+    }
+
+    @Override
+    public void update(Observable observable, Object arg1) {
+        // TODO remove instanceof
+        if (observable instanceof BooksPMod) {
+            // TODO why is it called twice?
+            logger.debug("Updating statistics");
+            updateStatistics();
+        } else {
+            super.update(observable, arg1);
+        }
+    }
+
+    private void updateStatistics() {
+        numberOfBooks.setText(String.valueOf(booksPMod.getBooksCount()));
+        numberOfCopies.setText(String.valueOf(booksPMod.getCopiesCount()));
     }
 
 }
