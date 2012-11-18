@@ -58,20 +58,20 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
     private JLabel lblCopyTitle;
     private JLabel lblLoanStatus;
     private JLabel lblNumberOfLoans;
+    private JLabel lblConditionValue;
+    private JLabel lblCopyDescription;
     private JLabel lblNumberOfLoansNumber;
     private JTable tblLoans;
     private JButton btnCreateLoan;
+    private JButton btnReturnButton;
     private JTextField txtCustomerSearch;
-    private JLabel lblConditionValue;
-    private JLabel lblCopyDescription;
     private JNumberTextField txtCopyId;
     private JComboBox<Customer> cbCustomer;
+    private JLabel lblReturnFeedbackLabel;
 
     private HideTextOnFocusListener hideTextOnFocusListener;
 
     private static final Logger logger = LoggerFactory.getLogger(LoanDetailMainView.class);
-    private JButton btnReturnButton;
-    private JLabel lblReturnFeedbackLabel;
 
     public LoanDetailMainView(Loan loan) {
         super(loan);
@@ -161,7 +161,7 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
         lblCustomer = new JLabel();
         panel.add(lblCustomer, "cell 0 1,alignx trailing");
 
-        cbCustomer = new JComboBox<Customer>(Repository.getInstance().getCutomerPMod().getCustomerComboBoxModel());
+        cbCustomer = new JComboBox<Customer>(Repository.getInstance().getCustomerPMod().getCustomerComboBoxModel());
         cbCustomer.setRenderer(new CustomerComboBoxRenderer());
         panel.add(cbCustomer, "cell 1 1 2 1,growx");
 
@@ -272,8 +272,8 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
             @Override
             public void actionPerformed(ActionEvent e) {
                 String returnedCopies = getController().returnCopies(tblLoans.getSelectedRows());
-                updateLoanTable();
                 lblReturnFeedbackLabel.setText("Copies " + returnedCopies + " returned");
+                updateMakeLoanButtonVisibility();
             }
         });
 
@@ -311,7 +311,7 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
             }
         });
 
-        Repository.getInstance().getCutomerPMod().getCustomerComboBoxModel().addListDataListener(new ListDataListener() {
+        Repository.getInstance().getCustomerPMod().getCustomerComboBoxModel().addListDataListener(new ListDataListener() {
 
             @Override
             public void intervalRemoved(ListDataEvent arg0) {
@@ -330,7 +330,7 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
                     public void run() {
                         updateLoanTable();
                         setTexts();
-                        setMakeLoanButtonVisibility();
+                        updateMakeLoanButtonVisibility();
                     }
                 });
             }
@@ -342,7 +342,7 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
             public void actionPerformed(ActionEvent arg0) {
                 updateLoanTable();
                 setTexts();
-                setMakeLoanButtonVisibility();
+                updateMakeLoanButtonVisibility();
             }
 
         });
@@ -379,12 +379,12 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
                 } else {
                     updateCopy(null);
                 }
-                setMakeLoanButtonVisibility();
+                updateMakeLoanButtonVisibility();
             }
         });
     }
 
-    private void setMakeLoanButtonVisibility() {
+    private void updateMakeLoanButtonVisibility() {
         boolean hasErrors = getController().validateLoan(txtCopyId.getNumber(), getCurrentCustomerSelection()).hasErrors();
         btnCreateLoan.setEnabled(!hasErrors);
     }
@@ -412,7 +412,7 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
                 lblLoanStatus.setIcon(IconUtil.loadIcon("warning.png"));
             }
         }
-        setMakeLoanButtonVisibility();
+        updateMakeLoanButtonVisibility();
     }
 
     private void saveLoan() {

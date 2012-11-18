@@ -13,7 +13,7 @@ import domain.Loan;
 public class LoanDetailController extends ControllerBase {
 
     public void filterCustomers(String text) {
-        getRepository().getCutomerPMod().getCustomerComboBoxModel().filterContent(text);
+        getRepository().getCustomerPMod().getCustomerComboBoxModel().filterContent(text);
     }
 
     public ValidationResult validateLoan(Long copyNr, Customer customer) {
@@ -57,6 +57,7 @@ public class LoanDetailController extends ControllerBase {
             if (loan.returnCopy()) {
                 returnedCopies += loan.getCopy().getInventoryNumber() + " ";
                 getRepository().getLoansPMod().updateLoan(loan);
+                getRepository().getCustomerPMod().updateCustomer(loan.getCustomer());
             }
         }
         return returnedCopies;

@@ -66,7 +66,7 @@ public class Repository {
         this.cutomerPMod = customerPMod;
     }
 
-    public CustomerPMod getCutomerPMod() {
+    public CustomerPMod getCustomerPMod() {
         return cutomerPMod;
     }
 

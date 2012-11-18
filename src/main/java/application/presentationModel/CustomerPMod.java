@@ -1,6 +1,7 @@
 package application.presentationModel;
 
 import application.viewModel.CustomerComboBoxModel;
+import domain.Customer;
 
 public class CustomerPMod extends pModBase {
 
@@ -12,6 +13,10 @@ public class CustomerPMod extends pModBase {
 
     public void setCustomerComboBoxModel(CustomerComboBoxModel customerComboBoxModel) {
         this.customerComboBoxModel = customerComboBoxModel;
+    }
+
+    public void updateCustomer(Customer customer) {
+        customerComboBoxModel.updateCustomer(customer);
     }
 
 }

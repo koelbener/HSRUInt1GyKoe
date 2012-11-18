@@ -100,4 +100,12 @@ public class CustomerComboBoxModel extends AbstractListModel<Customer> implement
         customers.remove(arg0);
     }
 
+    public void updateCustomer(Customer customer) {
+        for (int i = 0; i < customers.size(); i++) {
+            if (customers.get(i).equals(customer)) {
+                fireContentsChanged(this, i, i);
+            }
+        }
+    }
+
 }
