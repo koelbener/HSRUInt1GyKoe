@@ -381,10 +381,12 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
             boolean isCopyLent = Repository.getInstance().getLibrary().isCopyLent(searchCopy);
             if (!isCopyLent) {
                 lblLoanStatus.setIcon(IconUtil.loadIcon("check.png"));
+                lblLoanStatus.setText(Texts.get("validation.copy.isLent.false"));
             } else {
+                String lender = Repository.getInstance().getLibrary().getLender(searchCopy).getFullName();
+                lblLoanStatus.setText(Texts.get("validation.copy.isLent.true") + lender + ".");
                 lblLoanStatus.setIcon(IconUtil.loadIcon("warning.png"));
             }
-            lblLoanStatus.setText(Texts.get("validation.copy.isLent." + isCopyLent));
         }
         setMakeLoanButtonVisibility();
     }

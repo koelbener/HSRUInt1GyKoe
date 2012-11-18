@@ -13,6 +13,10 @@ import domain.Loan;
 public class LoanSearchFilterComboBoxModel extends AbstractListModel<Runnable> implements ComboBoxModel<Runnable> {
 
     private static final long serialVersionUID = 592368359539347695L;
+    public static final int INDEX_ALL_LOANS = 0;
+    public static final int INDEX_OPEN_LOANS = 1;
+    public static final int INDEX_DUE_LOANS = 2;
+
     List<Runnable> elements;
     int selectedElement;
     private Runnable filterOpenLoansJob;
@@ -28,9 +32,9 @@ public class LoanSearchFilterComboBoxModel extends AbstractListModel<Runnable> i
 
     private void initContents() {
         elements = new ArrayList<Runnable>();
-        elements.add(filterAllLoansJob);
-        elements.add(filterOpenLoansJob);
-        elements.add(filterOverdueLoansJob);
+        elements.add(INDEX_ALL_LOANS, filterAllLoansJob);
+        elements.add(INDEX_OPEN_LOANS, filterOpenLoansJob);
+        elements.add(INDEX_DUE_LOANS, filterOverdueLoansJob);
 
     }
 

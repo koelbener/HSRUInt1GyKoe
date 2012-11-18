@@ -75,6 +75,25 @@ public class Library {
         return false;
     }
 
+    public Customer getLender(Copy copy) {
+        Loan currentLoan = getCurrentLoan(copy);
+        if (currentLoan != null) {
+            return currentLoan.getCustomer();
+        }
+        return null;
+    }
+
+    public Loan getCurrentLoan(Copy copy) {
+        for (Loan loan : getLoans()) {
+            if (loan.getCopy().equals(copy)) {
+                if (loan.isLent()) {
+                    return loan;
+                }
+            }
+        }
+        return null;
+    }
+
     public List<Copy> getCopiesOfBook(Book book) {
         checkNotNull(book);
         List<Copy> res = new ArrayList<Copy>();

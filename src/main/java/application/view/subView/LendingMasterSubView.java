@@ -66,6 +66,8 @@ public class LendingMasterSubView extends SubViewBase<Library, LendingMasterCont
 
     public LendingMasterSubView(Library referenceObject) {
         super(referenceObject);
+
+        comboBoxSearchFilter.setSelectedIndex(LoanSearchFilterComboBoxModel.INDEX_OPEN_LOANS);
     }
 
     /**
@@ -130,6 +132,7 @@ public class LendingMasterSubView extends SubViewBase<Library, LendingMasterCont
         loansTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
         scrollPane_1.setViewportView(loansTable);
+
     }
 
     @Override

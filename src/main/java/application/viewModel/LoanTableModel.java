@@ -11,12 +11,12 @@ import domain.Loan;
 
 public class LoanTableModel extends AbstractTableModel {
 
-    private static final int COLUMN_LENT_TO = 5;
-    private static final int COLUMN_LENT_UNTIL = 4;
-    private static final int COLUMN_LENT_FROM = 3;
-    private static final int COLUMN_BOOK_TITLE = 2;
-    private static final int COLUMN_COPY_ID = 1;
-    private static final int COLUMN_STATUS = 0;
+    public static final int COLUMN_LENT_TO = 5;
+    public static final int COLUMN_LENT_UNTIL = 4;
+    public static final int COLUMN_LENT_FROM = 3;
+    public static final int COLUMN_BOOK_TITLE = 2;
+    public static final int COLUMN_COPY_ID = 1;
+    public static final int COLUMN_STATUS = 0;
     private static final long serialVersionUID = 1L;
     private List<Loan> loans;
     private String[] columnNames;
