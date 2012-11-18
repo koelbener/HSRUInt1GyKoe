@@ -42,16 +42,17 @@ public abstract class MainViewBase<R, T extends ControllerBase, S extends Window
     private void checkPositionAgainstActiveFrames() {
         int gap = 20;
         boolean needToCheck = true;
-        List<Frame> frames = Arrays.asList(Frame.getFrames());
+        List<Window> windows = Arrays.asList(Frame.getWindows());
+
         while (needToCheck) {
             needToCheck = false;
-            for (Frame frame : frames) {
+            for (Window window : windows) {
                 // change location of this frame and start checking all frames
                 // again
-                Point framePosition = frame.getLocation();
+                Point framePosition = window.getLocation();
                 Point myPosition = container.getLocation();
                 logger.trace("check frame position {} against {}", myPosition, framePosition);
-                if (!frame.equals(getContainer()) && frame.getLocation().equals(container.getLocation())) {
+                if (!window.equals(getContainer()) && window.getLocation().equals(container.getLocation())) {
                     container.setLocation(container.getLocation().x + gap, container.getLocation().y + gap);
                     logger.debug("change location of frame {} from {} to {}", new Object[] { container.getName(), myPosition, container.getLocation() });
                     needToCheck = true;

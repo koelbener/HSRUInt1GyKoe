@@ -13,6 +13,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -126,6 +127,7 @@ public class LendingMasterSubView extends SubViewBase<Library, LendingMasterCont
 
         loansTable = new JTable(loansPMod.getLoanTableModel());
         loansTable.setRowSorter(loansPMod.getLoanTableRowSorter());
+        loansTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
         scrollPane_1.setViewportView(loansTable);
     }

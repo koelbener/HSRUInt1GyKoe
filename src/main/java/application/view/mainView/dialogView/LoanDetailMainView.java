@@ -370,6 +370,7 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
             lblCopyDescription.setText("");
             lblConditionValue.setText("");
             lblLoanStatus.setIcon(null);
+            lblLoanStatus.setText("");
         } else {
             String titleName = searchCopy.getTitle().getName();
             lblCopyDescription.setText(titleName);
