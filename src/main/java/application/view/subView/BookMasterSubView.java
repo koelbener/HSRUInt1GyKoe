@@ -105,9 +105,9 @@ public class BookMasterSubView extends SubViewBase<Library, BookMasterController
 
         JPanel panel_5 = new JPanel();
         inventoryPanel.add(panel_5, BorderLayout.NORTH);
-        panel_5.setLayout(new MigLayout("", "[grow][][grow][]", "[][]"));
+        panel_5.setLayout(new MigLayout("", "[grow][grow][][]", "[][]"));
 
-        lblNewLabel_1 = new JLabel();
+        lblNewLabel_1 = new JLabel(); // TODO rename
         panel_5.add(lblNewLabel_1, "cell 0 0");
 
         txtFieldSearch = new JTextField();
@@ -115,17 +115,16 @@ public class BookMasterSubView extends SubViewBase<Library, BookMasterController
         panel_5.add(txtFieldSearch, "flowx,cell 0 1,growx");
         txtFieldSearch.setColumns(10);
 
-        checkBoxOnlyAvailable = new JCheckBox();
-
-        panel_5.add(checkBoxOnlyAvailable, "cell 0 1");
-
-        lblNurVerfgbare = new JLabel();
-        panel_5.add(lblNurVerfgbare, "cell 1 1,alignx trailing");
-
         searchFilterComboBox = new JComboBox<SearchFilterElement>();
         searchFilterComboBox.setName(NAME_COMBOBOX_FILTER);
         searchFilterComboBox.setModel(booksPMod.getFilterComboBoxModel());
-        panel_5.add(searchFilterComboBox, "cell 2 1,growx");
+        panel_5.add(searchFilterComboBox, "cell 1 1,growx");
+
+        checkBoxOnlyAvailable = new JCheckBox();
+        panel_5.add(checkBoxOnlyAvailable, "cell 2 1");
+
+        lblNurVerfgbare = new JLabel();
+        panel_5.add(lblNurVerfgbare, "cell 3 1,alignx trailing");
 
         JPanel panel_6 = new JPanel();
         inventoryPanel.add(panel_6, BorderLayout.CENTER);
