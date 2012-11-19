@@ -2,6 +2,7 @@ package application.view.helper;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.text.SimpleDateFormat;
 
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -10,6 +11,8 @@ import javax.swing.ListCellRenderer;
 import application.core.Repository;
 import application.core.Texts;
 import domain.Copy;
+import domain.Library;
+import domain.Loan;
 
 public class CopiesListCellRenderer extends JLabel implements ListCellRenderer<Copy> {
 
@@ -22,14 +25,22 @@ public class CopiesListCellRenderer extends JLabel implements ListCellRenderer<C
     }
 
     @Override
-    public Component getListCellRendererComponent(JList<? extends Copy> list, Copy value, int index, boolean isSelected, boolean cellHasFocus) {
-        String isAvailable = null;
-        if (Repository.getInstance().getLibrary().isCopyLent(value)) {
-            isAvailable = Texts.get("BookDetailMainView.copyList.unavailable");
+    public Component getListCellRendererComponent(JList<? extends Copy> list, Copy copy, int index, boolean isSelected, boolean cellHasFocus) {
+        Library library = Repository.getInstance().getLibrary();
+
+        StringBuilder sb = new StringBuilder();
+        sb.append(copy.getInventoryNumber()).append(" - ");
+        sb.append(copy.getCondition()).append(" - ");
+
+        if (library.isCopyLent(copy)) {
+            sb.append(Texts.get("BookDetailMainView.copyList.unavailable")).append(" ");
+            Loan loan = library.getCurrentLoan(copy);
+            SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy");
+            sb.append(format.format(loan.getDueDate().getTime()));
         } else {
-            isAvailable = Texts.get("BookDetailMainView.copyList.available");
+            sb.append(Texts.get("BookDetailMainView.copyList.available"));
         }
-        setText("#" + value.getInventoryNumber() + " (" + value.getCondition() + "/" + isAvailable + ")");
+        setText(sb.toString());
         if (isSelected) {
             setBackground(Color.GRAY);
         } else {
