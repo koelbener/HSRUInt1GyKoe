@@ -9,6 +9,7 @@ import java.awt.event.ActionListener;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -107,7 +108,9 @@ public class MasterMainView extends MainViewBase<Library, MasterController, JFra
 
     @Override
     protected JFrame initContainer() {
-        return new JFrame();
+        JFrame jFrame = new JFrame();
+        jFrame.setDefaultCloseOperation(JDialog.EXIT_ON_CLOSE);
+        return jFrame;
     }
 
 }
