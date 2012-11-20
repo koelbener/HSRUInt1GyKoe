@@ -39,7 +39,7 @@ public class BooksPMod extends pModBase {
     }
 
     public void setSearchString(String filter) {
-        logger.debug("Filter books table for \"{}\"", filter);
+        logger.trace("Filter books table for \"{}\"", filter);
         searchString = filter;
         updateFilter();
     }

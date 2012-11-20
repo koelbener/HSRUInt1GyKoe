@@ -39,9 +39,8 @@ public class LoansPMod extends pModBase {
     }
 
     public void setSearchString(String searchText) {
-        logger.debug("Filter loans table for \"{}\"", searchText);
+        logger.trace("Filter loans table for \"{}\"", searchText);
         loanTableRowSorter.setRowFilter(RowFilter.regexFilter("(?i)" + searchText));
-
     }
 
     public void addLoan(Loan loan) {
