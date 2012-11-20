@@ -8,7 +8,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
-import java.text.SimpleDateFormat;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -65,8 +64,6 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
     private JLabel lblConditionValue;
     private JLabel lblCopyDescription;
     private JLabel lblNumberOfLoansNumber;
-    private JLabel lblDueDate;
-    private JLabel lblDueDateValue;
     private JTable tblLoans;
     private JButton btnCreateLoan;
     private JButton btnReturnButton;
@@ -124,7 +121,6 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
         lblCondition.setText(Texts.get("LoanDetailMainViewBase.newLoan.copyCondition"));
         btnReturnButton.setText(Texts.get("LoanDetailMainViewBase.loansOverview.returnButton"));
         lblReturnFeedbackLabel.setText("");
-        lblDueDate.setText(Texts.get("LoanDetailMainViewBase.newLoan.dueDate"));
     }
 
     /**
@@ -213,7 +209,7 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
     private void createNewLoanSection(JPanel panel_4) {
         panel_2 = new JPanel();
         panel_4.add(panel_2, "cell 0 1,growx,aligny top");
-        panel_2.setLayout(new MigLayout("", "[54px][54px][54px][:250px:250px][54px][54px]", "[20px][][][]"));
+        panel_2.setLayout(new MigLayout("", "[54px][54px][54px][:250px:250px][54px][54px][54px][54px]", "[20px][]"));
 
         lblCopyId = new JLabel();
         panel_2.add(lblCopyId, "cell 0 0,grow");
@@ -231,7 +227,7 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
 
         lblCopyDescription = new JLabel();
         // lblCopyDescription.setMaximumSize(new Dimension(250, 20));
-        panel_2.add(lblCopyDescription, "cell 3 0 3 1,alignx left,growy");
+        panel_2.add(lblCopyDescription, "cell 3 0,alignx left,growy");
 
         lblCondition = new JLabel();
         panel_2.add(lblCondition, "cell 2 1,alignx left,growy");
@@ -239,14 +235,8 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
         lblConditionValue = new JLabel();
         panel_2.add(lblConditionValue, "cell 3 1,alignx left,growy");
 
-        lblDueDate = new JLabel();
-        panel_2.add(lblDueDate, "cell 4 1,alignx left,growy");
-
-        lblDueDateValue = new JLabel();
-        panel_2.add(lblDueDateValue, "cell 5 1,alignx left,growy");
-
         lblLoanStatus = new JLabel();
-        panel_2.add(lblLoanStatus, "cell 2 2 4 1,alignx left,growy");
+        panel_2.add(lblLoanStatus, "cell 2 2,span,alignx left,growy");
 
         btnCreateLoan = new JButton();
         panel_2.add(btnCreateLoan, "cell 0 1,grow");
@@ -291,7 +281,7 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
             public void actionPerformed(ActionEvent e) {
                 String returnedCopies = getController().returnCopies(tblLoans.getSelectedRows());
                 lblReturnFeedbackLabel.setText("Copies " + returnedCopies + " returned");
-                createMakeLoanButtonVisibility();
+                updateMakeLoanButtonVisibility();
             }
         });
 
@@ -348,7 +338,7 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
                     public void run() {
                         updateLoanTable();
                         setTexts();
-                        createMakeLoanButtonVisibility();
+                        updateMakeLoanButtonVisibility();
                     }
                 });
             }
@@ -361,7 +351,7 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
 
                 updateLoanTable();
                 setTexts();
-                createMakeLoanButtonVisibility();
+                updateMakeLoanButtonVisibility();
             }
         });
 
@@ -397,12 +387,12 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
                 } else {
                     updateCopy(null);
                 }
-                createMakeLoanButtonVisibility();
+                updateMakeLoanButtonVisibility();
             }
         });
     }
 
-    private void createMakeLoanButtonVisibility() {
+    private void updateMakeLoanButtonVisibility() {
         boolean hasErrors = getController().validateLoan(txtCopyId.getNumber(), getCurrentCustomerSelection()).hasErrors();
         btnCreateLoan.setEnabled(!hasErrors);
     }
@@ -413,7 +403,6 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
             lblConditionValue.setText("");
             lblLoanStatus.setIcon(null);
             lblLoanStatus.setText("");
-            lblDueDateValue.setText("");
         } else {
             String titleName = searchCopy.getTitle().getName();
             lblCopyDescription.setText(titleName);
@@ -430,11 +419,8 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
                 lblLoanStatus.setText(Texts.get("validation.copy.isLent.true") + lender + ".");
                 lblLoanStatus.setIcon(IconUtil.loadIcon("warning.png"));
             }
-            SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy");
-            lblDueDateValue.setText(format.format(new Loan(null, null).getDueDate().getTime()));
-
         }
-        createMakeLoanButtonVisibility();
+        updateMakeLoanButtonVisibility();
     }
 
     private void saveLoan() {
