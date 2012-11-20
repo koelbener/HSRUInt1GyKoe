@@ -3,6 +3,7 @@ package application.core;
 import java.util.Locale;
 import java.util.Observable;
 import java.util.ResourceBundle;
+import java.util.regex.Pattern;
 
 import javax.swing.SwingUtilities;
 
@@ -15,6 +16,7 @@ public class Texts extends Observable {
     private static final Logger logger = LoggerFactory.getLogger(Texts.class);
 
     private static Texts instance;
+    private static final String PARAMETER_PATTERN = Pattern.compile("\\{\\}").toString();
 
     private Texts() {
     };
@@ -33,6 +35,17 @@ public class Texts extends Observable {
             logger.error("Text with key " + key + " not available!");
             return "!" + key + "!";
         }
+    }
+
+    public static String get(String key, Object... params) {
+        return format(get(key), params);
+    }
+
+    static String format(String result, Object... params) {
+        for (Object param : params) {
+            result = result.replaceFirst(PARAMETER_PATTERN, param.toString());
+        }
+        return result;
     }
 
     private void loadBundle() {
@@ -55,6 +68,13 @@ public class Texts extends Observable {
     public void switchTo(Locale locale) {
         currentLocale = locale;
         loadBundle();
+    }
+
+    /**
+     * only to be used for testing!
+     */
+    static void setInstance(Texts instance) {
+        Texts.instance = instance;
     }
 
 }

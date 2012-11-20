@@ -4,6 +4,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
+import application.core.TextsTest;
 import application.view.helper.EnableCompontentOnTableSelectionListenerTest;
 import domain.BookTest;
 import domain.CopyTest;
@@ -21,7 +22,8 @@ import domain.validator.BookValidatorTest;
         CustomerTest.class, //
         LibraryTest.class, //
         LoanTest.class, //
-        BookValidatorTest.class //
+        BookValidatorTest.class, //
+        TextsTest.class //
 })
 public class UnitTestSuite {
 

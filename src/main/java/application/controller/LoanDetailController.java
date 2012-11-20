@@ -1,5 +1,8 @@
 package application.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import application.core.Repository;
 import application.core.Texts;
 
@@ -50,16 +53,16 @@ public class LoanDetailController extends ControllerBase {
         return getRepository().getLibrary().getCopyByInventoryNr(copyId);
     }
 
-    public String returnCopies(int[] selectedRows) {
-        String returnedCopies = "";
+    public List<Long> returnCopies(int[] selectedRows) {
+        List<Long> result = new ArrayList<>();
         for (int row : selectedRows) {
             Loan loan = Repository.getInstance().getLoansPMod().getLoanDetailTableModel().getLoan(row);
             if (loan.returnCopy()) {
-                returnedCopies += loan.getCopy().getInventoryNumber() + " ";
+                result.add(loan.getCopy().getInventoryNumber());
                 getRepository().getLoansPMod().updateLoan(loan);
                 getRepository().getCustomerPMod().updateCustomer(loan.getCustomer());
             }
         }
-        return returnedCopies;
+        return result;
     }
 }

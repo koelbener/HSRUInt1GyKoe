@@ -45,6 +45,7 @@ public class LoansPMod extends pModBase {
 
     public void addLoan(Loan loan) {
         loanTableModel.addLoan(loan);
+        loanDetailTableModel.addLoan(loan);
         setChanged();
         notifyObservers();
     }

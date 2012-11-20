@@ -8,6 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -41,6 +42,7 @@ import application.view.helper.EnableCompontentOnTableSelectionListener;
 import application.view.helper.HideTextOnFocusListener;
 import application.viewModel.LoanDetailTableModel;
 
+import com.google.common.base.Joiner;
 import com.jgoodies.validation.ValidationResult;
 
 import domain.Copy;
@@ -63,7 +65,9 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
     private JLabel lblNumberOfLoans;
     private JLabel lblConditionValue;
     private JLabel lblCopyDescription;
-    private JLabel lblNumberOfLoansNumber;
+    private JLabel valNumberOfLoans;
+    private JLabel lblNumberOfDueLoans;
+    private JLabel valNumberOfDueLoans;
     private JTable tblLoans;
     private JButton btnCreateLoan;
     private JButton btnReturnButton;
@@ -120,6 +124,7 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
         lblSearch.setText(Texts.get("LoanDetailMainViewBase.customerSelection.searchLabel"));
         lblCondition.setText(Texts.get("LoanDetailMainViewBase.newLoan.copyCondition"));
         btnReturnButton.setText(Texts.get("LoanDetailMainViewBase.loansOverview.returnButton"));
+        lblNumberOfDueLoans.setText(Texts.get("LoanDetailMainViewBase.loansOverview.numberOfDueLoans"));
         lblReturnFeedbackLabel.setText("");
     }
 
@@ -182,28 +187,35 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
     private void createLoanOverviewSection(JPanel panel_4) {
         panel_3 = new JPanel();
         panel_4.add(panel_3, "cell 0 2,grow");
-        panel_3.setLayout(new MigLayout("", "[][grow]", "[grow][grow][][]"));
+        panel_3.setLayout(new MigLayout("", "[][][][]", "[grow][grow][][]"));
 
         lblNumberOfLoans = new JLabel();
         panel_3.add(lblNumberOfLoans, "cell 0 0");
 
-        lblNumberOfLoansNumber = new JLabel("1");
-        panel_3.add(lblNumberOfLoansNumber, "cell 1 0");
+        valNumberOfLoans = new JLabel("1");
+        panel_3.add(valNumberOfLoans, "cell 1 0,alignx leading");
+
+        lblNumberOfDueLoans = new JLabel();
+        panel_3.add(lblNumberOfDueLoans, "cell 2 0");
+
+        valNumberOfDueLoans = new JLabel();
+        panel_3.add(valNumberOfDueLoans, "cell 3 0");
 
         LoanDetailTableModel loanDetailTableModel = Repository.getInstance().getLoansPMod().getLoanDetailTableModel();
         tblLoans = new JTable(loanDetailTableModel);
-        Customer selectedItem = listCustomer.getSelectedValue();
-        if (selectedItem != null) {
-            loanDetailTableModel.updateLoans(selectedItem);
-        }
         updateLoanTable();
-        panel_3.add(new JScrollPane(tblLoans), "cell 0 1 2 1,grow");
+
+        panel_3.add(new JScrollPane(tblLoans), "cell 0 1 4 1,grow");
+
+        JPanel panel_5 = new JPanel();
+        panel_3.add(panel_5, "cell 0 2 4 1,grow");
+        panel_5.setLayout(new MigLayout("", "[]", "[][]"));
 
         btnReturnButton = new JButton();
-        panel_3.add(btnReturnButton, "cell 1 2");
+        panel_5.add(btnReturnButton, "cell 0 0");
 
         lblReturnFeedbackLabel = new JLabel();
-        panel_3.add(lblReturnFeedbackLabel, "cell 1 3");
+        panel_5.add(lblReturnFeedbackLabel, "cell 1 0");
     }
 
     private void createNewLoanSection(JPanel panel_4) {
@@ -242,32 +254,13 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
         panel_2.add(btnCreateLoan, "cell 0 1,grow");
     }
 
-    private void updateLoanTable() {
-        Customer customer = getCurrentCustomerSelection();
-        if (customer != null) {
-            Repository.getInstance().getLoansPMod().getLoanDetailTableModel().updateLoans(customer);
-        }
-    }
-
-    private Customer getCurrentCustomerSelection() {
+    private Customer getCustomerSelection() {
         return listCustomer.getSelectedValue();
     }
 
     @Override
     protected LoanDetailController initController() {
         return new LoanDetailController();
-    }
-
-    private void updateLoansPanelTitle() {
-        String overViewTitle;
-        Customer customer = getCurrentCustomerSelection();
-        if (customer != null) {
-            String customerName = getCurrentCustomerSelection().getFullName();
-            overViewTitle = Texts.get("LoanDetailMainViewBase.loansOverview.title") + " " + customerName;
-        } else {
-            overViewTitle = Texts.get("LoanDetailMainViewBase.loansOverview.titleAlone");
-        }
-        panel_3.setBorder(new TitledBorder(null, overViewTitle, TitledBorder.LEADING, TitledBorder.TOP, null, null));
     }
 
     @Override
@@ -279,8 +272,13 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                String returnedCopies = getController().returnCopies(tblLoans.getSelectedRows());
-                lblReturnFeedbackLabel.setText("Copies " + returnedCopies + " returned");
+                List<Long> returnedCopies = getController().returnCopies(tblLoans.getSelectedRows());
+                String key = "LoanDetailMainViewBase.loansOverview.returnMessage";
+                if (returnedCopies.size() > 1) {
+                    key += "s";
+                }
+                String message = Texts.get(key, Joiner.on(", ").join(returnedCopies));
+                lblReturnFeedbackLabel.setText(message);
                 updateMakeLoanButtonVisibility();
             }
         });
@@ -337,7 +335,6 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
                     @Override
                     public void run() {
                         updateLoanTable();
-                        setTexts();
                         updateMakeLoanButtonVisibility();
                     }
                 });
@@ -392,9 +389,16 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
         });
     }
 
-    private void updateMakeLoanButtonVisibility() {
-        boolean hasErrors = getController().validateLoan(txtCopyId.getNumber(), getCurrentCustomerSelection()).hasErrors();
-        btnCreateLoan.setEnabled(!hasErrors);
+    private void updateLoanTable() {
+        Customer customer = getCustomerSelection();
+        if (customer != null) {
+            Repository.getInstance().getLoansPMod().getLoanDetailTableModel().updateLoans(customer);
+            // TODO move to presentation model?
+            List<Loan> overdueLoans = Repository.getInstance().getLibrary().getOverdueLoans(customer);
+            List<Loan> openLoans = Repository.getInstance().getLibrary().getCustomerOpenLoans(customer);
+            valNumberOfDueLoans.setText("" + overdueLoans.size());
+            valNumberOfLoans.setText("" + openLoans.size());
+        }
     }
 
     private void updateCopy(Copy searchCopy) {
@@ -421,6 +425,24 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
             }
         }
         updateMakeLoanButtonVisibility();
+        lblReturnFeedbackLabel.setText(""); // clear the message
+    }
+
+    private void updateMakeLoanButtonVisibility() {
+        boolean hasErrors = getController().validateLoan(txtCopyId.getNumber(), getCustomerSelection()).hasErrors();
+        btnCreateLoan.setEnabled(!hasErrors);
+    }
+
+    private void updateLoansPanelTitle() {
+        String overViewTitle;
+        Customer customer = getCustomerSelection();
+        if (customer != null) {
+            String customerName = getCustomerSelection().getFullName();
+            overViewTitle = Texts.get("LoanDetailMainViewBase.loansOverview.title") + " " + customerName;
+        } else {
+            overViewTitle = Texts.get("LoanDetailMainViewBase.loansOverview.titleAlone");
+        }
+        panel_3.setBorder(new TitledBorder(null, overViewTitle, TitledBorder.LEADING, TitledBorder.TOP, null, null));
     }
 
     private void saveLoan() {
@@ -430,15 +452,14 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
         if (copyId == null) {
             lblLoanStatus.setText(Texts.get("LoanDetailMainViewBase.newLoan.noInventoryNumber"));
         } else {
-            ValidationResult validationResult = getController().validateLoan(copyId, getCurrentCustomerSelection());
+            ValidationResult validationResult = getController().validateLoan(copyId, getCustomerSelection());
             if (validationResult.hasErrors()) {
                 lblLoanStatus.setText(validationResult.getMessagesText());
             } else {
                 lblLoanStatus.setText(Texts.get("LoanDetailMainViewBase.newLoan.loanSaved"));
                 txtCopyId.setText("");
                 updateCopy(null);
-                Loan loan = getController().saveLoan(copyId, getCurrentCustomerSelection());
-                Repository.getInstance().getLoansPMod().getLoanDetailTableModel().addLoan(loan);
+                getController().saveLoan(copyId, getCustomerSelection());
             }
         }
     }
