@@ -192,9 +192,9 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
 
         LoanDetailTableModel loanDetailTableModel = Repository.getInstance().getLoansPMod().getLoanDetailTableModel();
         tblLoans = new JTable(loanDetailTableModel);
-        Object selectedItem = listCustomer.getSelectedValue();
-        if (selectedItem instanceof Customer) {
-            loanDetailTableModel.updateLoans((Customer) selectedItem);
+        Customer selectedItem = listCustomer.getSelectedValue();
+        if (selectedItem != null) {
+            loanDetailTableModel.updateLoans(selectedItem);
         }
         updateLoanTable();
         panel_3.add(new JScrollPane(tblLoans), "cell 0 1 2 1,grow");
