@@ -11,18 +11,21 @@ import java.awt.event.FocusEvent;
 import java.text.SimpleDateFormat;
 
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.event.ListDataEvent;
 import javax.swing.event.ListDataListener;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 import net.miginfocom.swing.MigLayout;
 
@@ -34,7 +37,7 @@ import application.core.Repository;
 import application.core.Texts;
 import application.util.IconUtil;
 import application.view.component.JNumberTextField;
-import application.view.helper.CustomerComboBoxRenderer;
+import application.view.helper.CustomerListRenderer;
 import application.view.helper.EnableCompontentOnTableSelectionListener;
 import application.view.helper.HideTextOnFocusListener;
 import application.viewModel.LoanDetailTableModel;
@@ -69,7 +72,7 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
     private JButton btnReturnButton;
     private JTextField txtCustomerSearch;
     private JNumberTextField txtCopyId;
-    private JComboBox<Customer> cbCustomer;
+    private JList<Customer> listCustomer;
     private JLabel lblReturnFeedbackLabel;
 
     private HideTextOnFocusListener hideTextOnFocusListener;
@@ -90,6 +93,7 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
                 // set initial data
                 if (getReferenceObject() != null) {
                     txtCustomerSearch.setText(getReferenceObject().getCustomer().getFullName());
+                    listCustomer.setSelectedIndex(0);
                 }
             }
         });
@@ -139,7 +143,7 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
 
         JPanel mainPanel = new JPanel();
         contentPane.add(mainPanel, BorderLayout.CENTER);
-        mainPanel.setLayout(new MigLayout("", "[grow]", "[74.00][top][grow]"));
+        mainPanel.setLayout(new MigLayout("", "[grow]", "[70.00][89.00,top][grow]"));
 
         createCustomerSelectionSection(mainPanel);
 
@@ -152,7 +156,7 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
     private void createCustomerSelectionSection(JPanel panel_4) {
         panel = new JPanel();
         panel_4.add(panel, "cell 0 0,growx,aligny top");
-        panel.setLayout(new MigLayout("", "[][193.00][grow]", "[grow][grow]"));
+        panel.setLayout(new MigLayout("", "[][193.00][grow]", "[50.00,grow][26.00,grow]"));
 
         lblSearch = new JLabel();
         panel.add(lblSearch, "cell 0 0,alignx trailing");
@@ -165,9 +169,17 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
         lblCustomer = new JLabel();
         panel.add(lblCustomer, "cell 0 1,alignx trailing");
 
-        cbCustomer = new JComboBox<Customer>(Repository.getInstance().getCustomerPMod().getCustomerComboBoxModel());
-        cbCustomer.setRenderer(new CustomerComboBoxRenderer());
-        panel.add(cbCustomer, "cell 1 1 2 1,growx");
+        listCustomer = new JList<Customer>(Repository.getInstance().getCustomerPMod().getCustomerComboBoxModel());
+
+        listCustomer.setCellRenderer(new CustomerListRenderer());
+        listCustomer.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+        JScrollPane scrollPaneCustomerList = new JScrollPane(listCustomer);
+
+        scrollPaneCustomerList.setMinimumSize(new Dimension(200, 100));
+        scrollPaneCustomerList.setPreferredSize(new Dimension(200, 100));
+
+        panel.add(scrollPaneCustomerList, "cell 1 1 2 1,growx");
 
     }
 
@@ -184,7 +196,7 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
 
         LoanDetailTableModel loanDetailTableModel = Repository.getInstance().getLoansPMod().getLoanDetailTableModel();
         tblLoans = new JTable(loanDetailTableModel);
-        Object selectedItem = cbCustomer.getSelectedItem();
+        Object selectedItem = listCustomer.getSelectedValue();
         if (selectedItem instanceof Customer) {
             loanDetailTableModel.updateLoans((Customer) selectedItem);
         }
@@ -248,11 +260,7 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
     }
 
     private Customer getCurrentCustomerSelection() {
-        if (cbCustomer.getSelectedItem() instanceof Customer) {
-            return (Customer) cbCustomer.getSelectedItem();
-        } else {
-            return null;
-        }
+        return listCustomer.getSelectedValue();
     }
 
     @Override
@@ -346,15 +354,15 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
             }
         });
 
-        cbCustomer.addActionListener(new ActionListener() {
+        listCustomer.addListSelectionListener(new ListSelectionListener() {
 
             @Override
-            public void actionPerformed(ActionEvent arg0) {
+            public void valueChanged(ListSelectionEvent arg0) {
+
                 updateLoanTable();
                 setTexts();
                 createMakeLoanButtonVisibility();
             }
-
         });
 
         btnCreateLoan.addActionListener(new ActionListener() {

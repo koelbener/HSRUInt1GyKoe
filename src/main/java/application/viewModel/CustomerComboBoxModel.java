@@ -6,12 +6,11 @@ import java.util.Comparator;
 import java.util.List;
 
 import javax.swing.AbstractListModel;
-import javax.swing.MutableComboBoxModel;
 
 import application.core.Repository;
 import domain.Customer;
 
-public class CustomerComboBoxModel extends AbstractListModel<Customer> implements MutableComboBoxModel<Customer> {
+public class CustomerComboBoxModel extends AbstractListModel<Customer> {
 
     private static final long serialVersionUID = -3087379838481895619L;
     List<Customer> customers;
@@ -47,25 +46,15 @@ public class CustomerComboBoxModel extends AbstractListModel<Customer> implement
 
     @Override
     public Customer getElementAt(int arg0) {
-        return customers.get(arg0);
+        if (customers.size() > arg0) {
+            return customers.get(arg0);
+        }
+        return null;
     }
 
     @Override
     public int getSize() {
         return customers.size();
-    }
-
-    @Override
-    public Object getSelectedItem() {
-        if (customers.size() >= selectedElement + 1) {
-            return customers.get(selectedElement);
-        }
-        return "Kein Eintrag gefunden";
-    }
-
-    @Override
-    public void setSelectedItem(Object anItem) {
-        selectedElement = customers.indexOf(anItem);
     }
 
     public void filterContent(String filter) {
@@ -78,26 +67,6 @@ public class CustomerComboBoxModel extends AbstractListModel<Customer> implement
             }
         }
         setCustomers(filtredCustomers);
-    }
-
-    @Override
-    public void addElement(Customer arg0) {
-        customers.add(arg0);
-    }
-
-    @Override
-    public void insertElementAt(Customer arg0, int arg1) {
-        customers.add(arg1, arg0);
-    }
-
-    @Override
-    public void removeElement(Object arg0) {
-        customers.remove(arg0);
-    }
-
-    @Override
-    public void removeElementAt(int arg0) {
-        customers.remove(arg0);
     }
 
     public void updateCustomer(Customer customer) {
