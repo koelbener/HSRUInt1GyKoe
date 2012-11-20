@@ -285,7 +285,7 @@ public class BookMasterSubView extends SubViewBase<Library, BookMasterController
 
         hideTextOnFocusListener = new HideTextOnFocusListener(txtFieldSearch, searchDefaultText);
 
-        booksTable.addMouseListener(new BooksTableContextMenuListener(new ActionListener() {
+        booksTable.addMouseListener(new BooksTableContextMenuListener(booksTable, new ActionListener() {
 
             @Override
             public void actionPerformed(ActionEvent e) {
