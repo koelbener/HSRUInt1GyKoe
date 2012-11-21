@@ -15,15 +15,14 @@ public class JNumberTextField extends JTextField {
 
     @Override
     public void processKeyEvent(KeyEvent ev) {
-        char c = ev.getKeyChar();
+        String oldText = getText();
         try {
-            // Ignore all non-printable characters. Just check the printable ones.
-            if (c > 31 && c < 127) {
-                Integer.parseInt(c + "");
-            }
             super.processKeyEvent(ev);
+            if (!getText().equals("")) {
+                Integer.parseInt(getText());
+            }
         } catch (NumberFormatException nfe) {
-            // Do nothing. Character inputted is not a number, so ignore it.
+            setText(oldText);
         }
     }
 

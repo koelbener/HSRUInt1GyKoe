@@ -3,6 +3,7 @@ package application.view.mainView.dialogView;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.WindowEvent;
 
 import javax.swing.AbstractAction;
@@ -36,6 +37,29 @@ public abstract class DialogViewBase<R, T extends ControllerBase> extends MainVi
 
     // taken from http://www.jroller.com/tackline/entry/closing_dialogs_on_escape
     private void installEscapeCloseOperation() {
+        container.addKeyListener(new KeyListener() {
+
+            @Override
+            public void keyTyped(KeyEvent e) {
+                disposeOnEsc(e);
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+                disposeOnEsc(e);
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+                disposeOnEsc(e);
+            }
+
+            private void disposeOnEsc(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+                    container.dispose();
+                }
+            }
+        });
         final KeyStroke escapeStroke = KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0);
         final String dispatchWindowClosingActionMapKey = "com.spodding.tackline.dispatch:WINDOW_CLOSING";
 
