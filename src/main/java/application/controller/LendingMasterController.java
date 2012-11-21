@@ -1,5 +1,7 @@
 package application.controller;
 
+import java.awt.Frame;
+
 import javax.swing.RowSorter;
 
 import org.slf4j.Logger;
@@ -25,13 +27,24 @@ public class LendingMasterController extends ControllerBase {
         for (int index : selectedRows) {
             Loan loan = loanTableModel.getLoan(sorter.convertRowIndexToModel(index));
             logger.debug("opening loan {}", loan.getCopy().getInventoryNumber());
+            openLoanView(loan);
+        }
+    }
+
+    private void openLoanView(Loan loan) {
+        boolean loanViewAlreadyOpen = false;
+        for (Frame frame : Frame.getFrames()) {
+            if (frame.getName().equals(LoanDetailMainView.class.getSimpleName())) {
+                frame.dispose();
+            }
+        }
+        if (!loanViewAlreadyOpen) {
             new LoanDetailMainView(loan);
         }
-
     }
 
     public void newLoan() {
-        new LoanDetailMainView(null);
+        openLoanView(null);
 
     }
 

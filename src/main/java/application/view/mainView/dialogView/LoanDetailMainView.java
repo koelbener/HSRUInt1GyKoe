@@ -2,7 +2,6 @@ package application.view.mainView.dialogView;
 
 import java.awt.BorderLayout;
 import java.awt.Container;
-import java.awt.Dialog.ModalityType;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -138,8 +137,6 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
 
         Container contentPane = getContainer().getContentPane();
         getContainer().setBounds(100, 100, 600, 500);
-        // TODO Modality interferes with minSize and ESC-Listener
-        getContainer().setModalityType(ModalityType.APPLICATION_MODAL);
 
         JPanel mainPanel = new JPanel();
         contentPane.add(mainPanel, BorderLayout.CENTER);
