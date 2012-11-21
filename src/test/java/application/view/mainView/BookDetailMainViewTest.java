@@ -16,7 +16,6 @@ import static org.junit.Assert.assertEquals;
 import org.fest.swing.edt.FailOnThreadViolationRepaintManager;
 import org.fest.swing.edt.GuiActionRunner;
 import org.fest.swing.edt.GuiQuery;
-import org.fest.swing.fixture.DialogFixture;
 import org.fest.swing.fixture.FrameFixture;
 import org.junit.After;
 import org.junit.Before;
@@ -36,7 +35,7 @@ public class BookDetailMainViewTest extends AbstractFestTest {
     private static final String BOOK_AUTHOR = "Michi Gysel";
     private static final String BOOK_TITLE = "Testing with JUnit 4";
     private FrameFixture bookMaster;
-    private DialogFixture bookDetail;
+    private FrameFixture bookDetail;
     private static Library library;
 
     @BeforeClass
@@ -73,7 +72,7 @@ public class BookDetailMainViewTest extends AbstractFestTest {
     @Test
     public void validateOpenBook() {
         openFirstBook();
-        bookDetail = findDialog(bookMaster, EditBookDetailMainView.class.getSimpleName());
+        bookDetail = findFrame(bookMaster, EditBookDetailMainView.class.getSimpleName());
         // verify the text boxes
         bookDetail.textBox(NAME_TEXTBOX_TITLE).requireText(BOOK_TITLE);
         bookDetail.textBox(NAME_TEXTBOX_PUBLISHER).requireText(BOOK_PUBLISHER);
@@ -83,7 +82,7 @@ public class BookDetailMainViewTest extends AbstractFestTest {
     @Test
     public void validateEditBookEmptyTitle() {
         openFirstBook();
-        bookDetail = findDialog(bookMaster, EditBookDetailMainView.class.getSimpleName());
+        bookDetail = findFrame(bookMaster, EditBookDetailMainView.class.getSimpleName());
 
         bookDetail.textBox(NAME_TEXTBOX_TITLE).deleteText();
         bookDetail.textBox(NAME_TEXTBOX_AUTHOR).focus();
@@ -98,7 +97,7 @@ public class BookDetailMainViewTest extends AbstractFestTest {
     @Test
     public void validateNewBookEmptyTitle() {
         openNewBook();
-        bookDetail = findDialog(bookMaster, NewBookDetailMainView.class.getSimpleName());
+        bookDetail = findFrame(bookMaster, NewBookDetailMainView.class.getSimpleName());
         // verify the text boxes
         bookDetail.textBox(NAME_TEXTBOX_TITLE).requireText("");
         bookDetail.textBox(NAME_TEXTBOX_AUTHOR).requireText("");
@@ -120,7 +119,7 @@ public class BookDetailMainViewTest extends AbstractFestTest {
         openFirstBook();
         final String OLD_TITLE = bookMaster.table(NAME_TABLE_BOOKS).cell(row(0).column(0)).value();
 
-        bookDetail = findDialog(bookMaster, EditBookDetailMainView.class.getSimpleName());
+        bookDetail = findFrame(bookMaster, EditBookDetailMainView.class.getSimpleName());
         final String NEW_TITLE = "newTitle";
         bookDetail.textBox(NAME_TEXTBOX_TITLE).setText(NEW_TITLE);
         bookDetail.button(NAME_BUTTON_SAVE).click();
