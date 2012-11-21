@@ -54,7 +54,7 @@ public class LoanDetailController extends ControllerBase {
     }
 
     public List<Long> returnCopies(int[] selectedRows) {
-        List<Long> result = new ArrayList<>();
+        List<Long> result = new ArrayList<Long>();
         for (int row : selectedRows) {
             Loan loan = Repository.getInstance().getLoansPMod().getLoanDetailTableModel().getLoan(row);
             if (loan.returnCopy()) {
