@@ -1,8 +1,7 @@
 package application.viewModel;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.GregorianCalendar;
+import java.util.Date;
 import java.util.List;
 
 import javax.swing.table.AbstractTableModel;
@@ -66,7 +65,7 @@ public class LoanDetailTableModel extends AbstractTableModel {
             result = String.class;
             break;
         case COLUMN_ENDDATE:
-            result = String.class;
+            result = Date.class;
             break;
         default:
             break;
@@ -95,9 +94,7 @@ public class LoanDetailTableModel extends AbstractTableModel {
             result = loan.getCopy().getTitle().getName();
             break;
         case COLUMN_ENDDATE:
-            GregorianCalendar dueDate = loan.getDueDate();
-            SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy");
-            result = format.format(dueDate.getTime());
+            result = loan.getDueDate().getTime();
             break;
         }
 

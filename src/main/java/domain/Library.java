@@ -158,15 +158,6 @@ public class Library {
         return overdueLoans;
     }
 
-    public List<Loan> getOverdueLoans(Customer customer) {
-        List<Loan> overdueLoans = new ArrayList<Loan>();
-        for (Loan l : getLoans()) {
-            if (l.isOverdue() && l.getCustomer().equals(customer))
-                overdueLoans.add(l);
-        }
-        return overdueLoans;
-    }
-
     public List<Copy> getAvailableCopies() {
         return getCopies(false);
     }

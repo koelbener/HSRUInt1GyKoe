@@ -8,6 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
+import java.util.Date;
 import java.util.List;
 
 import javax.swing.JButton;
@@ -38,6 +39,7 @@ import application.core.Texts;
 import application.util.IconUtil;
 import application.view.component.JNumberTextField;
 import application.view.helper.CustomerListRenderer;
+import application.view.helper.DueDateTableCellRenderer;
 import application.view.helper.EnableCompontentOnTableSelectionListener;
 import application.view.helper.HideTextOnFocusListener;
 import application.viewModel.LoanDetailTableModel;
@@ -64,10 +66,8 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
     private JLabel lblLoanStatus;
     private JLabel lblNumberOfLoans;
     private JLabel lblConditionValue;
-    private JLabel lblCopyDescription;
+    private JLabel valCopyTitle;
     private JLabel valNumberOfLoans;
-    private JLabel lblNumberOfDueLoans;
-    private JLabel valNumberOfDueLoans;
     private JTable tblLoans;
     private JButton btnCreateLoan;
     private JButton btnReturnButton;
@@ -124,7 +124,6 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
         lblSearch.setText(Texts.get("LoanDetailMainViewBase.customerSelection.searchLabel"));
         lblCondition.setText(Texts.get("LoanDetailMainViewBase.newLoan.copyCondition"));
         btnReturnButton.setText(Texts.get("LoanDetailMainViewBase.loansOverview.returnButton"));
-        lblNumberOfDueLoans.setText(Texts.get("LoanDetailMainViewBase.loansOverview.numberOfDueLoans"));
         lblReturnFeedbackLabel.setText("");
     }
 
@@ -187,7 +186,7 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
     private void createLoanOverviewSection(JPanel panel_4) {
         panel_3 = new JPanel();
         panel_4.add(panel_3, "cell 0 2,grow");
-        panel_3.setLayout(new MigLayout("", "[][][][]", "[grow][grow][][]"));
+        panel_3.setLayout(new MigLayout("", "[][][][grow]", "[grow][grow][][]"));
 
         lblNumberOfLoans = new JLabel();
         panel_3.add(lblNumberOfLoans, "cell 0 0");
@@ -195,14 +194,9 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
         valNumberOfLoans = new JLabel("1");
         panel_3.add(valNumberOfLoans, "cell 1 0,alignx leading");
 
-        lblNumberOfDueLoans = new JLabel();
-        panel_3.add(lblNumberOfDueLoans, "cell 2 0");
-
-        valNumberOfDueLoans = new JLabel();
-        panel_3.add(valNumberOfDueLoans, "cell 3 0");
-
         LoanDetailTableModel loanDetailTableModel = Repository.getInstance().getLoansPMod().getLoanDetailTableModel();
         tblLoans = new JTable(loanDetailTableModel);
+        tblLoans.setDefaultRenderer(Date.class, new DueDateTableCellRenderer());
         updateLoanTable();
 
         panel_3.add(new JScrollPane(tblLoans), "cell 0 1 4 1,grow");
@@ -213,6 +207,7 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
 
         btnReturnButton = new JButton();
         panel_5.add(btnReturnButton, "cell 0 0");
+        btnReturnButton.setEnabled(false);
 
         lblReturnFeedbackLabel = new JLabel();
         panel_5.add(lblReturnFeedbackLabel, "cell 1 0");
@@ -221,7 +216,7 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
     private void createNewLoanSection(JPanel panel_4) {
         panel_2 = new JPanel();
         panel_4.add(panel_2, "cell 0 1,growx,aligny top");
-        panel_2.setLayout(new MigLayout("", "[54px][54px][54px][:250px:250px][54px][54px][54px][54px]", "[20px][]"));
+        panel_2.setLayout(new MigLayout("", "[][][][]", "[][]"));
 
         lblCopyId = new JLabel();
         panel_2.add(lblCopyId, "cell 0 0,grow");
@@ -233,25 +228,25 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
         panel_2.add(txtCopyId, "cell 1 0,grow");
         txtCopyId.setColumns(10);
 
+        btnCreateLoan = new JButton();
+        panel_2.add(btnCreateLoan, "cell 2 0,grow");
+
         lblCopyTitle = new JLabel();
+        panel_2.add(lblCopyTitle, "cell 0 1,grow");
 
-        panel_2.add(lblCopyTitle, "cell 2 0,grow");
-
-        lblCopyDescription = new JLabel();
+        valCopyTitle = new JLabel();
         // lblCopyDescription.setMaximumSize(new Dimension(250, 20));
-        panel_2.add(lblCopyDescription, "cell 3 0,alignx left,growy");
+        panel_2.add(valCopyTitle, "cell 1 1 3,alignx left,growy");
 
         lblCondition = new JLabel();
-        panel_2.add(lblCondition, "cell 2 1,alignx left,growy");
+        panel_2.add(lblCondition, "cell 0 2,alignx left,growy");
 
         lblConditionValue = new JLabel();
-        panel_2.add(lblConditionValue, "cell 3 1,alignx left,growy");
+        panel_2.add(lblConditionValue, "cell 1 2,alignx left,growy");
 
         lblLoanStatus = new JLabel();
         panel_2.add(lblLoanStatus, "cell 2 2,span,alignx left,growy");
 
-        btnCreateLoan = new JButton();
-        panel_2.add(btnCreateLoan, "cell 0 1,grow");
     }
 
     private Customer getCustomerSelection() {
@@ -394,24 +389,22 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
         if (customer != null) {
             Repository.getInstance().getLoansPMod().getLoanDetailTableModel().updateLoans(customer);
             // TODO move to presentation model?
-            List<Loan> overdueLoans = Repository.getInstance().getLibrary().getOverdueLoans(customer);
             List<Loan> openLoans = Repository.getInstance().getLibrary().getCustomerOpenLoans(customer);
-            valNumberOfDueLoans.setText("" + overdueLoans.size());
             valNumberOfLoans.setText("" + openLoans.size());
         }
     }
 
     private void updateCopy(Copy searchCopy) {
         if (searchCopy == null) {
-            lblCopyDescription.setText("");
+            valCopyTitle.setText("");
             lblConditionValue.setText("");
             lblLoanStatus.setIcon(null);
             lblLoanStatus.setText("");
         } else {
             String titleName = searchCopy.getTitle().getName();
-            lblCopyDescription.setText(titleName);
+            valCopyTitle.setText(titleName);
             // set it as title as well in case the content is too long
-            lblCopyDescription.setToolTipText(titleName);
+            valCopyTitle.setToolTipText(titleName);
             lblConditionValue.setText(searchCopy.getCondition().name());
             // lblLoanStatus
             boolean isCopyLent = Repository.getInstance().getLibrary().isCopyLent(searchCopy);
