@@ -185,7 +185,7 @@ public class BookTableModel extends AbstractTableModel {
             result = (numberOfCopies - numberOfLentCopies) + "/" + numberOfCopies;
             break;
         case COLUMN_SHELF:
-            result = book.getShelf();
+            result = book.getShelf().toString();
             break;
         }
         return result;
