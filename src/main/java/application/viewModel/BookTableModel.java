@@ -197,7 +197,17 @@ public class BookTableModel extends AbstractTableModel {
 
     public void addBook(Book book) {
         books.add(book);
-        fireTableDataChanged();
+        int index = getRowCount() - 1;
+        fireTableRowsInserted(index, index);
+    }
+
+    public void updateBook(Book book) {
+        fireTableBookUpdated(book);
+    }
+
+    void fireTableBookUpdated(Book book) {
+        int index = books.indexOf(book);
+        fireTableRowsUpdated(index, index);
     }
 
 }

@@ -1,5 +1,6 @@
 package application.view.mainView;
 
+import static application.view.mainView.dialogView.BookDetailMainViewBase.NAME_BUTTON_ADD_COPY;
 import static application.view.mainView.dialogView.BookDetailMainViewBase.NAME_BUTTON_CANCEL;
 import static application.view.mainView.dialogView.BookDetailMainViewBase.NAME_BUTTON_SAVE;
 import static application.view.mainView.dialogView.BookDetailMainViewBase.NAME_COMBOBOX_SHELF;
@@ -26,6 +27,7 @@ import application.LibraryApp;
 import application.view.AbstractFestTest;
 import application.view.mainView.dialogView.EditBookDetailMainView;
 import application.view.mainView.dialogView.NewBookDetailMainView;
+import application.viewModel.BookTableModel;
 import domain.Book;
 import domain.Library;
 import domain.Shelf;
@@ -116,18 +118,61 @@ public class BookDetailMainViewTest extends AbstractFestTest {
 
     @Test
     public void editBook() {
-        openFirstBook();
-        final String OLD_TITLE = bookMaster.table(NAME_TABLE_BOOKS).cell(row(0).column(0)).value();
+        final String OLD_TITLE = bookMaster.table(NAME_TABLE_BOOKS).cell(row(0).column(BookTableModel.COLUMN_TITLE)).value();
 
+        // open a book and edit the title
+        openFirstBook();
         bookDetail = findFrame(bookMaster, EditBookDetailMainView.class.getSimpleName());
         final String NEW_TITLE = "newTitle";
         bookDetail.textBox(NAME_TEXTBOX_TITLE).setText(NEW_TITLE);
+
+        // add two new copies
+        bookDetail.list().requireItemCount(0);
+        bookDetail.button(NAME_BUTTON_ADD_COPY).click(); // add two new copies
+        bookDetail.button(NAME_BUTTON_ADD_COPY).click();
+        bookDetail.list().requireItemCount(2);
+
+        // save the changes
         bookDetail.button(NAME_BUTTON_SAVE).click();
         bookDetail.requireNotVisible();
 
-        bookMaster.table(NAME_TABLE_BOOKS).cell(row(0).column(0)).requireValue(NEW_TITLE);
+        // verify that the changes were applied
+        bookMaster.table(NAME_TABLE_BOOKS).cell(row(0).column(BookTableModel.COLUMN_TITLE)).requireValue(NEW_TITLE);
+        bookMaster.table(NAME_TABLE_BOOKS).cell(row(0).column(BookTableModel.COLUMN_AMOUNT)).requireValue("2/2");
+
         // restore original state
-        bookMaster.table(NAME_TABLE_BOOKS).cell(row(0).column(0)).enterValue(OLD_TITLE);
+        bookMaster.table(NAME_TABLE_BOOKS).cell(row(0).column(BookTableModel.COLUMN_TITLE)).enterValue(OLD_TITLE);
+    }
+
+    @Test
+    public void newBook() {
+        String title = "a title";
+        String publisher = "a publisher";
+        String author = "an author";
+
+        // open a book and edit the title
+        openNewBook();
+        bookDetail = findFrame(bookMaster, NewBookDetailMainView.class.getSimpleName());
+        bookDetail.textBox(NAME_TEXTBOX_TITLE).setText(title);
+        bookDetail.textBox(NAME_TEXTBOX_PUBLISHER).setText(publisher);
+        bookDetail.textBox(NAME_TEXTBOX_AUTHOR).setText(author);
+        bookDetail.comboBox(NAME_COMBOBOX_SHELF).selectItem(2);
+
+        // add two new copies
+        bookDetail.list().requireItemCount(0);
+        bookDetail.button(NAME_BUTTON_ADD_COPY).click(); // add two new copies
+        bookDetail.button(NAME_BUTTON_ADD_COPY).click();
+        bookDetail.list().requireItemCount(2);
+
+        // save the changes
+        bookDetail.button(NAME_BUTTON_SAVE).click();
+        bookDetail.requireNotVisible();
+
+        // verify that the changes were applied
+        bookMaster.table(NAME_TABLE_BOOKS).cell(row(1).column(BookTableModel.COLUMN_TITLE)).requireValue(title);
+        bookMaster.table(NAME_TABLE_BOOKS).cell(row(1).column(BookTableModel.COLUMN_AUTHOR)).requireValue(author);
+        bookMaster.table(NAME_TABLE_BOOKS).cell(row(1).column(BookTableModel.COLUMN_PUBLISHER)).requireValue(publisher);
+        bookMaster.table(NAME_TABLE_BOOKS).cell(row(1).column(BookTableModel.COLUMN_AMOUNT)).requireValue("2/2");
     }
 
     private void openNewBook() {

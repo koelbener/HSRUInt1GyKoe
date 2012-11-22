@@ -42,6 +42,7 @@ public abstract class BookDetailMainViewBase extends DialogViewBase<Book, BookDe
     public static final String NAME_VALIDATION_PANEL = "ValidationPanel";
     public static final String NAME_BUTTON_SAVE = "Save";
     public static final String NAME_BUTTON_CANCEL = "Cancel";
+    public static final String NAME_BUTTON_ADD_COPY = "AddCopy";
     public static final String NAME_TEXTBOX_TITLE = "textbox.title";
     public static final String NAME_TEXTBOX_AUTHOR = "textbox.author";
     public static final String NAME_TEXTBOX_PUBLISHER = "textbox.publisher";
@@ -205,6 +206,7 @@ public abstract class BookDetailMainViewBase extends DialogViewBase<Book, BookDe
         panel_2.add(btnEntfernen, "cell 2 0");
 
         btnHinzufgen = new JButton();
+        btnHinzufgen.setName(NAME_BUTTON_ADD_COPY);
         panel_2.add(btnHinzufgen, "cell 3 0");
 
         JPanel panel_3 = new JPanel();

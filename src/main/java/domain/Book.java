@@ -1,6 +1,8 @@
 package domain;
 
-public class Book {
+import com.google.common.collect.ComparisonChain;
+
+public class Book implements Comparable<Book> {
 
     private String title, author, publisher;
     private Shelf shelf;
@@ -56,4 +58,9 @@ public class Book {
         shelf = updatedBook.shelf;
     }
 
+    @Override
+    public int compareTo(Book o) {
+        // this is ugly as hell but it's the best solution without a unique id on the book
+        return ComparisonChain.start().compare(System.identityHashCode(this), System.identityHashCode(o)).result();
+    }
 }

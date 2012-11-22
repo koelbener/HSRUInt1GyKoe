@@ -12,7 +12,7 @@ import domain.Copy;
 public class BookDetailController extends ControllerBase {
     private static final Logger logger = LoggerFactory.getLogger(BookDetailController.class);
 
-    public void saveBook(Book book, List<Copy> copies) {
+    public void saveBook(Book book, List<Copy> newCopies) {
 
         String title = book.getName();
         Book existingBook = getRepository().getLibrary().findByBookTitle(title);
@@ -20,14 +20,13 @@ public class BookDetailController extends ControllerBase {
             logger.debug("Creating new book \"{}\"", title);
             existingBook = getRepository().getLibrary().createAndAddBook(title);
             existingBook.updateFrom(book);
-            getRepository().getBooksPMod().addBook(book);
+            getRepository().getBooksPMod().addBook(existingBook);
         } else {
             logger.debug("Updating book \"{}\"", title);
-            getRepository().getBooksPMod().updateBook(book);
         }
 
         List<Copy> existingCopies = new ArrayList<Copy>(getRepository().getLibrary().getCopiesOfBook(existingBook));
-        for (Copy copy : copies) {
+        for (Copy copy : newCopies) {
             if (newlyAdded(copy)) {
                 copy.setTitle(existingBook);
                 getRepository().getLibrary().addCopy(copy);
@@ -35,12 +34,12 @@ public class BookDetailController extends ControllerBase {
                 existingCopies.remove(copy);
             }
         }
-        // remove all copies that were not in the list anymore
+        // delete all copies which are not in the list anymore
         for (Copy copy : existingCopies) {
             getRepository().getLibrary().removeCopy(copy);
         }
 
-        getRepository().getBooksPMod().updateBook(book);
+        getRepository().getBooksPMod().updateBook(existingBook);
     }
 
     private boolean newlyAdded(Copy copy) {

@@ -72,7 +72,7 @@ public class BooksPMod extends pModBase {
     }
 
     public void updateBook(Book book) {
-        bookTableModel.fireTableDataChanged();
+        bookTableModel.updateBook(book);
         setChanged();
         notifyObservers();
     }
