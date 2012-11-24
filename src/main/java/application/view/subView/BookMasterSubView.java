@@ -3,6 +3,8 @@ package application.view.subView;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Observable;
@@ -16,8 +18,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.TableColumn;
@@ -258,9 +258,10 @@ public class BookMasterSubView extends SubViewBase<Library, BookMasterController
             }
         });
 
-        checkBoxOnlyAvailable.addChangeListener(new ChangeListener() {
+        checkBoxOnlyAvailable.addItemListener(new ItemListener() {
+
             @Override
-            public void stateChanged(ChangeEvent arg0) {
+            public void itemStateChanged(ItemEvent e) {
                 getController().setSearchOnlyAvailableBooks(checkBoxOnlyAvailable.isSelected());
             }
         });

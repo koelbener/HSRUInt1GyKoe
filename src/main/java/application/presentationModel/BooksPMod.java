@@ -1,5 +1,8 @@
 package application.presentationModel;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.swing.RowFilter;
 import javax.swing.table.TableRowSorter;
 
@@ -19,10 +22,12 @@ public class BooksPMod extends pModBase {
     private final TableRowSorter<BookTableModel> bookTableRowSorter;
     private String searchString = "";
     private int filterColumn = -1;
+    private boolean onlyAvailableBooks = false;
 
     public BooksPMod() {
         bookTableModel = new BookTableModel(Repository.getInstance().getLibrary().getBooks());
         bookTableRowSorter = new TableRowSorter<BookTableModel>(bookTableModel);
+
         filterComboBoxModel = new BookSearchFilterComboBoxModel();
     }
 
@@ -45,24 +50,13 @@ public class BooksPMod extends pModBase {
     }
 
     public void setOnlyAvailableBooks(boolean onlyAvailableBooks) {
-        if (onlyAvailableBooks) {
-            bookTableModel.setData(Repository.getInstance().getLibrary().getAvailableBooks());
-        } else {
-            bookTableModel.setData(Repository.getInstance().getLibrary().getBooks());
-        }
+        this.onlyAvailableBooks = onlyAvailableBooks;
+        updateFilter();
     }
 
     public void setFilterColumn(int filterColumn) {
         this.filterColumn = filterColumn;
         updateFilter();
-    }
-
-    private void updateFilter() {
-        if (filterColumn >= 0) {
-            bookTableRowSorter.setRowFilter(RowFilter.regexFilter("(?i)" + searchString, filterColumn));
-        } else {
-            bookTableRowSorter.setRowFilter(RowFilter.regexFilter("(?i)" + searchString));
-        }
     }
 
     public void addBook(Book book) {
@@ -83,6 +77,31 @@ public class BooksPMod extends pModBase {
 
     public int getCopiesCount() {
         return Repository.getInstance().getLibrary().getCopies().size();
+    }
+
+    private void updateFilter() {
+        List<RowFilter<Object, Object>> filters = new ArrayList<RowFilter<Object, Object>>();
+    
+        if (filterColumn >= 0) {
+            filters.add(RowFilter.regexFilter("(?i)" + searchString, filterColumn));
+        } else {
+            filters.add(RowFilter.regexFilter("(?i)" + searchString));
+        }
+    
+        if (onlyAvailableBooks) {
+            filters.add(new OnyAvailableFilter());
+        }
+    
+        bookTableRowSorter.setRowFilter(RowFilter.andFilter(filters));
+    }
+
+    private class OnyAvailableFilter extends RowFilter<Object, Object> {
+    
+        @Override
+        public boolean include(RowFilter.Entry<? extends Object, ? extends Object> entry) {
+            String availability = entry.getStringValue(BookTableModel.COLUMN_AMOUNT);
+            return availability.charAt(0) != '0';
+        }
     }
 
 }
