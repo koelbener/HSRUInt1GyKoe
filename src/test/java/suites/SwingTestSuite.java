@@ -5,6 +5,7 @@ import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
 import application.view.mainView.BookDetailMainViewTest;
+import application.view.mainView.BookDetailMainViewTestForIntegrity;
 import application.view.subView.BookMasterSubViewTest;
 import application.view.subView.LendingMasterSubViewTest;
 
@@ -13,7 +14,8 @@ import application.view.subView.LendingMasterSubViewTest;
 //
         BookDetailMainViewTest.class, //
         BookMasterSubViewTest.class, //
-        LendingMasterSubViewTest.class //
+        LendingMasterSubViewTest.class, //
+        BookDetailMainViewTestForIntegrity.class //
 })
 public class SwingTestSuite {
 

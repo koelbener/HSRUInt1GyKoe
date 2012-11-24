@@ -42,6 +42,17 @@ public class BookDetailController extends ControllerBase {
         getRepository().getBooksPMod().updateBook(existingBook);
     }
 
+    public boolean areCopiesDeletable(List<Copy> copies) {
+        boolean result = true;
+        for (Copy copy : copies) {
+            if (getRepository().getLibrary().isOrWasCopyLent(copy)) {
+                result = false;
+                break;
+            }
+        }
+        return result;
+    }
+
     private boolean newlyAdded(Copy copy) {
         return copy.getTitle() == null;
     }

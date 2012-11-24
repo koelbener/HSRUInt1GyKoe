@@ -75,6 +75,15 @@ public class Library {
         return false;
     }
 
+    public boolean isOrWasCopyLent(Copy copy) {
+        for (Loan l : loans) {
+            if (l.getCopy().equals(copy)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public Customer getLender(Copy copy) {
         Loan currentLoan = getCurrentLoan(copy);
         if (currentLoan != null) {

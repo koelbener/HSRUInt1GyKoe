@@ -2,6 +2,7 @@ package application.view.mainView;
 
 import static application.view.mainView.dialogView.BookDetailMainViewBase.NAME_BUTTON_ADD_COPY;
 import static application.view.mainView.dialogView.BookDetailMainViewBase.NAME_BUTTON_CANCEL;
+import static application.view.mainView.dialogView.BookDetailMainViewBase.NAME_BUTTON_DELETE_COPY;
 import static application.view.mainView.dialogView.BookDetailMainViewBase.NAME_BUTTON_SAVE;
 import static application.view.mainView.dialogView.BookDetailMainViewBase.NAME_COMBOBOX_SHELF;
 import static application.view.mainView.dialogView.BookDetailMainViewBase.NAME_TEXTBOX_AUTHOR;
@@ -142,6 +143,12 @@ public class BookDetailMainViewTest extends AbstractFestTest {
 
         // restore original state
         bookMaster.table(NAME_TABLE_BOOKS).cell(row(0).column(BookTableModel.COLUMN_TITLE)).enterValue(OLD_TITLE);
+        bookMaster.button(NAME_BUTTON_OPEN).click();
+        bookDetail = findFrame(bookMaster, EditBookDetailMainView.class.getSimpleName());
+        bookDetail.list().selectItems(0, 1);
+        bookDetail.button(NAME_BUTTON_DELETE_COPY).click();
+        bookDetail.button(NAME_BUTTON_SAVE).click();
+
     }
 
     @Test
@@ -173,6 +180,47 @@ public class BookDetailMainViewTest extends AbstractFestTest {
         bookMaster.table(NAME_TABLE_BOOKS).cell(row(1).column(BookTableModel.COLUMN_AUTHOR)).requireValue(author);
         bookMaster.table(NAME_TABLE_BOOKS).cell(row(1).column(BookTableModel.COLUMN_PUBLISHER)).requireValue(publisher);
         bookMaster.table(NAME_TABLE_BOOKS).cell(row(1).column(BookTableModel.COLUMN_AMOUNT)).requireValue("2/2");
+
+        // cleanup
+        bookMaster.table(NAME_TABLE_BOOKS).selectRows(1);
+        bookMaster.button(NAME_BUTTON_OPEN).click();
+        bookDetail = findFrame(bookMaster, EditBookDetailMainView.class.getSimpleName());
+        bookDetail.list().selectItems(0, 1);
+        bookDetail.button(NAME_BUTTON_DELETE_COPY).click();
+        bookDetail.button(NAME_BUTTON_SAVE).click();
+
+    }
+
+    @Test
+    public void addAndDeleteCopies() {
+        // open a book and edit the title
+        openFirstBook();
+        bookDetail = findFrame(bookMaster, EditBookDetailMainView.class.getSimpleName());
+
+        bookDetail.list().requireItemCount(0);
+        bookDetail.button(NAME_BUTTON_ADD_COPY).requireEnabled();
+        bookDetail.button(NAME_BUTTON_DELETE_COPY).requireDisabled();
+        // add two new copies
+        bookDetail.button(NAME_BUTTON_ADD_COPY).click(); // add two new copies
+        bookDetail.button(NAME_BUTTON_ADD_COPY).click();
+        bookDetail.list().requireItemCount(2);
+        bookDetail.button(NAME_BUTTON_DELETE_COPY).requireDisabled();
+
+        // select items
+        bookDetail.list().selectItem(0);
+        bookDetail.button(NAME_BUTTON_DELETE_COPY).requireEnabled();
+        bookDetail.list().selectItems(0, 1);
+        bookDetail.button(NAME_BUTTON_DELETE_COPY).requireEnabled();
+
+        // and delete all copies
+        bookDetail.button(NAME_BUTTON_DELETE_COPY).click();
+        bookDetail.button(NAME_BUTTON_DELETE_COPY).requireDisabled();
+        bookDetail.list().requireItemCount(0);
+
+        // save the changes
+        bookDetail.button(NAME_BUTTON_SAVE).click();
+        bookDetail.requireNotVisible();
+        bookMaster.table(NAME_TABLE_BOOKS).cell(row(0).column(BookTableModel.COLUMN_AMOUNT)).requireValue("0/0");
     }
 
     private void openNewBook() {

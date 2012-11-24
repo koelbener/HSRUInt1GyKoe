@@ -43,6 +43,7 @@ public abstract class BookDetailMainViewBase extends DialogViewBase<Book, BookDe
     public static final String NAME_BUTTON_SAVE = "Save";
     public static final String NAME_BUTTON_CANCEL = "Cancel";
     public static final String NAME_BUTTON_ADD_COPY = "AddCopy";
+    public static final String NAME_BUTTON_DELETE_COPY = "DeleteCopy";
     public static final String NAME_TEXTBOX_TITLE = "textbox.title";
     public static final String NAME_TEXTBOX_AUTHOR = "textbox.author";
     public static final String NAME_TEXTBOX_PUBLISHER = "textbox.publisher";
@@ -202,6 +203,7 @@ public abstract class BookDetailMainViewBase extends DialogViewBase<Book, BookDe
         tfNumberOfCopies.setColumns(10);
 
         btnEntfernen = new JButton();
+        btnEntfernen.setName(NAME_BUTTON_DELETE_COPY);
         btnEntfernen.setEnabled(false);
         panel_2.add(btnEntfernen, "cell 2 0");
 
@@ -294,19 +296,18 @@ public abstract class BookDetailMainViewBase extends DialogViewBase<Book, BookDe
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                copyListModel.removeCopy(copiesList.getSelectedValue());
+                if (copyListModel.removeCopy(copiesList.getSelectedValuesList()))
+                    btnEntfernen.setEnabled(false);
             }
         });
         copiesList.addListSelectionListener(new ListSelectionListener() {
 
             @Override
             public void valueChanged(ListSelectionEvent e) {
-                // TODO this does not work when removing all copies
                 int selectedCopies = copiesList.getSelectedIndices().length;
-                btnEntfernen.setEnabled(selectedCopies == 1);
+                btnEntfernen.setEnabled(selectedCopies > 0 && getController().areCopiesDeletable(copiesList.getSelectedValuesList()));
             }
         });
-
     }
 
     protected boolean validateBook() {

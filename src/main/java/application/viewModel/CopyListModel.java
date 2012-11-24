@@ -15,10 +15,6 @@ public class CopyListModel extends AbstractListModel<Copy> {
         this.copyList = list;
     }
 
-    public void propagateUpdate(int pos) {
-        fireContentsChanged(this, pos, pos);
-    }
-
     @Override
     public Copy getElementAt(int index) {
         return copyList.get(index);
@@ -31,13 +27,17 @@ public class CopyListModel extends AbstractListModel<Copy> {
 
     public void addCopy(Copy copy) {
         copyList.add(copy);
-        propagateUpdate(copyList.size() - 1);
-
+        int index = copyList.size() - 1;
+        fireIntervalAdded(this, index, index);
     }
 
-    public void removeCopy(Copy copy) {
-        copyList.remove(copy);
-        fireContentsChanged(this, 0, copyList.size());
+    public boolean removeCopy(List<Copy> copies) {
+        for (Copy copy : copies) {
+            int index = copies.indexOf(copy);
+            copyList.remove(copy);
+            fireIntervalRemoved(this, index, index);
+        }
+        return copyList.isEmpty();
     }
 
     public List<Copy> getAll() {
