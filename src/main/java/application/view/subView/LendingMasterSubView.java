@@ -39,7 +39,7 @@ public class LendingMasterSubView extends SubViewBase<Library, LendingMasterCont
 
     public static final String NAME_BUTTON_OPEN = "button.open";
     public static final String NAME_BUTTON_NEW = "button.new";
-    public static final String NAME_TABLE_BOOKS = "table.books";
+    public static final String NAME_TABLE_LOANS = "table.loans";
     public static final String NAME_LABEL_NUMBER_OF_BOOKS = "label.numberOfBooks";
     public static final String NAME_SEARCH_FIELD = "textField.search";
     public static final String NAME_COMBOBOX_FILTER = "comboBox.searchFilter";
@@ -54,7 +54,7 @@ public class LendingMasterSubView extends SubViewBase<Library, LendingMasterCont
     private JLabel lblOverdueLoans;
 
     private JTextField txtSearch;
-    private JComboBox<Runnable> comboBoxSearchFilter;
+    private JComboBox<LoanSearchFilterComboBoxModel.FilterOption> comboBoxSearchFilter;
     private JButton btnNew;
     private JButton btnOpen;
     private LoansPMod loansPMod;
@@ -67,8 +67,6 @@ public class LendingMasterSubView extends SubViewBase<Library, LendingMasterCont
 
     public LendingMasterSubView(Library referenceObject) {
         super(referenceObject);
-
-        comboBoxSearchFilter.setSelectedIndex(LoanSearchFilterComboBoxModel.INDEX_OPEN_LOANS);
     }
 
     /**
@@ -114,7 +112,8 @@ public class LendingMasterSubView extends SubViewBase<Library, LendingMasterCont
         searchPanel.add(txtSearch, "flowx,cell 0 0,growx");
         txtSearch.setColumns(10);
 
-        comboBoxSearchFilter = new JComboBox<Runnable>(new LoanSearchFilterComboBoxModel());
+        comboBoxSearchFilter = new JComboBox<LoanSearchFilterComboBoxModel.FilterOption>(Repository.getInstance().getLoansPMod().getSearchFilterModel());
+        comboBoxSearchFilter.setName(NAME_COMBOBOX_FILTER);
         searchPanel.add(comboBoxSearchFilter, "cell 0 0");
 
         JPanel panel_13 = new JPanel();
@@ -131,6 +130,7 @@ public class LendingMasterSubView extends SubViewBase<Library, LendingMasterCont
         inventoryPanel.add(scrollPane_1, BorderLayout.CENTER);
 
         loansTable = new JTable(loansPMod.getLoanTableModel());
+        loansTable.setName(NAME_TABLE_LOANS);
         loansTable.setRowSorter(loansPMod.getLoanTableRowSorter());
         loansTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
@@ -162,6 +162,7 @@ public class LendingMasterSubView extends SubViewBase<Library, LendingMasterCont
 
         // table
         loansPMod.getLoanTableModel().setColumns();
+        loansPMod.getLoanTableModel().updateStateValues();
 
         container.revalidate();
     }
@@ -205,7 +206,7 @@ public class LendingMasterSubView extends SubViewBase<Library, LendingMasterCont
 
             @Override
             public void actionPerformed(ActionEvent arg0) {
-                getController().filterElementSelected((Runnable) comboBoxSearchFilter.getSelectedItem());
+                getController().filterLoans((LoanSearchFilterComboBoxModel.FilterOption) comboBoxSearchFilter.getSelectedItem());
             }
         });
 
@@ -241,13 +242,14 @@ public class LendingMasterSubView extends SubViewBase<Library, LendingMasterCont
 
     private void search() {
         if (!txtSearch.getText().equals(searchDefaultText)) {
-            getController().searchBooks(txtSearch.getText());
+            getController().filterLoans(txtSearch.getText());
+        } else {
+            getController().filterLoans("");
         }
     }
 
     @Override
     public void update(Observable observable, Object arg1) {
-        // TODO remove instanceof
         if (observable instanceof LoansPMod) {
             updateStatistics();
         } else {

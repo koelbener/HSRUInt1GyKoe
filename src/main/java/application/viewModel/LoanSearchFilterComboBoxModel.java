@@ -2,54 +2,63 @@ package application.viewModel;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 
 import javax.swing.AbstractListModel;
 import javax.swing.ComboBoxModel;
 
-import application.core.Repository;
 import application.core.Texts;
-import domain.Loan;
+import application.viewModel.LoanSearchFilterComboBoxModel.FilterOption;
 
-public class LoanSearchFilterComboBoxModel extends AbstractListModel<Runnable> implements ComboBoxModel<Runnable> {
+public class LoanSearchFilterComboBoxModel extends AbstractListModel<FilterOption> implements ComboBoxModel<FilterOption>, Observer {
 
     private static final long serialVersionUID = 592368359539347695L;
     public static final int INDEX_ALL_LOANS = 0;
     public static final int INDEX_OPEN_LOANS = 1;
     public static final int INDEX_DUE_LOANS = 2;
 
-    List<Runnable> elements;
+    public enum FilterOption {
+        ALL_LOANS("LendingMasterMainView.filterComboBox.all"), //
+        OPEN_LOANS("LendingMasterMainView.filterComboBox.onlyOpen"), //
+        DUE_LOANS("LendingMasterMainView.filterComboBox.onlyDue");
+
+        private final String text;
+        private String textLocalised;
+
+        private FilterOption(String text) {
+            this.text = text;
+            updateText();
+        }
+
+        public void updateText() {
+            this.textLocalised = Texts.get(text);
+        }
+
+        @Override
+        public String toString() {
+            return textLocalised;
+        }
+    }
+
+    List<FilterOption> elements;
     int selectedElement;
-    private Runnable filterOpenLoansJob;
-    private Runnable filterOverdueLoansJob;
-    private Runnable filterAllLoansJob;
 
-    public LoanSearchFilterComboBoxModel() {
-        initJobs();
+    public LoanSearchFilterComboBoxModel(FilterOption defaultValue) {
         initContents();
-
-        selectedElement = 0;
+        setSelectedItem(defaultValue);
+        Texts.getInstance().addObserver(this);
     }
 
     private void initContents() {
-        elements = new ArrayList<Runnable>();
-        elements.add(INDEX_ALL_LOANS, filterAllLoansJob);
-        elements.add(INDEX_OPEN_LOANS, filterOpenLoansJob);
-        elements.add(INDEX_DUE_LOANS, filterOverdueLoansJob);
-
-    }
-
-    abstract class FiltredData<T> {
-        public abstract List<T> getData();
-
-    }
-
-    public void updateTexts() {
-        initContents();
-        fireContentsChanged(this, 0, 3);
+        elements = new ArrayList<FilterOption>();
+        elements.add(INDEX_ALL_LOANS, FilterOption.ALL_LOANS);
+        elements.add(INDEX_OPEN_LOANS, FilterOption.OPEN_LOANS);
+        elements.add(INDEX_DUE_LOANS, FilterOption.DUE_LOANS);
     }
 
     @Override
-    public Runnable getElementAt(int arg0) {
+    public FilterOption getElementAt(int arg0) {
         return elements.get(arg0);
     }
 
@@ -68,49 +77,12 @@ public class LoanSearchFilterComboBoxModel extends AbstractListModel<Runnable> i
         selectedElement = elements.indexOf(anItem);
     }
 
-    private void initJobs() {
-        filterOpenLoansJob = new Runnable() {
-
-            @Override
-            public void run() {
-                List<Loan> data = Repository.getInstance().getLibrary().getOpenLoans();
-                Repository.getInstance().getLoansPMod().getLoanTableModel().setData(data);
-            }
-
-            @Override
-            public String toString() {
-                return Texts.get("LendingMasterMainView.filterComboBox.onlyOpen");
-            }
-
-        };
-
-        filterOverdueLoansJob = new Runnable() {
-
-            @Override
-            public void run() {
-                List<Loan> data = Repository.getInstance().getLibrary().getOverdueLoans();
-                Repository.getInstance().getLoansPMod().getLoanTableModel().setData(data);
-            }
-
-            @Override
-            public String toString() {
-                return Texts.get("LendingMasterMainView.filterComboBox.onlyDue");
-            }
-        };
-
-        filterAllLoansJob = new Runnable() {
-
-            @Override
-            public void run() {
-                List<Loan> data = Repository.getInstance().getLibrary().getLoans();
-                Repository.getInstance().getLoansPMod().getLoanTableModel().setData(data);
-            }
-
-            @Override
-            public String toString() {
-                return Texts.get("LendingMasterMainView.filterComboBox.all");
-            }
-        };
+    @Override
+    public void update(Observable o, Object arg) {
+        for (FilterOption e : FilterOption.values()) {
+            e.updateText();
+        }
+        fireContentsChanged(this, 0, 3);
     }
 
 }

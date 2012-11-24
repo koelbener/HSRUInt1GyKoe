@@ -24,7 +24,7 @@ public class BookTableModel extends AbstractTableModel {
     public static final int COLUMN_AUTHOR = 1;
     public static final int COLUMN_TITLE = 0;
     private static final long serialVersionUID = -67214736125029646L;
-    private List<Book> books;
+    private final List<Book> books;
     private String[] columnNames;
     private final Logger logger = LoggerFactory.getLogger(BookTableModel.class);
 
@@ -143,11 +143,6 @@ public class BookTableModel extends AbstractTableModel {
                 break;
             }
         }
-    }
-
-    public void setData(List<Book> books) {
-        this.books = books;
-        fireTableDataChanged();
     }
 
     @Override

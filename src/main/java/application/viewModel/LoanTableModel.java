@@ -18,7 +18,7 @@ public class LoanTableModel extends AbstractTableModel {
     public static final int COLUMN_COPY_ID = 1;
     public static final int COLUMN_STATUS = 0;
     private static final long serialVersionUID = 1L;
-    private List<Loan> loans;
+    private final List<Loan> loans;
     private String[] columnNames;
 
     public LoanTableModel(List<Loan> loans) {
@@ -93,11 +93,11 @@ public class LoanTableModel extends AbstractTableModel {
         switch (columnIndex) {
         case COLUMN_STATUS:
             if (loan.isOverdue()) {
-                result = "fällig";
+                result = Texts.get("LendingMasterMainView.table.cell.due");
             } else if (loan.isLent()) {
-                result = "verliehen";
+                result = Texts.get("LendingMasterMainView.table.cell.lent");
             } else {
-                result = "zurück";
+                result = Texts.get("LendingMasterMainView.table.cell.back");
             }
             break;
         case COLUMN_COPY_ID:
@@ -129,18 +129,14 @@ public class LoanTableModel extends AbstractTableModel {
         return result;
     }
 
-    public void setData(List<Loan> loans) {
-        this.loans = loans;
-        fireTableDataChanged();
-    }
-
     public Loan getLoan(int index) {
         return loans.get(index);
     }
 
     public void addLoan(Loan loan) {
+        int index = loans.size();
         loans.add(loan);
-        fireTableDataChanged();
+        fireTableRowsInserted(index, index);
     }
 
     public void updateLoan(Loan loan) {
@@ -150,6 +146,10 @@ public class LoanTableModel extends AbstractTableModel {
                 fireTableRowsUpdated(i, i);
             }
         }
+    }
+
+    public void updateStateValues() {
+        fireTableRowsUpdated(0, getRowCount() - 1);
     }
 
 }

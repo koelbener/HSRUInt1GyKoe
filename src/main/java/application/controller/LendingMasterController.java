@@ -8,17 +8,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import application.view.mainView.dialogView.LoanDetailMainView;
+import application.viewModel.LoanSearchFilterComboBoxModel.FilterOption;
 import application.viewModel.LoanTableModel;
 import domain.Loan;
 
 public class LendingMasterController extends ControllerBase {
 
     private static final Logger logger = LoggerFactory.getLogger(LendingMasterController.class);
-
-    public void searchBooks(String searchText) {
-        getRepository().getLoansPMod().setSearchString(searchText);
-
-    }
 
     public void openLoans(int[] selectedRows) {
         LoanTableModel loanTableModel = getRepository().getLoansPMod().getLoanTableModel();
@@ -48,8 +44,12 @@ public class LendingMasterController extends ControllerBase {
 
     }
 
-    public void filterElementSelected(Runnable selectedItem) {
-        selectedItem.run();
+    public void filterLoans(String searchString) {
+        getRepository().getLoansPMod().updateFilter(searchString);
+    }
+
+    public void filterLoans(FilterOption option) {
+        getRepository().getLoansPMod().updateFilter(option);
     }
 
 }

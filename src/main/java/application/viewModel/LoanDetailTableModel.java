@@ -102,8 +102,9 @@ public class LoanDetailTableModel extends AbstractTableModel {
     }
 
     public void addLoan(Loan loan) {
+        int index = loans.size();
         loans.add(loan);
-        fireTableDataChanged();
+        fireTableRowsInserted(index, index);
     }
 
     public void updateLoans(Customer customer) {

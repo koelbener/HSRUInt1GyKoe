@@ -9,7 +9,7 @@ public class Loan {
     private final Copy copy;
     private final Customer customer;
     private GregorianCalendar pickupDate, returnDate;
-    private final static int DAYS_TO_RETURN_BOOK = 30;
+    public final static int DAYS_TO_RETURN_BOOK = 30;
 
     public Loan(Customer customer, Copy copy) {
         this.copy = copy;
