@@ -10,24 +10,23 @@ public class HideTextOnFocusListener {
     private String text;
     private final JTextField textField;
 
-    public HideTextOnFocusListener(JTextField textFieldP, String textP) {
+    public HideTextOnFocusListener(JTextField textField, String text) {
 
-        // TODO: P??
-        this.textField = textFieldP;
-        this.text = textP;
+        this.textField = textField;
+        this.text = text;
 
         textField.addFocusListener(new FocusAdapter() {
             @Override
             public void focusGained(FocusEvent arg0) {
-                if (textField.getText().equals(text)) {
-                    textField.setText("");
+                if (HideTextOnFocusListener.this.textField.getText().equals(HideTextOnFocusListener.this.text)) {
+                    HideTextOnFocusListener.this.textField.setText("");
                 }
             }
 
             @Override
             public void focusLost(FocusEvent arg0) {
-                if (textField.getText().equals("")) {
-                    textField.setText(text);
+                if (HideTextOnFocusListener.this.textField.getText().equals("")) {
+                    HideTextOnFocusListener.this.textField.setText(HideTextOnFocusListener.this.text);
                 }
             }
         });
