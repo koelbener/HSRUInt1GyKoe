@@ -74,7 +74,7 @@ public abstract class BookDetailMainViewBase extends DialogViewBase<Book, BookDe
     protected JPanel validationPanel;
 
     public BookDetailMainViewBase(Book book) {
-        super(book);
+        super(book, "book_closed.gif");
         updateViewValues();
     }
 

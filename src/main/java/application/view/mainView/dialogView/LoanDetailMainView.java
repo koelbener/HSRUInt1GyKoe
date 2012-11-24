@@ -80,7 +80,7 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
     private static final Logger logger = LoggerFactory.getLogger(LoanDetailMainView.class);
 
     public LoanDetailMainView(Loan loan) {
-        super(loan);
+        super(loan, "loan.gif");
     }
 
     @Override

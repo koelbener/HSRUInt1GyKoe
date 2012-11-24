@@ -17,8 +17,9 @@ import application.view.mainView.MainViewBase;
 
 public abstract class DialogViewBase<R, T extends ControllerBase> extends MainViewBase<R, T, JFrame> {
 
-    public DialogViewBase(R referenceObject) {
+    public DialogViewBase(R referenceObject, String icon) {
         super(referenceObject);
+        setIcon(icon);
         getContainer().setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         container.setMinimumSize(new Dimension(616, 445));
         installEscapeCloseOperation();

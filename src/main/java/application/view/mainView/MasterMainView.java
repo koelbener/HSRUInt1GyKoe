@@ -22,6 +22,7 @@ import net.miginfocom.swing.MigLayout;
 import application.controller.MasterController;
 import application.core.Language;
 import application.core.Texts;
+import application.util.IconUtil;
 import application.view.subView.BookMasterSubView;
 import application.view.subView.LendingMasterSubView;
 import domain.Library;
@@ -84,8 +85,8 @@ public class MasterMainView extends MainViewBase<Library, MasterController, JFra
         LendingMasterSubView lendingMasterPanel = new LendingMasterSubView(library);
         BookMasterSubView bookMasterPanel = new BookMasterSubView(library);
 
-        tabbedPane.addTab(Texts.get("BookMasterMainView.tab.books"), null, bookMasterPanel.getContainer(), null);
-        tabbedPane.addTab(Texts.get("BookMasterMainView.tab.lending"), null, lendingMasterPanel.getContainer(), null);
+        tabbedPane.addTab(Texts.get("BookMasterMainView.tab.books"), IconUtil.loadIcon("book_closed.gif"), bookMasterPanel.getContainer(), null);
+        tabbedPane.addTab(Texts.get("BookMasterMainView.tab.lending"), IconUtil.loadIcon("loan.gif"), lendingMasterPanel.getContainer(), null);
         contentPane.add(tabbedPane, BorderLayout.CENTER);
         container.pack();
     }
