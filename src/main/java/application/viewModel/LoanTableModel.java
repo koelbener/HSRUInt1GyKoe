@@ -149,7 +149,8 @@ public class LoanTableModel extends AbstractTableModel {
     }
 
     public void updateStateValues() {
-        fireTableRowsUpdated(0, getRowCount() - 1);
+        if (getRowCount() > 0)
+            fireTableRowsUpdated(0, getRowCount() - 1);
     }
 
 }
