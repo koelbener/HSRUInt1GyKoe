@@ -63,7 +63,7 @@ public class BookMasterSubView extends SubViewBase<Library, BookMasterController
     public JLabel lblAnzahlExemplare;
     public JLabel lblLasd;
     public JPanel inventoryPanel;
-    public JLabel lblNewLabel_1;
+    public JLabel lblAllBooksHint;
     public JLabel lblNurVerfgbare;
     public JPanel statisticsPanel;
     private HideTextOnFocusListener hideTextOnFocusListener;
@@ -110,8 +110,8 @@ public class BookMasterSubView extends SubViewBase<Library, BookMasterController
         inventoryPanel.add(panel_5, BorderLayout.NORTH);
         panel_5.setLayout(new MigLayout("", "[grow][grow][][]", "[][]"));
 
-        lblNewLabel_1 = new JLabel(); // TODO rename
-        panel_5.add(lblNewLabel_1, "cell 0 0");
+        lblAllBooksHint = new JLabel();
+        panel_5.add(lblAllBooksHint, "cell 0 0");
 
         txtFieldSearch = new JTextField();
         txtFieldSearch.setName(NAME_SEARCH_FIELD);
@@ -184,7 +184,7 @@ public class BookMasterSubView extends SubViewBase<Library, BookMasterController
         lblAnzahlExemplare.setText(Texts.get("BookMasterMainView.lblAnzahlExemplare.text"));
         lblLasd.setText(Texts.get("BookMasterMainView.lblLasd.text"));
         btnNewBook.setText(Texts.get("BookMasterMainView.btnNewBook.text"));
-        lblNewLabel_1.setText(Texts.get("BookMasterMainView.lblNewLabel_1.text"));
+        lblAllBooksHint.setText(Texts.get("BookMasterMainView.allBooksHint.text"));
         btnOpenBook.setText(Texts.get("BookMasterMainView.btnOpenBook.text"));
         searchDefaultText = Texts.get("BookMasterMainView.searchDefault");
         txtFieldSearch.setText(searchDefaultText);
@@ -310,9 +310,7 @@ public class BookMasterSubView extends SubViewBase<Library, BookMasterController
 
     @Override
     public void update(Observable observable, Object arg1) {
-        // TODO remove instanceof
         if (observable instanceof BooksPMod) {
-            // TODO why is it called twice?
             logger.debug("Updating statistics");
             updateStatistics();
         } else {
