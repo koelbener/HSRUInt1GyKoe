@@ -28,14 +28,21 @@ public class BookDetailController extends ControllerBase {
         List<Copy> existingCopies = new ArrayList<Copy>(getRepository().getLibrary().getCopiesOfBook(existingBook));
         for (Copy copy : newCopies) {
             if (newlyAdded(copy)) {
+                logger.debug("Adding copy \"{}\"", copy);
                 copy.setTitle(existingBook);
                 getRepository().getLibrary().addCopy(copy);
             } else {
-                existingCopies.remove(copy);
+                if (existingCopies.remove(copy)) {
+                    logger.debug("Updating copy \"{}\"", copy);
+                    // the copy has not been removed
+                    Copy copyToPersist = getRepository().getLibrary().getCopyByInventoryNr(copy.getInventoryNumber());
+                    copyToPersist.updateFrom(copy);
+                }
             }
         }
         // delete all copies which are not in the list anymore
         for (Copy copy : existingCopies) {
+            logger.debug("Removing copy \"{}\"", copy);
             getRepository().getLibrary().removeCopy(copy);
         }
 

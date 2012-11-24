@@ -44,4 +44,9 @@ public class CopyListModel extends AbstractListModel<Copy> {
         return copyList;
     }
 
+    public void updateCopy(Copy copy) {
+        int index = copyList.indexOf(copy);
+        fireContentsChanged(this, index, index);
+    }
+
 }

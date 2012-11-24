@@ -23,8 +23,8 @@ public abstract class ViewBase<R, T extends ControllerBase, S extends Component>
         initModel();
         initUIElements();
         setTexts();
-        initListeners();
         controller = initController();
+        initListeners();
 
         Texts.getInstance().addObserver(this);
     }

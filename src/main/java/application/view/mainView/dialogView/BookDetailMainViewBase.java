@@ -25,6 +25,7 @@ import application.core.LibraryActionListener;
 import application.core.Repository;
 import application.core.Texts;
 import application.view.helper.CopiesListCellRenderer;
+import application.view.helper.CopiesListContextMenuListener;
 import application.viewModel.CopyListModel;
 
 import com.jgoodies.validation.ValidationResult;
@@ -85,7 +86,7 @@ public abstract class BookDetailMainViewBase extends DialogViewBase<Book, BookDe
         if (referenceObject != null) {
             copiesOfBook = library.getCopiesOfBook(referenceObject);
         }
-        copyListModel = new CopyListModel(copiesOfBook);
+        copyListModel = new CopyListModel(Copy.cloneCopies(copiesOfBook));
     }
 
     private void updateViewValues() {
@@ -288,8 +289,7 @@ public abstract class BookDetailMainViewBase extends DialogViewBase<Book, BookDe
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                copyListModel.addCopy(new Copy(null));
-
+                copyListModel.addCopy(new Copy());
             }
         });
         btnEntfernen.addActionListener(new ActionListener() {
@@ -308,6 +308,8 @@ public abstract class BookDetailMainViewBase extends DialogViewBase<Book, BookDe
                 btnEntfernen.setEnabled(selectedCopies > 0 && getController().areCopiesDeletable(copiesList.getSelectedValuesList()));
             }
         });
+
+        copiesList.addMouseListener(new CopiesListContextMenuListener(copiesList, copyListModel, getController()));
     }
 
     protected boolean validateBook() {

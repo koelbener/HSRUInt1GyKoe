@@ -10,6 +10,7 @@ import javax.swing.ListCellRenderer;
 
 import application.core.Repository;
 import application.core.Texts;
+import application.util.IconUtil;
 import domain.Copy;
 import domain.Library;
 import domain.Loan;
@@ -30,7 +31,7 @@ public class CopiesListCellRenderer extends JLabel implements ListCellRenderer<C
 
         StringBuilder sb = new StringBuilder();
         sb.append(copy.getInventoryNumber()).append(" - ");
-        sb.append(copy.getCondition()).append(" - ");
+        sb.append(Texts.get(copy.getCondition().getKey())).append(" - ");
 
         if (library.isCopyLent(copy)) {
             sb.append(Texts.get("BookDetailMainView.copyList.unavailable")).append(" ");
@@ -46,6 +47,9 @@ public class CopiesListCellRenderer extends JLabel implements ListCellRenderer<C
         } else {
             setBackground(Color.WHITE);
         }
+
+        setIcon(IconUtil.loadIcon(copy.getCondition().getIcon()));
+
         return this;
     }
 }
