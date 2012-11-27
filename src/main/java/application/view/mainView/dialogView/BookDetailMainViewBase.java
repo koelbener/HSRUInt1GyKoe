@@ -24,6 +24,7 @@ import application.controller.BookDetailController;
 import application.core.LibraryActionListener;
 import application.core.Repository;
 import application.core.Texts;
+import application.util.IconUtil;
 import application.view.helper.CopiesListCellRenderer;
 import application.view.helper.CopiesListContextMenuListener;
 import application.viewModel.CopyListModel;
@@ -53,22 +54,21 @@ public abstract class BookDetailMainViewBase extends DialogViewBase<Book, BookDe
     protected JTextField txtFieldTitle;
     protected JTextField txtFieldAuthor;
     protected JTextField txtFieldPublisher;
+    protected JTextField valNrOfCopies;
     protected JComboBox<Shelf> comboBoxShelf;
-    protected JTextField tfNumberOfCopies;
-    protected CopyListModel copyListModel;
-
     private JButton btnSave;
     private JButton btnCancel;
-    private JButton btnHinzufgen;
-    private JButton btnEntfernen;
-    private JList<Copy> copiesList;
+    private JButton btnAdd;
+    private JButton btnRemove;
     private JPanel panel;
-    private JLabel lblTitel;
-    private JLabel lblAutor;
-    private JLabel lblVerlag;
+    private JLabel lblTitle;
+    private JLabel lblAuthor;
+    private JLabel lblPublisher;
     private JLabel lblShelf;
     private JPanel panel_1;
-    private JLabel lblAnzahl;
+    private JLabel lblNrOfCopies;
+    private JList<Copy> copiesList;
+    protected CopyListModel copyListModel;
     protected ValidationResultModel validationModel;
     protected JComponent validationResultList;
     protected JPanel validationPanel;
@@ -100,10 +100,10 @@ public abstract class BookDetailMainViewBase extends DialogViewBase<Book, BookDe
             txtFieldPublisher.setText(referenceObject.getPublisher());
             // select the correct shelf
             comboBoxShelf.setSelectedItem(referenceObject.getShelf());
-            tfNumberOfCopies.setText(String.valueOf(copyListModel.getSize()));
         } else {
             comboBoxShelf.setSelectedItem(Shelf.A1);
         }
+        updateCopiesCount();
     }
 
     private Book extractViewValues(Book book) {
@@ -127,13 +127,13 @@ public abstract class BookDetailMainViewBase extends DialogViewBase<Book, BookDe
         panel_1.setBorder(new TitledBorder(null, Texts.get("BookDetailMainView.panel_1.borderTitle"), TitledBorder.LEADING, TitledBorder.TOP, null, null)); //$NON-NLS-1$
 
         // components
-        lblTitel.setText(Texts.get("BookDetailMainView.lblTitel.text"));
-        lblAutor.setText(Texts.get("BookDetailMainView.lblAutor.text"));
-        lblVerlag.setText(Texts.get("BookDetailMainView.lblVerlag.text"));
+        lblTitle.setText(Texts.get("BookDetailMainView.lblTitel.text"));
+        lblAuthor.setText(Texts.get("BookDetailMainView.lblAutor.text"));
+        lblPublisher.setText(Texts.get("BookDetailMainView.lblVerlag.text"));
         lblShelf.setText(Texts.get("BookDetailMainView.lblRegal.text"));
-        lblAnzahl.setText(Texts.get("BookDetailMainView.lblAnzahl.text"));
-        btnEntfernen.setText(Texts.get("BookDetailMainView.btnEntfernen.text"));
-        btnHinzufgen.setText(Texts.get("BookDetailMainView.btnHinzufgen.text"));
+        lblNrOfCopies.setText(Texts.get("BookDetailMainView.lblAnzahl.text"));
+        btnRemove.setText(Texts.get("BookDetailMainView.btnEntfernen.text"));
+        btnAdd.setText(Texts.get("BookDetailMainView.btnHinzufgen.text"));
         btnSave.setText(Texts.get("BookDetailMainView.btnSave.text"));
         btnCancel.setText(Texts.get("BookDetailMainView.btnCancel.text"));
     }
@@ -156,24 +156,24 @@ public abstract class BookDetailMainViewBase extends DialogViewBase<Book, BookDe
         panel_4.add(panel, BorderLayout.NORTH);
         panel.setLayout(new MigLayout("", "[][grow]", "[][][][]"));
 
-        lblTitel = new JLabel();
-        panel.add(lblTitel, "cell 0 0,alignx trailing");
+        lblTitle = new JLabel();
+        panel.add(lblTitle, "cell 0 0,alignx trailing");
 
         txtFieldTitle = new JTextField();
         panel.add(txtFieldTitle, "cell 1 0,growx");
         txtFieldTitle.setColumns(10);
         txtFieldTitle.setName(NAME_TEXTBOX_TITLE);
 
-        lblAutor = new JLabel();
-        panel.add(lblAutor, "cell 0 1,alignx trailing");
+        lblAuthor = new JLabel();
+        panel.add(lblAuthor, "cell 0 1,alignx trailing");
 
         txtFieldAuthor = new JTextField();
         txtFieldAuthor.setName(NAME_TEXTBOX_AUTHOR);
         panel.add(txtFieldAuthor, "cell 1 1,growx");
         txtFieldAuthor.setColumns(10);
 
-        lblVerlag = new JLabel();
-        panel.add(lblVerlag, "cell 0 2,alignx trailing");
+        lblPublisher = new JLabel();
+        panel.add(lblPublisher, "cell 0 2,alignx trailing");
 
         txtFieldPublisher = new JTextField();
         txtFieldPublisher.setName(NAME_TEXTBOX_PUBLISHER);
@@ -195,22 +195,24 @@ public abstract class BookDetailMainViewBase extends DialogViewBase<Book, BookDe
         panel_1.add(panel_2, BorderLayout.NORTH);
         panel_2.setLayout(new MigLayout("", "[][grow][][]", "[]"));
 
-        lblAnzahl = new JLabel();
-        panel_2.add(lblAnzahl, "cell 0 0,alignx trailing");
+        lblNrOfCopies = new JLabel();
+        panel_2.add(lblNrOfCopies, "cell 0 0,alignx trailing");
 
-        tfNumberOfCopies = new JTextField();
-        tfNumberOfCopies.setEnabled(false);
-        panel_2.add(tfNumberOfCopies, "flowx,cell 1 0");
-        tfNumberOfCopies.setColumns(10);
+        valNrOfCopies = new JTextField();
+        valNrOfCopies.setEnabled(false);
+        panel_2.add(valNrOfCopies, "flowx,cell 1 0");
+        valNrOfCopies.setColumns(10);
 
-        btnEntfernen = new JButton();
-        btnEntfernen.setName(NAME_BUTTON_DELETE_COPY);
-        btnEntfernen.setEnabled(false);
-        panel_2.add(btnEntfernen, "cell 2 0");
+        btnAdd = new JButton();
+        btnAdd.setName(NAME_BUTTON_ADD_COPY);
+        btnAdd.setIcon(IconUtil.loadIcon("add.gif"));
+        panel_2.add(btnAdd, "cell 2 0");
 
-        btnHinzufgen = new JButton();
-        btnHinzufgen.setName(NAME_BUTTON_ADD_COPY);
-        panel_2.add(btnHinzufgen, "cell 3 0");
+        btnRemove = new JButton();
+        btnRemove.setName(NAME_BUTTON_DELETE_COPY);
+        btnRemove.setEnabled(false);
+        btnRemove.setIcon(IconUtil.loadIcon("delete.gif"));
+        panel_2.add(btnRemove, "cell 3 0");
 
         JPanel panel_3 = new JPanel();
         panel_1.add(panel_3, BorderLayout.CENTER);
@@ -285,19 +287,22 @@ public abstract class BookDetailMainViewBase extends DialogViewBase<Book, BookDe
             }
         });
 
-        btnHinzufgen.addActionListener(new ActionListener() {
+        btnAdd.addActionListener(new ActionListener() {
 
             @Override
             public void actionPerformed(ActionEvent e) {
                 copyListModel.addCopy(new Copy());
+                updateCopiesCount();
             }
+
         });
-        btnEntfernen.addActionListener(new ActionListener() {
+        btnRemove.addActionListener(new ActionListener() {
 
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (copyListModel.removeCopy(copiesList.getSelectedValuesList()))
-                    btnEntfernen.setEnabled(false);
+                    btnRemove.setEnabled(false);
+                updateCopiesCount();
             }
         });
         copiesList.addListSelectionListener(new ListSelectionListener() {
@@ -305,7 +310,7 @@ public abstract class BookDetailMainViewBase extends DialogViewBase<Book, BookDe
             @Override
             public void valueChanged(ListSelectionEvent e) {
                 int selectedCopies = copiesList.getSelectedIndices().length;
-                btnEntfernen.setEnabled(selectedCopies > 0 && getController().areCopiesDeletable(copiesList.getSelectedValuesList()));
+                btnRemove.setEnabled(selectedCopies > 0 && getController().areCopiesDeletable(copiesList.getSelectedValuesList()));
             }
         });
 
@@ -320,4 +325,7 @@ public abstract class BookDetailMainViewBase extends DialogViewBase<Book, BookDe
         return !validation.hasErrors();
     }
 
+    private void updateCopiesCount() {
+        valNrOfCopies.setText("" + copyListModel.getSize());
+    }
 }
