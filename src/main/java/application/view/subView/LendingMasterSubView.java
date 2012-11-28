@@ -159,6 +159,7 @@ public class LendingMasterSubView extends SubViewBase<Library, LendingMasterCont
 
         // Tooltips
         btnNew.setToolTipText(Texts.get("LendingMasterMainView.btnNew.toolTipText"));
+        txtSearch.setToolTipText(Texts.get("LendingMasterMainView.searchToolTip"));
 
         // table
         loansPMod.getLoanTableModel().setColumns();

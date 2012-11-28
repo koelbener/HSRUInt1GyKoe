@@ -74,11 +74,11 @@ public class LoansPMod extends pModBase {
         return library.getOverdueLoans().size();
     }
 
-    private class LoanRowFilter extends RowFilter<Object, Object> {
+    private class LoanRowStatusFilter extends RowFilter<Object, Object> {
 
         private final FilterOption option;
 
-        public LoanRowFilter(FilterOption option) {
+        public LoanRowStatusFilter(FilterOption option) {
             Preconditions.checkNotNull(option);
             this.option = option;
         }
@@ -104,6 +104,40 @@ public class LoansPMod extends pModBase {
 
     }
 
+    private class LoanRowSearchFilter extends RowFilter<Object, Object> {
+
+        private final String searchString;
+
+        public LoanRowSearchFilter(String searchString) {
+            Preconditions.checkNotNull(searchString);
+            this.searchString = searchString;
+        }
+
+        @Override
+        public boolean include(RowFilter.Entry<? extends Object, ? extends Object> entry) {
+            boolean result = false;
+            LoanTableModel model = (LoanTableModel) entry.getModel();
+            Loan loan = model.getLoan((Integer) entry.getIdentifier());
+            for (String stringToCheck : getRelevantStrings(loan)) {
+                if (stringToCheck.indexOf(searchString) != -1) {
+                    result = true;
+                    break;
+                }
+            }
+            return result;
+        }
+
+        private List<String> getRelevantStrings(Loan loan) {
+            Preconditions.checkNotNull(loan);
+            List<String> result = new ArrayList<String>();
+            result.add(loan.getCustomer().getFullName());
+            result.add(Long.toString(loan.getCopy().getInventoryNumber()));
+            result.add(loan.getCopy().getTitle().getName());
+            return result;
+        }
+
+    }
+
     public ComboBoxModel<FilterOption> getSearchFilterModel() {
         return loanSearchFilterComboBoxModel;
     }
@@ -121,10 +155,10 @@ public class LoansPMod extends pModBase {
     private void updateFilter(FilterOption option, String searchString) {
         List<RowFilter<Object, Object>> filters = new ArrayList<RowFilter<Object, Object>>();
 
-        filters.add(new LoanRowFilter(option));
+        filters.add(new LoanRowStatusFilter(option));
 
         if (!searchString.isEmpty()) {
-            filters.add(RowFilter.regexFilter("(?i)" + searchString));
+            filters.add(new LoanRowSearchFilter(searchString));
         }
 
         loanTableRowSorter.setRowFilter(RowFilter.andFilter(filters));
