@@ -32,7 +32,7 @@ public class CustomerListRenderer extends JLabel implements ListCellRenderer<Obj
         }
 
         if (isSelected) {
-            setBackground(Color.GRAY);
+            setBackground(Color.LIGHT_GRAY);
         } else {
             setBackground(Color.WHITE);
         }

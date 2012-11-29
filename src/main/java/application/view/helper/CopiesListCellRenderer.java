@@ -43,7 +43,7 @@ public class CopiesListCellRenderer extends JLabel implements ListCellRenderer<C
         }
         setText(sb.toString());
         if (isSelected) {
-            setBackground(Color.GRAY);
+            setBackground(Color.LIGHT_GRAY);
         } else {
             setBackground(Color.WHITE);
         }
