@@ -65,7 +65,7 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
     private JLabel lblCustomer;
     private JLabel lblCondition;
     private JLabel lblCopyTitle;
-    private JLabel lblAvailabilityVal;
+    private JLabel lblAvailabilityValue;
     private JLabel lblNumberOfLoans;
     private JLabel lblConditionValue;
     private JLabel valCopyTitle;
@@ -299,8 +299,8 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
         lblConditionValue = new JLabel();
         panel_2.add(lblConditionValue, "cell 1 2,alignx left,growy");
 
-        lblAvailabilityVal = new JLabel();
-        panel_2.add(lblAvailabilityVal, "cell 1 3 2 1,alignx left,growy");
+        lblAvailabilityValue = new JLabel();
+        panel_2.add(lblAvailabilityValue, "cell 1 3 2 1,alignx left,growy");
 
         lblAvailability = new JLabel("");
         panel_2.add(lblAvailability, "cell 0 3");
@@ -318,23 +318,25 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
         if (currentSelectedCopy == null) {
             valCopyTitle.setText("");
             lblConditionValue.setText("");
-            lblAvailabilityVal.setIcon(null);
-            lblAvailabilityVal.setText("");
+            lblConditionValue.setIcon(null);
+            lblAvailabilityValue.setIcon(null);
+            lblAvailabilityValue.setText("");
         } else {
             String titleName = currentSelectedCopy.getTitle().getName();
             valCopyTitle.setText(titleName);
             // set it as title as well in case the content is too long
             valCopyTitle.setToolTipText(titleName);
             lblConditionValue.setText(currentSelectedCopy.getCondition().name());
+            lblConditionValue.setIcon(IconUtil.loadIcon(currentSelectedCopy.getCondition().getIcon()));
             // lblLoanStatus
             boolean isCopyLent = Repository.getInstance().getLibrary().isCopyLent(currentSelectedCopy);
             if (!isCopyLent) {
-                lblAvailabilityVal.setIcon(IconUtil.loadIcon("check.png"));
-                lblAvailabilityVal.setText(Texts.get("validation.copy.isLent.false"));
+                lblAvailabilityValue.setIcon(IconUtil.loadIcon("check.png"));
+                lblAvailabilityValue.setText(Texts.get("validation.copy.isLent.false"));
             } else {
                 String lender = pMod.getLender(currentSelectedCopy).getFullName();
-                lblAvailabilityVal.setText(Texts.get("validation.copy.isLent.true") + lender + ".");
-                lblAvailabilityVal.setIcon(IconUtil.loadIcon("warning.png"));
+                lblAvailabilityValue.setText(Texts.get("validation.copy.isLent.true") + lender + ".");
+                lblAvailabilityValue.setIcon(IconUtil.loadIcon("warning.png"));
                 lblLinkToLoan.setVisible(true);
             }
         }
@@ -514,13 +516,13 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
 
     private void saveLoan() {
         if (currentSelectedCopy == null) {
-            lblAvailabilityVal.setText(Texts.get("LoanDetailMainViewBase.newLoan.noInventoryNumber"));
+            lblAvailabilityValue.setText(Texts.get("LoanDetailMainViewBase.newLoan.noInventoryNumber"));
         } else {
             ValidationResult validationResult = getController().validateLoan(currentSelectedCopy, getCurrentCustomer());
             if (validationResult.hasErrors()) {
-                lblAvailabilityVal.setText(validationResult.getMessagesText());
+                lblAvailabilityValue.setText(validationResult.getMessagesText());
             } else {
-                lblAvailabilityVal.setText(Texts.get("LoanDetailMainViewBase.newLoan.loanSaved"));
+                lblAvailabilityValue.setText(Texts.get("LoanDetailMainViewBase.newLoan.loanSaved"));
 
                 getController().saveLoan(currentSelectedCopy, getCurrentCustomer());
                 txtCopyId.setText("");
