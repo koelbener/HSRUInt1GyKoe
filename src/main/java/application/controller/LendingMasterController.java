@@ -29,6 +29,7 @@ public class LendingMasterController extends ControllerBase {
 
     private void openLoanView(Loan loan) {
         boolean loanViewAlreadyOpen = false;
+        // close already opened frames
         for (Frame frame : Frame.getFrames()) {
             if (frame.getName().equals(LoanDetailMainView.class.getSimpleName())) {
                 frame.dispose();

@@ -65,7 +65,7 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
     private JLabel lblCustomer;
     private JLabel lblCondition;
     private JLabel lblCopyTitle;
-    private JLabel lblLoanStatus;
+    private JLabel lblAvailabilityVal;
     private JLabel lblNumberOfLoans;
     private JLabel lblConditionValue;
     private JLabel valCopyTitle;
@@ -78,13 +78,14 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
     private JList<Customer> listCustomer;
     private JLabel lblReturnFeedbackLabel;
     private Copy currentSelectedCopy;
+    private JButton lblLinkToLoan;
 
     private HideTextOnFocusListener hideTextOnFocusListener;
 
     private static final Logger logger = LoggerFactory.getLogger(LoanDetailMainView.class);
-    private JLabel lblLinkToLoan;
 
     private LoansPMod pMod;
+    private JLabel lblAvailability;
 
     public LoanDetailMainView(Loan loan) {
         super(loan, "loan.gif");
@@ -96,6 +97,7 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
         updateLoanOverViewSection();
         if (reloadAll) {
             updateCustomerSelectionSection();
+            clearNewLoanSection();
         }
     }
 
@@ -139,7 +141,9 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
         lblSearch.setText(Texts.get("LoanDetailMainViewBase.customerSelection.searchLabel"));
         lblCondition.setText(Texts.get("LoanDetailMainViewBase.newLoan.copyCondition"));
         btnReturnButton.setText(Texts.get("LoanDetailMainViewBase.loansOverview.returnButton"));
+        lblLinkToLoan.setText(Texts.get("LoanDetailMainViewBase.newLoan.VisitLoan"));
         lblReturnFeedbackLabel.setText("");
+        lblAvailability.setText(Texts.get("LoanDetailMainViewBase.newLoan.availability"));
     }
 
     /**
@@ -263,7 +267,7 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
     private void createNewLoanSection(JPanel panel_4) {
         panel_2 = new JPanel();
         panel_4.add(panel_2, "cell 0 1,growx,aligny top");
-        panel_2.setLayout(new MigLayout("", "[][][][]", "[][][][][]"));
+        panel_2.setLayout(new MigLayout("", "[][][][]", "[][][][][][][]"));
 
         lblCopyId = new JLabel();
         panel_2.add(lblCopyId, "cell 0 0,grow");
@@ -272,11 +276,11 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
         txtCopyId.setMaximumSize(new Dimension(40, 20));
         txtCopyId.setPreferredSize(new Dimension(40, 20));
         txtCopyId.setMinimumSize(new Dimension(40, 20));
-        panel_2.add(txtCopyId, "cell 1 0,grow");
+        panel_2.add(txtCopyId, "cell 1 0,alignx left,growy");
         txtCopyId.setColumns(10);
 
         btnCreateLoan = new JButton();
-        panel_2.add(btnCreateLoan, "cell 2 0,grow");
+        panel_2.add(btnCreateLoan, "cell 2 0,alignx left,growy");
 
         lblCopyTitle = new JLabel();
         panel_2.add(lblCopyTitle, "cell 0 1,grow");
@@ -285,27 +289,37 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
         // lblCopyDescription.setMaximumSize(new Dimension(250, 20));
         panel_2.add(valCopyTitle, "cell 1 1 3,alignx left,growy");
 
+        lblLinkToLoan = new JButton("");
+        lblLinkToLoan.setVisible(false);
+        panel_2.add(lblLinkToLoan, "cell 3 3,alignx left");
+
         lblCondition = new JLabel();
         panel_2.add(lblCondition, "cell 0 2,alignx left,growy");
 
         lblConditionValue = new JLabel();
         panel_2.add(lblConditionValue, "cell 1 2,alignx left,growy");
 
-        lblLoanStatus = new JLabel();
-        panel_2.add(lblLoanStatus, "cell 2 2,alignx left,growy");
+        lblAvailabilityVal = new JLabel();
+        panel_2.add(lblAvailabilityVal, "cell 1 3 2 1,alignx left,growy");
 
-        lblLinkToLoan = new JLabel("");
-        panel_2.add(lblLinkToLoan, "cell 3 3");
+        lblAvailability = new JLabel("");
+        panel_2.add(lblAvailability, "cell 0 3");
+    }
+
+    private void clearNewLoanSection() {
+        txtCopyId.setText("");
+        currentSelectedCopy = null;
+        updateNewLoanSection();
     }
 
     private void updateNewLoanSection() {
 
+        lblLinkToLoan.setVisible(false);
         if (currentSelectedCopy == null) {
             valCopyTitle.setText("");
             lblConditionValue.setText("");
-            lblLoanStatus.setIcon(null);
-            lblLoanStatus.setText("");
-            lblLinkToLoan.setText("");
+            lblAvailabilityVal.setIcon(null);
+            lblAvailabilityVal.setText("");
         } else {
             String titleName = currentSelectedCopy.getTitle().getName();
             valCopyTitle.setText(titleName);
@@ -315,14 +329,13 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
             // lblLoanStatus
             boolean isCopyLent = Repository.getInstance().getLibrary().isCopyLent(currentSelectedCopy);
             if (!isCopyLent) {
-                lblLoanStatus.setIcon(IconUtil.loadIcon("check.png"));
-                lblLoanStatus.setText(Texts.get("validation.copy.isLent.false"));
-                lblLinkToLoan.setText("");
+                lblAvailabilityVal.setIcon(IconUtil.loadIcon("check.png"));
+                lblAvailabilityVal.setText(Texts.get("validation.copy.isLent.false"));
             } else {
                 String lender = pMod.getLender(currentSelectedCopy).getFullName();
-                lblLoanStatus.setText(Texts.get("validation.copy.isLent.true") + lender + ".");
-                lblLoanStatus.setIcon(IconUtil.loadIcon("warning.png"));
-                lblLinkToLoan.setText("Ansehen");
+                lblAvailabilityVal.setText(Texts.get("validation.copy.isLent.true") + lender + ".");
+                lblAvailabilityVal.setIcon(IconUtil.loadIcon("warning.png"));
+                lblLinkToLoan.setVisible(true);
             }
         }
 
@@ -354,7 +367,7 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
                 lblReturnFeedbackLabel.setText("");
             }
         });
-        
+
         btnReturnButton.addActionListener(new ActionListener() {
 
             @Override
@@ -482,10 +495,9 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
             }
         });
 
-        lblLinkToLoan.addMouseListener(new MouseAdapter() {
-
+        lblLinkToLoan.addActionListener(new ActionListener() {
             @Override
-            public void mouseClicked(MouseEvent arg0) {
+            public void actionPerformed(ActionEvent arg0) {
                 if (pMod.isCopyLent(currentSelectedCopy)) {
                     switchToLoan(pMod.getCurrentLoan(currentSelectedCopy), true);
                 }
@@ -502,13 +514,13 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
 
     private void saveLoan() {
         if (currentSelectedCopy == null) {
-            lblLoanStatus.setText(Texts.get("LoanDetailMainViewBase.newLoan.noInventoryNumber"));
+            lblAvailabilityVal.setText(Texts.get("LoanDetailMainViewBase.newLoan.noInventoryNumber"));
         } else {
             ValidationResult validationResult = getController().validateLoan(currentSelectedCopy, getCurrentCustomer());
             if (validationResult.hasErrors()) {
-                lblLoanStatus.setText(validationResult.getMessagesText());
+                lblAvailabilityVal.setText(validationResult.getMessagesText());
             } else {
-                lblLoanStatus.setText(Texts.get("LoanDetailMainViewBase.newLoan.loanSaved"));
+                lblAvailabilityVal.setText(Texts.get("LoanDetailMainViewBase.newLoan.loanSaved"));
 
                 getController().saveLoan(currentSelectedCopy, getCurrentCustomer());
                 txtCopyId.setText("");
