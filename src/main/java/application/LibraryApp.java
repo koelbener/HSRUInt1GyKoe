@@ -12,6 +12,7 @@ import application.core.Repository;
 import application.data.DataLoder;
 import application.data.XmlDataLoader;
 import application.presentationModel.BooksPMod;
+import application.presentationModel.CopyPMod;
 import application.presentationModel.CustomerPMod;
 import application.presentationModel.LoansPMod;
 import application.presentationModel.ShelfPMod;
@@ -71,6 +72,7 @@ public class LibraryApp {
         Repository.getInstance().setShelfPMod(new ShelfPMod());
         Repository.getInstance().setLoansPMod(new LoansPMod());
         Repository.getInstance().setCustomerPMod(new CustomerPMod());
+        Repository.getInstance().setCopyPMod(new CopyPMod());
     }
 
 }

@@ -1,6 +1,7 @@
 package application.core;
 
 import application.presentationModel.BooksPMod;
+import application.presentationModel.CopyPMod;
 import application.presentationModel.CustomerPMod;
 import application.presentationModel.LoansPMod;
 import application.presentationModel.ShelfPMod;
@@ -17,6 +18,7 @@ public class Repository {
     private BooksPMod booksPMod;
     private ShelfPMod shelfPMod;
     private LoansPMod loansPMod;
+    private CopyPMod copyPMod;
 
     private CustomerPMod cutomerPMod;
 
@@ -68,6 +70,14 @@ public class Repository {
 
     public CustomerPMod getCustomerPMod() {
         return cutomerPMod;
+    }
+
+    public void setCopyPMod(CopyPMod copyPMod) {
+        this.copyPMod = copyPMod;
+    }
+
+    public CopyPMod getCopyPMod() {
+        return copyPMod;
     }
 
 }

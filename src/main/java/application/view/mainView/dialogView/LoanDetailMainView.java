@@ -38,6 +38,7 @@ import org.slf4j.LoggerFactory;
 import application.controller.LoanDetailController;
 import application.core.Repository;
 import application.core.Texts;
+import application.presentationModel.CopyPMod;
 import application.presentationModel.LoansPMod;
 import application.presentationModel.componentModel.LoanDetailTableModel;
 import application.util.IconUtil;
@@ -81,15 +82,16 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
     private JLabel lblReturnFeedbackLabel;
     private Copy currentSelectedCopy;
     private JButton lblLinkToLoan;
+    private JLabel lblAvailability;
+    private JLabel lblCopyStatus;
+    private JComboBox<Condition> statusComboBox;
 
     private HideTextOnFocusListener hideTextOnFocusListener;
 
     private static final Logger logger = LoggerFactory.getLogger(LoanDetailMainView.class);
 
     private LoansPMod pMod;
-    private JLabel lblAvailability;
-    private JLabel lblCopyStatus;
-    private JComboBox<Condition> statusComboBox;
+    private CopyPMod copyPMod;
 
     public LoanDetailMainView(Loan loan) {
         super(loan, "loan.gif");
@@ -110,6 +112,7 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
     protected void initModel() {
         super.initModel();
         pMod = Repository.getInstance().getLoansPMod();
+        copyPMod = Repository.getInstance().getCopyPMod();
         SwingUtilities.invokeLater(new Runnable() {
 
             @Override
@@ -241,7 +244,7 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
         panel_5.add(btnReturnButton, "cell 2 0");
         btnReturnButton.setEnabled(false);
 
-        statusComboBox = new JComboBox<Condition>(pMod.getCopyStatusModel());
+        statusComboBox = new JComboBox<Condition>(copyPMod.getCopyStatusModel());
         panel_5.add(statusComboBox, "cell 1 0");
 
         lblReturnFeedbackLabel = new JLabel();
@@ -353,7 +356,7 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
                     lblAvailabilityValue.setIcon(IconUtil.loadIcon("check.png"));
                     lblAvailabilityValue.setText(Texts.get("validation.copy.isLent.false"));
                 } else {
-                    String lender = pMod.getLender(currentSelectedCopy).getFullName();
+                    String lender = copyPMod.getLender(currentSelectedCopy).getFullName();
                     lblAvailabilityValue.setText(Texts.get("validation.copy.isLent.true") + lender + ".");
                     lblAvailabilityValue.setIcon(IconUtil.loadIcon("warning.png"));
                     lblLinkToLoan.setVisible(true);
@@ -397,7 +400,7 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
             public void valueChanged(ListSelectionEvent arg0) {
                 Long copyId = pMod.getLoanDetailTableModel().getCopyOfRow(tblLoans.getSelectedRow());
                 if (copyId != null) {
-                    Copy copy = pMod.searchCopy(copyId);
+                    Copy copy = copyPMod.searchCopy(copyId);
                     statusComboBox.setSelectedItem(copy.getCondition());
                 }
             }
@@ -532,7 +535,7 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
 
             private void searchCopy(Long copyId) {
                 if (copyId != null) {
-                    currentSelectedCopy = pMod.searchCopy(copyId);
+                    currentSelectedCopy = copyPMod.searchCopy(copyId);
                     updateNewLoanSection();
                     updateMakeLoanButtonVisibility();
                 }
@@ -542,8 +545,8 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
         lblLinkToLoan.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent arg0) {
-                if (pMod.isCopyLent(currentSelectedCopy)) {
-                    switchToLoan(pMod.getCurrentLoan(currentSelectedCopy), true);
+                if (copyPMod.isCopyLent(currentSelectedCopy)) {
+                    switchToLoan(copyPMod.getCurrentLoan(currentSelectedCopy), true);
                 }
             }
         });

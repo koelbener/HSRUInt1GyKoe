@@ -8,15 +8,13 @@ import javax.swing.RowFilter;
 import javax.swing.table.TableRowSorter;
 
 import application.core.Repository;
-import application.presentationModel.componentModel.CopyStatusComboBoxModel;
 import application.presentationModel.componentModel.LoanDetailTableModel;
 import application.presentationModel.componentModel.LoanSearchFilterComboBoxModel;
-import application.presentationModel.componentModel.LoanTableModel;
 import application.presentationModel.componentModel.LoanSearchFilterComboBoxModel.FilterOption;
+import application.presentationModel.componentModel.LoanTableModel;
 
 import com.google.common.base.Preconditions;
 
-import domain.Copy;
 import domain.Customer;
 import domain.Library;
 import domain.Loan;
@@ -25,7 +23,6 @@ public class LoansPMod extends pModBase {
     private final LoanTableModel loanTableModel;
     private final TableRowSorter<LoanTableModel> loanTableRowSorter;
     private final LoanDetailTableModel loanDetailTableModel;
-    private final CopyStatusComboBoxModel copyStatusModel;
     private final Library library;
     private final LoanSearchFilterComboBoxModel loanSearchFilterComboBoxModel;
     private String searchString = "";
@@ -37,12 +34,7 @@ public class LoansPMod extends pModBase {
         loanTableRowSorter = new TableRowSorter<LoanTableModel>(loanTableModel);
         loanDetailTableModel = new LoanDetailTableModel(null);
         loanSearchFilterComboBoxModel = new LoanSearchFilterComboBoxModel(searchOption);
-        copyStatusModel = new CopyStatusComboBoxModel();
         updateFilter(searchOption, searchString);
-    }
-
-    public CopyStatusComboBoxModel getCopyStatusModel() {
-        return copyStatusModel;
     }
 
     public LoanDetailTableModel getLoanDetailTableModel() {
@@ -55,10 +47,6 @@ public class LoansPMod extends pModBase {
 
     public TableRowSorter<LoanTableModel> getLoanTableRowSorter() {
         return loanTableRowSorter;
-    }
-
-    public Copy searchCopy(Long copyId) {
-        return library.getCopyByInventoryNr(copyId);
     }
 
     public void addLoan(Loan loan) {
@@ -85,18 +73,6 @@ public class LoansPMod extends pModBase {
 
     public int getOverdueLoansCount() {
         return library.getOverdueLoans().size();
-    }
-
-    public boolean isCopyLent(Copy copy) {
-        return library.isCopyLent(copy);
-    }
-
-    public Customer getLender(Copy copy) {
-        return library.getLender(copy);
-    }
-
-    public Loan getCurrentLoan(Copy copy) {
-        return library.getCurrentLoan(copy);
     }
 
     public Loan getFirstLoanOfCustomer(Customer customer) {
