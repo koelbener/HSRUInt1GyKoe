@@ -1,22 +1,22 @@
 package application.presentationModel;
 
-import application.viewModel.CustomerComboBoxModel;
+import application.viewModel.CustomerListModel;
 import domain.Customer;
 
 public class CustomerPMod extends pModBase {
 
-    private CustomerComboBoxModel customerComboBoxModel = new CustomerComboBoxModel();
+    private CustomerListModel customerListModel = new CustomerListModel();
 
-    public CustomerComboBoxModel getCustomerComboBoxModel() {
-        return customerComboBoxModel;
+    public CustomerListModel getCustomerListModel() {
+        return customerListModel;
     }
 
-    public void setCustomerComboBoxModel(CustomerComboBoxModel customerComboBoxModel) {
-        this.customerComboBoxModel = customerComboBoxModel;
+    public void setCustomerListModel(CustomerListModel customerListModel) {
+        this.customerListModel = customerListModel;
     }
 
     public void updateCustomer(Customer customer) {
-        customerComboBoxModel.updateCustomer(customer);
+        customerListModel.updateCustomer(customer);
     }
 
 }

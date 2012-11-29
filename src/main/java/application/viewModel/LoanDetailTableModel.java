@@ -40,6 +40,10 @@ public class LoanDetailTableModel extends AbstractTableModel {
         return loans.size();
     }
 
+    public int getRowIndex(Loan loan) {
+        return loans.indexOf(loan);
+    }
+
     @Override
     public int getColumnCount() {
         return 4;

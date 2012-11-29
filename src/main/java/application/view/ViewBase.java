@@ -14,7 +14,7 @@ public abstract class ViewBase<R, T extends ControllerBase, S extends Component>
     protected T controller;
     protected S container;
     protected Library library;
-    private final R referenceObject;
+    private R referenceObject;
 
     public ViewBase(R referenceObject) {
         container = initContainer();
@@ -54,6 +54,10 @@ public abstract class ViewBase<R, T extends ControllerBase, S extends Component>
 
     protected R getReferenceObject() {
         return referenceObject;
+    }
+
+    protected void setReferenceObject(R referenceObject) {
+        this.referenceObject = referenceObject;
     }
 
     protected boolean isNewEntity() {

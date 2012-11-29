@@ -16,17 +16,12 @@ import domain.Loan;
 public class LoanDetailController extends ControllerBase {
 
     public void filterCustomers(String text) {
-        getRepository().getCustomerPMod().getCustomerComboBoxModel().filterContent(text);
+        getRepository().getCustomerPMod().getCustomerListModel().filterContent(text);
     }
 
-    public ValidationResult validateLoan(Long copyNr, Customer customer) {
+    public ValidationResult validateLoan(Copy copy, Customer customer) {
         ValidationResult result = new ValidationResult();
         Library library = getRepository().getLibrary();
-
-        Copy copy = null;
-        if (copyNr != null) {
-            copy = library.getCopyByInventoryNr(copyNr);
-        }
 
         if (copy == null) {
             result.addError(Texts.get("validation.noCopyFound"));
@@ -42,8 +37,7 @@ public class LoanDetailController extends ControllerBase {
 
     }
 
-    public Loan saveLoan(Long copyId, Customer customer) {
-        Copy copy = getRepository().getLibrary().getCopyByInventoryNr(copyId);
+    public Loan saveLoan(Copy copy, Customer customer) {
         Loan loan = getRepository().getLibrary().createAndAddLoan(customer, copy);
         getRepository().getLoansPMod().addLoan(loan);
         return loan;

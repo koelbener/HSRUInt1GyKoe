@@ -15,6 +15,8 @@ import application.viewModel.LoanTableModel;
 
 import com.google.common.base.Preconditions;
 
+import domain.Copy;
+import domain.Customer;
 import domain.Library;
 import domain.Loan;
 
@@ -72,6 +74,30 @@ public class LoansPMod extends pModBase {
 
     public int getOverdueLoansCount() {
         return library.getOverdueLoans().size();
+    }
+
+    public boolean isCopyLent(Copy copy) {
+        return library.isCopyLent(copy);
+    }
+
+    public Customer getLender(Copy copy) {
+        return library.getLender(copy);
+    }
+
+    public Loan getCurrentLoan(Copy copy) {
+        return library.getCurrentLoan(copy);
+    }
+
+    public Loan getFirstLoanOfCustomer(Customer customer) {
+        Loan result;
+        List<Loan> loans = library.getCustomerOpenLoans(customer);
+        if (!loans.isEmpty()) {
+            result = loans.get(0);
+        } else {
+            result = null;
+        }
+        return result;
+
     }
 
     private class LoanRowStatusFilter extends RowFilter<Object, Object> {

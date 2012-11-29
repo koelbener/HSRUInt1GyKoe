@@ -10,13 +10,14 @@ import javax.swing.AbstractListModel;
 import application.core.Repository;
 import domain.Customer;
 
-public class CustomerComboBoxModel extends AbstractListModel<Customer> {
+public class CustomerListModel extends AbstractListModel<Customer> {
 
     private static final long serialVersionUID = -3087379838481895619L;
     List<Customer> customers;
+    String currentFilter = "";
     int selectedElement;
 
-    public CustomerComboBoxModel() {
+    public CustomerListModel() {
         initContents();
         selectedElement = 0;
     }
@@ -58,15 +59,17 @@ public class CustomerComboBoxModel extends AbstractListModel<Customer> {
     }
 
     public void filterContent(String filter) {
-
-        List<Customer> allCustomers = Repository.getInstance().getLibrary().getCustomers();
-        List<Customer> filtredCustomers = new ArrayList<Customer>();
-        for (Customer customer : allCustomers) {
-            if (customer.toString().toLowerCase().indexOf(filter.toLowerCase()) != -1) {
-                filtredCustomers.add(customer);
+        if (!currentFilter.equals(filter)) {
+            List<Customer> allCustomers = Repository.getInstance().getLibrary().getCustomers();
+            List<Customer> filtredCustomers = new ArrayList<Customer>();
+            for (Customer customer : allCustomers) {
+                if (customer.toString().toLowerCase().indexOf(filter.toLowerCase()) != -1) {
+                    filtredCustomers.add(customer);
+                }
             }
+            setCustomers(filtredCustomers);
+            currentFilter = filter;
         }
-        setCustomers(filtredCustomers);
     }
 
     public void updateCustomer(Customer customer) {
