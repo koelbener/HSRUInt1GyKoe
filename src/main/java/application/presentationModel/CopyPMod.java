@@ -1,19 +1,19 @@
 package application.presentationModel;
 
-import application.core.Repository;
+import java.util.List;
+
 import application.presentationModel.componentModel.CopyStatusComboBoxModel;
 import domain.Copy;
+import domain.Copy.Condition;
 import domain.Customer;
-import domain.Library;
 import domain.Loan;
 
 public class CopyPMod extends pModBase {
 
-    private final Library library;
     private final CopyStatusComboBoxModel copyStatusModel;
 
     public CopyPMod() {
-        library = Repository.getInstance().getLibrary();
+        super();
         copyStatusModel = new CopyStatusComboBoxModel();
     }
 
@@ -35,5 +35,38 @@ public class CopyPMod extends pModBase {
 
     public Loan getCurrentLoan(Copy copy) {
         return library.getCurrentLoan(copy);
+    }
+
+    public void changeCondition(Copy copy, Condition condition) {
+        if (copy != null && condition != null) {
+            copy.setCondition(condition);
+        }
+        setChanged();
+        notifyObservers();
+    }
+
+    public boolean areCopiesDeletable(List<Copy> copies) {
+        boolean result = true;
+        for (Copy copy : copies) {
+            if (library.isOrWasCopyLent(copy)) {
+                result = false;
+                break;
+            }
+        }
+        return result;
+    }
+
+    public void addCopy(Copy copy) {
+        library.addCopy(copy);
+    }
+
+    public Copy getCopyByInventoryId(long inventoryNumber) {
+        return library.getCopyByInventoryNr(inventoryNumber);
+    }
+
+    public void removeCopy(Copy copy) {
+        library.removeCopy(copy);
+        setChanged();
+        notifyObservers();
     }
 }

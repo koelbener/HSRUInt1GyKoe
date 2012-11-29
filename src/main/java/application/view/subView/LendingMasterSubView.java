@@ -67,8 +67,8 @@ public class LendingMasterSubView extends SubViewBase<Library, LendingMasterCont
     private HideTextOnFocusListener hideTextOnFocusListener;
     private JButton btnRefresh;
 
-    public LendingMasterSubView(Library referenceObject) {
-        super(referenceObject);
+    public LendingMasterSubView() {
+        super(null);
     }
 
     /**

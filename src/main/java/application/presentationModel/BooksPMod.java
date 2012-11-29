@@ -13,6 +13,7 @@ import application.core.Repository;
 import application.presentationModel.componentModel.BookSearchFilterComboBoxModel;
 import application.presentationModel.componentModel.BookTableModel;
 import domain.Book;
+import domain.Copy;
 
 public class BooksPMod extends pModBase {
 
@@ -25,6 +26,7 @@ public class BooksPMod extends pModBase {
     private boolean onlyAvailableBooks = false;
 
     public BooksPMod() {
+        super();
         bookTableModel = new BookTableModel(Repository.getInstance().getLibrary().getBooks());
         bookTableRowSorter = new TableRowSorter<BookTableModel>(bookTableModel);
 
@@ -81,27 +83,42 @@ public class BooksPMod extends pModBase {
 
     private void updateFilter() {
         List<RowFilter<Object, Object>> filters = new ArrayList<RowFilter<Object, Object>>();
-    
+
         if (filterColumn >= 0) {
             filters.add(RowFilter.regexFilter("(?i)" + searchString, filterColumn));
         } else {
             filters.add(RowFilter.regexFilter("(?i)" + searchString));
         }
-    
+
         if (onlyAvailableBooks) {
             filters.add(new OnyAvailableFilter());
         }
-    
+
         bookTableRowSorter.setRowFilter(RowFilter.andFilter(filters));
     }
 
     private class OnyAvailableFilter extends RowFilter<Object, Object> {
-    
+
         @Override
         public boolean include(RowFilter.Entry<? extends Object, ? extends Object> entry) {
             String availability = entry.getStringValue(BookTableModel.COLUMN_AMOUNT);
             return availability.charAt(0) != '0';
         }
+    }
+
+    public List<Copy> getCopiesOfBook(Book book) {
+        return library.getCopiesOfBook(book);
+    }
+
+    public Book findByBookTitle(String title) {
+        return library.findByBookTitle(title);
+    }
+
+    public Book createAndAddBook(String title) {
+        Book book = library.createAndAddBook(title);
+        setChanged();
+        notifyObservers();
+        return book;
     }
 
 }

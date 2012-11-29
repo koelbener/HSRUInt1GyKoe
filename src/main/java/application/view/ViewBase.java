@@ -5,15 +5,12 @@ import java.util.Observable;
 import java.util.Observer;
 
 import application.controller.ControllerBase;
-import application.core.Repository;
 import application.core.Texts;
-import domain.Library;
 
 public abstract class ViewBase<R, T extends ControllerBase, S extends Component> implements Observer {
 
     protected T controller;
     protected S container;
-    protected Library library;
     private R referenceObject;
 
     public ViewBase(R referenceObject) {
@@ -39,7 +36,6 @@ public abstract class ViewBase<R, T extends ControllerBase, S extends Component>
     protected abstract void setTexts();
 
     protected void initModel() {
-        library = Repository.getInstance().getLibrary();
     }
 
     protected abstract void initUIElements();

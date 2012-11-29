@@ -272,7 +272,7 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
             overViewTitle = Texts.get("LoanDetailMainViewBase.loansOverview.titleAlone");
         }
         // update statistic
-        List<Loan> openLoans = Repository.getInstance().getLibrary().getCustomerOpenLoans(customer);
+        List<Loan> openLoans = Repository.getInstance().getCustomerPMod().getCustomerOpenLoans(customer);
         valNumberOfLoans.setText("" + openLoans.size());
         panel_3.setBorder(new TitledBorder(null, overViewTitle, TitledBorder.LEADING, TitledBorder.TOP, null, null));
 

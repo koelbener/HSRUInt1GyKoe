@@ -15,27 +15,27 @@ public class BookDetailController extends ControllerBase {
     public void saveBook(Book book, List<Copy> newCopies) {
 
         String title = book.getName();
-        Book existingBook = getRepository().getLibrary().findByBookTitle(title);
+        Book existingBook = getRepository().getBooksPMod().findByBookTitle(title);
         if (existingBook == null) {
             logger.debug("Creating new book \"{}\"", title);
-            existingBook = getRepository().getLibrary().createAndAddBook(title);
+            existingBook = getRepository().getBooksPMod().createAndAddBook(title);
             existingBook.updateFrom(book);
             getRepository().getBooksPMod().addBook(existingBook);
         } else {
             logger.debug("Updating book \"{}\"", title);
         }
 
-        List<Copy> existingCopies = new ArrayList<Copy>(getRepository().getLibrary().getCopiesOfBook(existingBook));
+        List<Copy> existingCopies = new ArrayList<Copy>(getRepository().getBooksPMod().getCopiesOfBook(book));
         for (Copy copy : newCopies) {
             if (newlyAdded(copy)) {
                 logger.debug("Adding copy \"{}\"", copy);
                 copy.setTitle(existingBook);
-                getRepository().getLibrary().addCopy(copy);
+                getRepository().getCopyPMod().addCopy(copy);
             } else {
                 if (existingCopies.remove(copy)) {
                     logger.debug("Updating copy \"{}\"", copy);
                     // the copy has not been removed
-                    Copy copyToPersist = getRepository().getLibrary().getCopyByInventoryNr(copy.getInventoryNumber());
+                    Copy copyToPersist = getRepository().getCopyPMod().getCopyByInventoryId(copy.getInventoryNumber());
                     copyToPersist.updateFrom(copy);
                 }
             }
@@ -43,21 +43,10 @@ public class BookDetailController extends ControllerBase {
         // delete all copies which are not in the list anymore
         for (Copy copy : existingCopies) {
             logger.debug("Removing copy \"{}\"", copy);
-            getRepository().getLibrary().removeCopy(copy);
+            getRepository().getCopyPMod().removeCopy(copy);
         }
 
         getRepository().getBooksPMod().updateBook(existingBook);
-    }
-
-    public boolean areCopiesDeletable(List<Copy> copies) {
-        boolean result = true;
-        for (Copy copy : copies) {
-            if (getRepository().getLibrary().isOrWasCopyLent(copy)) {
-                result = false;
-                break;
-            }
-        }
-        return result;
     }
 
     private boolean newlyAdded(Copy copy) {

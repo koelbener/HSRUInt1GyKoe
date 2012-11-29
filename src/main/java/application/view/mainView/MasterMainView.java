@@ -82,8 +82,8 @@ public class MasterMainView extends MainViewBase<Library, MasterController, JFra
         tabbedPane = new JTabbedPane(JTabbedPane.TOP);
         tabbedPane.setBorder(new CompoundBorder(new EmptyBorder(10, 5, 5, 5), new LineBorder(new Color(0, 0, 0), 1, true)));
 
-        LendingMasterSubView lendingMasterPanel = new LendingMasterSubView(library);
-        BookMasterSubView bookMasterPanel = new BookMasterSubView(library);
+        LendingMasterSubView lendingMasterPanel = new LendingMasterSubView();
+        BookMasterSubView bookMasterPanel = new BookMasterSubView();
 
         tabbedPane.addTab(Texts.get("BookMasterMainView.tab.books"), IconUtil.loadIcon("book_closed.gif"), bookMasterPanel.getContainer(), null);
         tabbedPane.addTab(Texts.get("BookMasterMainView.tab.lending"), IconUtil.loadIcon("loan.gif"), lendingMasterPanel.getContainer(), null);

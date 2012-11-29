@@ -4,14 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import application.core.Repository;
-import application.core.Texts;
 
 import com.jgoodies.validation.ValidationResult;
 
 import domain.Copy;
 import domain.Copy.Condition;
 import domain.Customer;
-import domain.Library;
 import domain.Loan;
 
 public class LoanDetailController extends ControllerBase {
@@ -21,36 +19,18 @@ public class LoanDetailController extends ControllerBase {
     }
 
     public ValidationResult validateLoan(Copy copy, Customer customer) {
-        ValidationResult result = new ValidationResult();
-        Library library = getRepository().getLibrary();
-
-        if (copy == null) {
-            result.addError(Texts.get("validation.noCopyFound"));
-        } else if (library.isCopyLent(copy)) {
-            result.addError(Texts.get("validation.copyLent"));
-        } else if (copy.getCondition().equals(Condition.LOST)) {
-            result.addError(Texts.get("validation.lostBook"));
-        } else if (!library.canCustomerMakeMoreLoans(customer)) {
-            result.addError(Texts.get("validation.noMoreLoansAllowed"));
-        } else if (customer == null) {
-            result.addError(Texts.get("validation.noCustomerSelected"));
-        }
-
-        return result;
-
+        return Repository.getInstance().getLoansPMod().validateLoan(copy, customer);
     }
 
     public Loan saveLoan(Copy copy, Customer customer) {
-        Loan loan = getRepository().getLibrary().createAndAddLoan(customer, copy);
+        Loan loan = getRepository().getLoansPMod().createAndAddLoan(customer, copy);
         getRepository().getLoansPMod().addLoan(loan);
         return loan;
     }
 
     public void changeCondition(int rowIndex, Condition condition) {
         Loan loan = Repository.getInstance().getLoansPMod().getLoanDetailTableModel().getLoan(rowIndex);
-        if (condition != null && loan != null) {
-            loan.getCopy().setCondition(condition);
-        }
+        Repository.getInstance().getCopyPMod().changeCondition(loan.getCopy(), condition);
     }
 
     public List<Long> returnCopies(int[] selectedRows) {

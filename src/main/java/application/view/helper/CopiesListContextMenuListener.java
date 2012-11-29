@@ -7,10 +7,9 @@ import java.awt.event.MouseListener;
 
 import javax.swing.JList;
 
-import application.controller.BookDetailController;
+import application.core.Repository;
 import application.presentationModel.componentModel.CopyListModel;
 
-import com.google.common.base.Preconditions;
 import com.google.common.primitives.Ints;
 
 import domain.Copy;
@@ -21,13 +20,10 @@ public class CopiesListContextMenuListener implements MouseListener, ActionListe
     private final CopiesContextMenu menu;
     private final CopyListModel copyListModel;
     private final JList<Copy> list;
-    private final BookDetailController bookDetailController;
 
-    public CopiesListContextMenuListener(final JList<Copy> list, CopyListModel copyListModel, final BookDetailController bookDetailController) {
-        Preconditions.checkNotNull(bookDetailController);
+    public CopiesListContextMenuListener(final JList<Copy> list, CopyListModel copyListModel) {
         this.list = list;
         this.copyListModel = copyListModel;
-        this.bookDetailController = bookDetailController;
         menu = new CopiesContextMenu(this);
 
         list.addMouseListener(new MouseListener() {
@@ -47,7 +43,7 @@ public class CopiesListContextMenuListener implements MouseListener, ActionListe
                         menu.enableCopyRelatedOptions(false);
                     }
 
-                    boolean enableDelete = bookDetailController.areCopiesDeletable(list.getSelectedValuesList());
+                    boolean enableDelete = Repository.getInstance().getCopyPMod().areCopiesDeletable(list.getSelectedValuesList());
                     menu.enableDelete(enableDelete);
                 }
             }

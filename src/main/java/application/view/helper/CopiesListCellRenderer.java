@@ -10,9 +10,9 @@ import javax.swing.ListCellRenderer;
 
 import application.core.Repository;
 import application.core.Texts;
+import application.presentationModel.CopyPMod;
 import application.util.IconUtil;
 import domain.Copy;
-import domain.Library;
 import domain.Loan;
 
 public class CopiesListCellRenderer extends JLabel implements ListCellRenderer<Copy> {
@@ -27,15 +27,15 @@ public class CopiesListCellRenderer extends JLabel implements ListCellRenderer<C
 
     @Override
     public Component getListCellRendererComponent(JList<? extends Copy> list, Copy copy, int index, boolean isSelected, boolean cellHasFocus) {
-        Library library = Repository.getInstance().getLibrary();
+        CopyPMod pMod = Repository.getInstance().getCopyPMod();
 
         StringBuilder sb = new StringBuilder();
         sb.append(copy.getInventoryNumber()).append(" - ");
         sb.append(Texts.get(copy.getCondition().getKey())).append(" - ");
 
-        if (library.isCopyLent(copy)) {
+        if (pMod.isCopyLent(copy)) {
             sb.append(Texts.get("BookDetailMainView.copyList.unavailable")).append(" ");
-            Loan loan = library.getCurrentLoan(copy);
+            Loan loan = pMod.getCurrentLoan(copy);
             SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy");
             sb.append(format.format(loan.getDueDate().getTime()));
         } else {

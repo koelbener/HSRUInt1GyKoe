@@ -7,29 +7,30 @@ import javax.swing.ComboBoxModel;
 import javax.swing.RowFilter;
 import javax.swing.table.TableRowSorter;
 
-import application.core.Repository;
+import application.core.Texts;
 import application.presentationModel.componentModel.LoanDetailTableModel;
 import application.presentationModel.componentModel.LoanSearchFilterComboBoxModel;
 import application.presentationModel.componentModel.LoanSearchFilterComboBoxModel.FilterOption;
 import application.presentationModel.componentModel.LoanTableModel;
 
 import com.google.common.base.Preconditions;
+import com.jgoodies.validation.ValidationResult;
 
+import domain.Copy;
+import domain.Copy.Condition;
 import domain.Customer;
-import domain.Library;
 import domain.Loan;
 
 public class LoansPMod extends pModBase {
     private final LoanTableModel loanTableModel;
     private final TableRowSorter<LoanTableModel> loanTableRowSorter;
     private final LoanDetailTableModel loanDetailTableModel;
-    private final Library library;
     private final LoanSearchFilterComboBoxModel loanSearchFilterComboBoxModel;
     private String searchString = "";
     private FilterOption searchOption = FilterOption.OPEN_LOANS;
 
     public LoansPMod() {
-        library = Repository.getInstance().getLibrary();
+        super();
         loanTableModel = new LoanTableModel(library.getLoans());
         loanTableRowSorter = new TableRowSorter<LoanTableModel>(loanTableModel);
         loanDetailTableModel = new LoanDetailTableModel(null);
@@ -178,6 +179,32 @@ public class LoansPMod extends pModBase {
         }
 
         loanTableRowSorter.setRowFilter(RowFilter.andFilter(filters));
+    }
+
+    public Loan createAndAddLoan(Customer customer, Copy copy) {
+        Loan loan = library.createAndAddLoan(customer, copy);
+        setChanged();
+        notifyObservers();
+        return loan;
+    }
+
+    public ValidationResult validateLoan(Copy copy, Customer customer) {
+        ValidationResult result = new ValidationResult();
+
+        if (copy == null) {
+            result.addError(Texts.get("validation.noCopyFound"));
+        } else if (library.isCopyLent(copy)) {
+            result.addError(Texts.get("validation.copyLent"));
+        } else if (copy.getCondition().equals(Condition.LOST)) {
+            result.addError(Texts.get("validation.lostBook"));
+        } else if (!library.canCustomerMakeMoreLoans(customer)) {
+            result.addError(Texts.get("validation.noMoreLoansAllowed"));
+        } else if (customer == null) {
+            result.addError(Texts.get("validation.noCustomerSelected"));
+        }
+
+        return result;
+
     }
 
 }

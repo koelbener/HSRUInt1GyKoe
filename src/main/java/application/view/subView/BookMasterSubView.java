@@ -68,8 +68,8 @@ public class BookMasterSubView extends SubViewBase<Library, BookMasterController
     private HideTextOnFocusListener hideTextOnFocusListener;
     private JCheckBox checkBoxOnlyAvailable;
 
-    public BookMasterSubView(Library referenceObject) {
-        super(referenceObject);
+    public BookMasterSubView() {
+        super(null);
     }
 
     /**

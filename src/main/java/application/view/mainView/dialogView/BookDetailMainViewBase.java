@@ -83,7 +83,7 @@ public abstract class BookDetailMainViewBase extends DialogViewBase<Book, BookDe
         Book referenceObject = getReferenceObject();
         List<Copy> copiesOfBook = new ArrayList<Copy>();
         if (referenceObject != null) {
-            copiesOfBook = library.getCopiesOfBook(referenceObject);
+            copiesOfBook = Repository.getInstance().getBooksPMod().getCopiesOfBook(referenceObject);
         }
         copyListModel = new CopyListModel(Copy.cloneCopies(copiesOfBook));
     }
@@ -307,11 +307,11 @@ public abstract class BookDetailMainViewBase extends DialogViewBase<Book, BookDe
             @Override
             public void valueChanged(ListSelectionEvent e) {
                 int selectedCopies = copiesList.getSelectedIndices().length;
-                btnRemove.setEnabled(selectedCopies > 0 && getController().areCopiesDeletable(copiesList.getSelectedValuesList()));
+                btnRemove.setEnabled(selectedCopies > 0 && Repository.getInstance().getCopyPMod().areCopiesDeletable(copiesList.getSelectedValuesList()));
             }
         });
 
-        copiesList.addMouseListener(new CopiesListContextMenuListener(copiesList, copyListModel, getController()));
+        copiesList.addMouseListener(new CopiesListContextMenuListener(copiesList, copyListModel));
     }
 
     protected boolean validateBook() {
