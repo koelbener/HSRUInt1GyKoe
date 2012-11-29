@@ -7,6 +7,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -23,6 +25,7 @@ import net.miginfocom.swing.MigLayout;
 import application.controller.BookDetailController;
 import application.core.Repository;
 import application.core.Texts;
+import application.presentationModel.CopyPMod;
 import application.presentationModel.componentModel.CopyListModel;
 import application.util.IconUtil;
 import application.view.helper.CopiesListCellRenderer;
@@ -38,7 +41,7 @@ import domain.Copy;
 import domain.Shelf;
 import domain.validator.BookValidator;
 
-public abstract class BookDetailMainViewBase extends DialogViewBase<Book, BookDetailController> {
+public abstract class BookDetailMainViewBase extends DialogViewBase<Book, BookDetailController> implements Observer {
 
     public static final String NAME_VALIDATION_PANEL = "ValidationPanel";
     public static final String NAME_BUTTON_SAVE = "Save";
@@ -75,6 +78,11 @@ public abstract class BookDetailMainViewBase extends DialogViewBase<Book, BookDe
     public BookDetailMainViewBase(Book book) {
         super(book, "book_closed.gif");
         updateViewValues();
+    }
+
+    @Override
+    protected void addObservables() {
+        observables.add(Repository.getInstance().getCopyPMod());
     }
 
     @Override
@@ -324,5 +332,17 @@ public abstract class BookDetailMainViewBase extends DialogViewBase<Book, BookDe
 
     private void updateCopiesCount() {
         valNrOfCopies.setText("" + copyListModel.getSize());
+    }
+
+    @Override
+    public void update(Observable arg0, Object arg1) {
+        if (arg0.getClass().equals(CopyPMod.class)) {
+            List<Copy> copiesOfBook = null;
+            if (getReferenceObject() != null) {
+                copiesOfBook = Repository.getInstance().getBooksPMod().getCopiesOfBook(getReferenceObject());
+                copyListModel = new CopyListModel(Copy.cloneCopies(copiesOfBook));
+                copiesList.setModel(copyListModel);
+            }
+        }
     }
 }

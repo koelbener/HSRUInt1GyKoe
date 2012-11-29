@@ -114,4 +114,8 @@ public class MasterMainView extends MainViewBase<Library, MasterController, JFra
         return jFrame;
     }
 
+    @Override
+    protected void addObservables() {
+    }
+
 }

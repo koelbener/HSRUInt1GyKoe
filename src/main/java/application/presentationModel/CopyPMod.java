@@ -69,4 +69,9 @@ public class CopyPMod extends pModBase {
         setChanged();
         notifyObservers();
     }
+
+    public void update(Copy copy) {
+        setChanged();
+        notifyObservers();
+    }
 }

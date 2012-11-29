@@ -11,6 +11,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Date;
 import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -56,7 +58,7 @@ import domain.Copy.Condition;
 import domain.Customer;
 import domain.Loan;
 
-public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailController> {
+public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailController> implements Observer {
 
     private static String defaultSearchValue;
 
@@ -106,6 +108,11 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
             clearNewLoanSection();
         }
         updateMakeLoanButtonVisibility();
+    }
+
+    @Override
+    protected void addObservables() {
+        observables.add(Repository.getInstance().getCopyPMod());
     }
 
     @Override
@@ -347,7 +354,7 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
             lblConditionValue.setText(currentSelectedCopy.getCondition().name());
             lblConditionValue.setIcon(IconUtil.loadIcon(currentSelectedCopy.getCondition().getIcon()));
             // lblLoanStatus
-            boolean isCopyLent = Repository.getInstance().getLibrary().isCopyLent(currentSelectedCopy);
+            boolean isCopyLent = Repository.getInstance().getCopyPMod().isCopyLent(currentSelectedCopy);
             if (currentSelectedCopy.getCondition().equals(Condition.LOST)) {
                 lblAvailabilityValue.setText(Texts.get("validation.copy.lost"));
                 lblAvailabilityValue.setIcon(IconUtil.loadIcon("warning.png"));
@@ -567,6 +574,20 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
             if (!validationResult.hasErrors()) {
                 getController().saveLoan(currentSelectedCopy, getCurrentCustomer());
                 txtCopyId.setText("");
+            }
+        }
+    }
+
+    @Override
+    public void update(Observable arg0, Object arg1) {
+        if (arg0.getClass().equals(CopyPMod.class)) {
+            updateNewLoanSection();
+            updateLoanOverViewSection();
+
+            Long copyId = pMod.getLoanDetailTableModel().getCopyOfRow(tblLoans.getSelectedRow());
+            if (copyId != null) {
+                Copy copy = copyPMod.searchCopy(copyId);
+                statusComboBox.setSelectedItem(copy.getCondition());
             }
         }
     }

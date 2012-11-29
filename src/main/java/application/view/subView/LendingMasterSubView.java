@@ -29,7 +29,6 @@ import application.core.Repository;
 import application.core.Texts;
 import application.presentationModel.LoansPMod;
 import application.presentationModel.componentModel.LoanSearchFilterComboBoxModel;
-import application.util.IconUtil;
 import application.view.helper.EnableCompontentOnTableSelectionListener;
 import application.view.helper.HideTextOnFocusListener;
 import domain.Library;
@@ -65,7 +64,6 @@ public class LendingMasterSubView extends SubViewBase<Library, LendingMasterCont
     private JLabel valCurrentLoans;
     private JLabel valOverdueLoans;
     private HideTextOnFocusListener hideTextOnFocusListener;
-    private JButton btnRefresh;
 
     public LendingMasterSubView() {
         super(null);
@@ -117,10 +115,6 @@ public class LendingMasterSubView extends SubViewBase<Library, LendingMasterCont
         comboBoxSearchFilter = new JComboBox<LoanSearchFilterComboBoxModel.FilterOption>(Repository.getInstance().getLoansPMod().getSearchFilterModel());
         comboBoxSearchFilter.setName(NAME_COMBOBOX_FILTER);
         searchPanel.add(comboBoxSearchFilter, "cell 0 0");
-
-        btnRefresh = new JButton("");
-        btnRefresh.setIcon(IconUtil.loadIcon("refresh.gif"));
-        searchPanel.add(btnRefresh, "cell 1 0,alignx right");
 
         JPanel panel_13 = new JPanel();
         panel_13.setLayout(new MigLayout("", "[]", "[23px][]"));
@@ -192,14 +186,6 @@ public class LendingMasterSubView extends SubViewBase<Library, LendingMasterCont
         new EnableCompontentOnTableSelectionListener(loansTable, btnOpen);
 
         hideTextOnFocusListener = new HideTextOnFocusListener(txtSearch, searchDefaultText);
-
-        btnRefresh.addActionListener(new ActionListener() {
-
-            @Override
-            public void actionPerformed(ActionEvent arg0) {
-                getController().filterLoans();
-            }
-        });
 
         btnNew.addActionListener(new ActionListener() {
 

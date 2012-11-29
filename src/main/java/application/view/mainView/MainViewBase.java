@@ -3,8 +3,12 @@ package application.view.mainView;
 import java.awt.Frame;
 import java.awt.Point;
 import java.awt.Window;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Observable;
 import java.util.Observer;
 
 import javax.swing.ImageIcon;
@@ -13,6 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import application.controller.ControllerBase;
+import application.core.Repository;
 import application.util.IconUtil;
 import application.view.ViewBase;
 
@@ -23,12 +28,19 @@ import application.view.ViewBase;
 public abstract class MainViewBase<R, T extends ControllerBase, S extends Window> extends ViewBase<R, T, S> implements Observer {
 
     private static final Logger logger = LoggerFactory.getLogger(MainViewBase.class);
+    protected final List<Observable> observables = new ArrayList<Observable>();
 
     public MainViewBase(R referenceObject) {
         super(referenceObject);
         checkPositionAgainstActiveFrames();
+        Repository.getInstance().getBooksPMod().addObserver(this);
+        addObservables();
+        installObservers();
+        installRemoveObservers();
         container.setVisible(true);
     }
+
+    protected abstract void addObservables();
 
     protected void setIcon(String file) {
         ImageIcon myAppImage = IconUtil.loadIcon(file);
@@ -60,7 +72,24 @@ public abstract class MainViewBase<R, T extends ControllerBase, S extends Window
                 }
             }
         }
+    }
 
+    private void installObservers() {
+        for (Observable o : observables) {
+            o.addObserver(this);
+        }
+    }
+
+    private void installRemoveObservers() {
+        final Observer thisObj = this;
+        getContainer().addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosed(WindowEvent arg0) {
+                for (Observable o : observables) {
+                    o.deleteObserver(thisObj);
+                }
+            }
+        });
     }
 
 }

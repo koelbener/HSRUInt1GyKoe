@@ -7,6 +7,7 @@ import javax.swing.ComboBoxModel;
 import javax.swing.RowFilter;
 import javax.swing.table.TableRowSorter;
 
+import application.core.Repository;
 import application.core.Texts;
 import application.presentationModel.componentModel.LoanDetailTableModel;
 import application.presentationModel.componentModel.LoanSearchFilterComboBoxModel;
@@ -31,11 +32,22 @@ public class LoansPMod extends pModBase {
 
     public LoansPMod() {
         super();
+        // LoanTable
         loanTableModel = new LoanTableModel(library.getLoans());
+        // no need to remove Observer, as loanTableModel always exists
+        Repository.getInstance().getBooksPMod().addObserver(loanTableModel);
+        this.addObserver(loanTableModel);
+
+        // Filter and Sorter of LoanTable
         loanTableRowSorter = new TableRowSorter<LoanTableModel>(loanTableModel);
-        loanDetailTableModel = new LoanDetailTableModel(null);
         loanSearchFilterComboBoxModel = new LoanSearchFilterComboBoxModel(searchOption);
         updateFilter(searchOption, searchString);
+
+        // LoanDetailTable
+        loanDetailTableModel = new LoanDetailTableModel(null);
+        // no need to remove Observer, as loanTableModel always exists
+        Repository.getInstance().getBooksPMod().addObserver(loanDetailTableModel);
+
     }
 
     public LoanDetailTableModel getLoanDetailTableModel() {
@@ -132,7 +144,7 @@ public class LoansPMod extends pModBase {
             LoanTableModel model = (LoanTableModel) entry.getModel();
             Loan loan = model.getLoan((Integer) entry.getIdentifier());
             for (String stringToCheck : getRelevantStrings(loan)) {
-                if (stringToCheck.indexOf(searchString) != -1) {
+                if (stringToCheck.toLowerCase().indexOf(searchString.toLowerCase()) != -1) {
                     result = true;
                     break;
                 }

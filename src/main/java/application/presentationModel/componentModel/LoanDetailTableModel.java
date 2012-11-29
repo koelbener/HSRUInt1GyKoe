@@ -3,15 +3,18 @@ package application.presentationModel.componentModel;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 
 import javax.swing.table.AbstractTableModel;
 
 import application.core.Repository;
 import application.core.Texts;
+import application.presentationModel.BooksPMod;
 import domain.Customer;
 import domain.Loan;
 
-public class LoanDetailTableModel extends AbstractTableModel {
+public class LoanDetailTableModel extends AbstractTableModel implements Observer {
 
     public static final int COLUMN_COPY_ID = 0;
     public static final int COLUMN_TITLE = 1;
@@ -136,5 +139,12 @@ public class LoanDetailTableModel extends AbstractTableModel {
             }
         }
 
+    }
+
+    @Override
+    public void update(Observable o, Object arg) {
+        if (o.getClass().equals(BooksPMod.class)) {
+            fireTableDataChanged();
+        }
     }
 }

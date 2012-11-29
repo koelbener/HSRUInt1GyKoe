@@ -26,7 +26,7 @@ public class CustomerListRenderer extends JLabel implements ListCellRenderer<Obj
         boolean newLoanAllowed = false;
         if (value instanceof Customer) {
             Customer customer = (Customer) value;
-            newLoanAllowed = Repository.getInstance().getLibrary().canCustomerMakeMoreLoans(customer);
+            newLoanAllowed = Repository.getInstance().getCustomerPMod().canCustomerMakeMoreLoans(customer);
 
             setText(customer.getFullNameAndAddress());
         }

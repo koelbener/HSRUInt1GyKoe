@@ -49,4 +49,8 @@ public class CopyListModel extends AbstractListModel<Copy> {
         fireContentsChanged(this, index, index);
     }
 
+    public void update() {
+        fireContentsChanged(this, 0, getSize());
+    }
+
 }

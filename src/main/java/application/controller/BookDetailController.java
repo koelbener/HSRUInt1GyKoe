@@ -6,6 +6,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import application.core.Repository;
 import domain.Book;
 import domain.Copy;
 
@@ -37,6 +38,7 @@ public class BookDetailController extends ControllerBase {
                     // the copy has not been removed
                     Copy copyToPersist = getRepository().getCopyPMod().getCopyByInventoryId(copy.getInventoryNumber());
                     copyToPersist.updateFrom(copy);
+                    Repository.getInstance().getCopyPMod().update(copy);
                 }
             }
         }

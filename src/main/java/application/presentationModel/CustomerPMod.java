@@ -10,6 +10,10 @@ public class CustomerPMod extends pModBase {
 
     private CustomerListModel customerListModel = new CustomerListModel();
 
+    public CustomerPMod() {
+        super();
+    }
+
     public CustomerListModel getCustomerListModel() {
         return customerListModel;
     }

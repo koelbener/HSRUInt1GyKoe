@@ -1,13 +1,13 @@
 package application.view;
 
-import java.awt.Component;
+import java.awt.Container;
 import java.util.Observable;
 import java.util.Observer;
 
 import application.controller.ControllerBase;
 import application.core.Texts;
 
-public abstract class ViewBase<R, T extends ControllerBase, S extends Component> implements Observer {
+public abstract class ViewBase<R, T extends ControllerBase, S extends Container> implements Observer {
 
     protected T controller;
     protected S container;

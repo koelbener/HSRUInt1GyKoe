@@ -3,13 +3,18 @@ package application.presentationModel.componentModel;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 
 import javax.swing.table.AbstractTableModel;
 
+import application.core.Repository;
 import application.core.Texts;
+import application.presentationModel.BooksPMod;
+import application.presentationModel.LoansPMod;
 import domain.Loan;
 
-public class LoanTableModel extends AbstractTableModel {
+public class LoanTableModel extends AbstractTableModel implements Observer {
 
     public static final int COLUMN_LENT_TO = 5;
     public static final int COLUMN_LENT_UNTIL = 4;
@@ -151,6 +156,16 @@ public class LoanTableModel extends AbstractTableModel {
     public void updateStateValues() {
         if (getRowCount() > 0)
             fireTableRowsUpdated(0, getRowCount() - 1);
+    }
+
+    @Override
+    public void update(Observable o, Object arg) {
+        if (o.getClass().equals(BooksPMod.class)) {
+            fireTableDataChanged();
+        } else if (o.getClass().equals(LoansPMod.class)) {
+            Repository.getInstance().getLoansPMod().updateFilter();
+        }
+
     }
 
 }

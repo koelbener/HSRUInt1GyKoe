@@ -143,6 +143,7 @@ public class BookTableModel extends AbstractTableModel {
                 break;
             }
         }
+        Repository.getInstance().getBooksPMod().updateBook(book);
     }
 
     @Override
