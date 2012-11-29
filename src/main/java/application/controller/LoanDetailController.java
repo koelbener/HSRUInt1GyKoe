@@ -28,6 +28,8 @@ public class LoanDetailController extends ControllerBase {
             result.addError(Texts.get("validation.noCopyFound"));
         } else if (library.isCopyLent(copy)) {
             result.addError(Texts.get("validation.copyLent"));
+        } else if (copy.getCondition().equals(Condition.LOST)) {
+            result.addError(Texts.get("validation.lostBook"));
         } else if (!library.canCustomerMakeMoreLoans(customer)) {
             result.addError(Texts.get("validation.noMoreLoansAllowed"));
         } else if (customer == null) {
