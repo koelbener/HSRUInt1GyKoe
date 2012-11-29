@@ -8,6 +8,7 @@ import javax.swing.RowFilter;
 import javax.swing.table.TableRowSorter;
 
 import application.core.Repository;
+import application.viewModel.CopyStatusComboBoxModel;
 import application.viewModel.LoanDetailTableModel;
 import application.viewModel.LoanSearchFilterComboBoxModel;
 import application.viewModel.LoanSearchFilterComboBoxModel.FilterOption;
@@ -24,6 +25,7 @@ public class LoansPMod extends pModBase {
     private final LoanTableModel loanTableModel;
     private final TableRowSorter<LoanTableModel> loanTableRowSorter;
     private final LoanDetailTableModel loanDetailTableModel;
+    private final CopyStatusComboBoxModel copyStatusModel;
     private final Library library;
     private final LoanSearchFilterComboBoxModel loanSearchFilterComboBoxModel;
     private String searchString = "";
@@ -35,7 +37,12 @@ public class LoansPMod extends pModBase {
         loanTableRowSorter = new TableRowSorter<LoanTableModel>(loanTableModel);
         loanDetailTableModel = new LoanDetailTableModel(null);
         loanSearchFilterComboBoxModel = new LoanSearchFilterComboBoxModel(searchOption);
+        copyStatusModel = new CopyStatusComboBoxModel();
         updateFilter(searchOption, searchString);
+    }
+
+    public CopyStatusComboBoxModel getCopyStatusModel() {
+        return copyStatusModel;
     }
 
     public LoanDetailTableModel getLoanDetailTableModel() {
@@ -48,6 +55,10 @@ public class LoansPMod extends pModBase {
 
     public TableRowSorter<LoanTableModel> getLoanTableRowSorter() {
         return loanTableRowSorter;
+    }
+
+    public Copy searchCopy(Long copyId) {
+        return library.getCopyByInventoryNr(copyId);
     }
 
     public void addLoan(Loan loan) {
@@ -97,7 +108,6 @@ public class LoansPMod extends pModBase {
             result = null;
         }
         return result;
-
     }
 
     private class LoanRowStatusFilter extends RowFilter<Object, Object> {

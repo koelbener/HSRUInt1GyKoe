@@ -9,6 +9,7 @@ import application.core.Texts;
 import com.jgoodies.validation.ValidationResult;
 
 import domain.Copy;
+import domain.Copy.Condition;
 import domain.Customer;
 import domain.Library;
 import domain.Loan;
@@ -43,8 +44,11 @@ public class LoanDetailController extends ControllerBase {
         return loan;
     }
 
-    public Copy searchCopy(Long copyId) {
-        return getRepository().getLibrary().getCopyByInventoryNr(copyId);
+    public void changeCondition(int rowIndex, Condition condition) {
+        Loan loan = Repository.getInstance().getLoansPMod().getLoanDetailTableModel().getLoan(rowIndex);
+        if (condition != null && loan != null) {
+            loan.getCopy().setCondition(condition);
+        }
     }
 
     public List<Long> returnCopies(int[] selectedRows) {

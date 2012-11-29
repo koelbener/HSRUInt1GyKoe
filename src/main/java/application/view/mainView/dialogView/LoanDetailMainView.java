@@ -13,6 +13,7 @@ import java.util.Date;
 import java.util.List;
 
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
@@ -50,6 +51,7 @@ import com.google.common.base.Joiner;
 import com.jgoodies.validation.ValidationResult;
 
 import domain.Copy;
+import domain.Copy.Condition;
 import domain.Customer;
 import domain.Loan;
 
@@ -86,6 +88,8 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
 
     private LoansPMod pMod;
     private JLabel lblAvailability;
+    private JLabel lblCopyStatus;
+    private JComboBox<Condition> statusComboBox;
 
     public LoanDetailMainView(Loan loan) {
         super(loan, "loan.gif");
@@ -99,6 +103,7 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
             updateCustomerSelectionSection();
             clearNewLoanSection();
         }
+        updateMakeLoanButtonVisibility();
     }
 
     @Override
@@ -227,14 +232,20 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
 
         JPanel panel_5 = new JPanel();
         panel_3.add(panel_5, "cell 0 2 4 1,grow");
-        panel_5.setLayout(new MigLayout("", "[]", "[][]"));
+        panel_5.setLayout(new MigLayout("", "[][][][]", "[][]"));
+
+        lblCopyStatus = new JLabel("Status:");
+        panel_5.add(lblCopyStatus, "cell 0 0");
 
         btnReturnButton = new JButton();
-        panel_5.add(btnReturnButton, "cell 0 0");
+        panel_5.add(btnReturnButton, "cell 2 0");
         btnReturnButton.setEnabled(false);
 
+        statusComboBox = new JComboBox<Condition>(pMod.getCopyStatusModel());
+        panel_5.add(statusComboBox, "cell 1 0");
+
         lblReturnFeedbackLabel = new JLabel();
-        panel_5.add(lblReturnFeedbackLabel, "cell 1 0");
+        panel_5.add(lblReturnFeedbackLabel, "cell 3 0");
     }
 
     private void updateLoanOverViewSection() {
@@ -306,6 +317,10 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
         panel_2.add(lblAvailability, "cell 0 3");
     }
 
+    private Condition getSelectedCondition() {
+        return (Condition) statusComboBox.getSelectedItem();
+    }
+
     private void clearNewLoanSection() {
         txtCopyId.setText("");
         currentSelectedCopy = null;
@@ -362,6 +377,7 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
     protected void initListeners() {
 
         new EnableCompontentOnTableSelectionListener(tblLoans, btnReturnButton);
+        new EnableCompontentOnTableSelectionListener(tblLoans, statusComboBox, true);
 
         getContainer().addMouseListener(new MouseAdapter() {
             @Override
@@ -370,16 +386,37 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
             }
         });
 
+        tblLoans.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+
+            @Override
+            public void valueChanged(ListSelectionEvent arg0) {
+                Long copyId = pMod.getLoanDetailTableModel().getCopyOfRow(tblLoans.getSelectedRow());
+                if (copyId != null) {
+                    Copy copy = pMod.searchCopy(copyId);
+                    statusComboBox.setSelectedItem(copy.getCondition());
+                }
+            }
+        });
+
         btnReturnButton.addActionListener(new ActionListener() {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                List<Long> returnedCopies = getController().returnCopies(tblLoans.getSelectedRows());
+                List<Long> returnedCopies;
+                Condition newCondition = null;
+                if (tblLoans.getSelectedRowCount() == 1) {
+                    newCondition = getSelectedCondition();
+                    getController().changeCondition(tblLoans.getSelectedRow(), newCondition);
+                }
+                returnedCopies = getController().returnCopies(tblLoans.getSelectedRows());
                 String key = "LoanDetailMainViewBase.loansOverview.returnMessage";
                 if (returnedCopies.size() > 1) {
                     key += "s";
                 }
                 String message = Texts.get(key, Joiner.on(", ").join(returnedCopies));
+                if (newCondition != null) {
+                    message = message + " " + Texts.get("LoanDetailMainViewBase.loansOverview.conditionChanged", Texts.get(newCondition.getKey()));
+                }
                 lblReturnFeedbackLabel.setText(message);
                 updateLoanOverViewSection();
                 updateMakeLoanButtonVisibility();
@@ -490,7 +527,7 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
 
             private void searchCopy(Long copyId) {
                 if (copyId != null) {
-                    currentSelectedCopy = getController().searchCopy(copyId);
+                    currentSelectedCopy = pMod.searchCopy(copyId);
                     updateNewLoanSection();
                     updateMakeLoanButtonVisibility();
                 }
@@ -519,11 +556,7 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
             lblAvailabilityValue.setText(Texts.get("LoanDetailMainViewBase.newLoan.noInventoryNumber"));
         } else {
             ValidationResult validationResult = getController().validateLoan(currentSelectedCopy, getCurrentCustomer());
-            if (validationResult.hasErrors()) {
-                lblAvailabilityValue.setText(validationResult.getMessagesText());
-            } else {
-                lblAvailabilityValue.setText(Texts.get("LoanDetailMainViewBase.newLoan.loanSaved"));
-
+            if (!validationResult.hasErrors()) {
                 getController().saveLoan(currentSelectedCopy, getCurrentCustomer());
                 txtCopyId.setText("");
             }

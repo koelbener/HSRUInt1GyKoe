@@ -54,13 +54,21 @@ public class LoanDetailTableModel extends AbstractTableModel {
         return columnNames[column];
     }
 
+    public Long getCopyOfRow(int index) {
+        if (index >= 0 && index < loans.size()) {
+            return (long) getValueAt(index, COLUMN_COPY_ID);
+        }
+        return null;
+
+    }
+
     @Override
     public Class<?> getColumnClass(int columnIndex) {
         Class<?> result = String.class;
 
         switch (columnIndex) {
         case COLUMN_COPY_ID:
-            result = Integer.class;
+            result = Long.class;
             break;
         case COLUMN_TITLE:
             result = String.class;
@@ -79,7 +87,10 @@ public class LoanDetailTableModel extends AbstractTableModel {
     }
 
     public Loan getLoan(int row) {
-        return loans.get(row);
+        if (row >= 0 && row < loans.size()) {
+            return loans.get(row);
+        }
+        return null;
     }
 
     @Override

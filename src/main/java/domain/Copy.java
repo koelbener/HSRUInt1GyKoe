@@ -3,6 +3,8 @@ package domain;
 import java.util.ArrayList;
 import java.util.List;
 
+import application.core.Texts;
+
 public class Copy {
 
     public enum Condition {
@@ -18,6 +20,11 @@ public class Copy {
         Condition(String key, String icon) {
             this.key = key;
             this.icon = icon;
+        }
+
+        @Override
+        public String toString() {
+            return Texts.get(getKey());
         }
 
         public String getKey() {

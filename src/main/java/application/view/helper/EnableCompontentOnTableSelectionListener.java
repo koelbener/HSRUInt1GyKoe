@@ -9,6 +9,7 @@ public class EnableCompontentOnTableSelectionListener implements ListSelectionLi
 
     private final JTable table;
     private final JComponent component;
+    private boolean onlySingleSelection = false;
 
     public EnableCompontentOnTableSelectionListener(JTable table, JComponent component) {
         this.table = table;
@@ -16,10 +17,19 @@ public class EnableCompontentOnTableSelectionListener implements ListSelectionLi
         table.getSelectionModel().addListSelectionListener(this);
     }
 
+    public EnableCompontentOnTableSelectionListener(JTable table, JComponent component, boolean onlySingleSelection) {
+        this(table, component);
+        this.onlySingleSelection = onlySingleSelection;
+    }
+
     @Override
     public void valueChanged(ListSelectionEvent e) {
-        int[] rows = table.getSelectedRows();
-        component.setEnabled(rows != null && rows.length > 0);
+        int[] selectedRows = table.getSelectedRows();
+        boolean enabled = (selectedRows != null && selectedRows.length > 0);
+        if (onlySingleSelection) {
+            enabled = (enabled && selectedRows.length == 1);
+        }
+        component.setEnabled(enabled);
     }
 
 }
