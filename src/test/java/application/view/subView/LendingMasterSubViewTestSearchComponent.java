@@ -17,9 +17,9 @@ import org.junit.Test;
 
 import application.LibraryApp;
 import application.core.Texts;
+import application.presentationModel.componentModel.LoanTableModel;
 import application.view.AbstractFestTest;
 import application.view.mainView.MasterMainView;
-import application.viewModel.LoanTableModel;
 import domain.Book;
 import domain.Copy;
 import domain.Customer;

@@ -28,15 +28,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import application.controller.BookMasterController;
-import application.core.LibraryActionListener;
 import application.core.Repository;
 import application.core.Texts;
 import application.presentationModel.BooksPMod;
+import application.presentationModel.componentModel.BookTableModel;
+import application.presentationModel.componentModel.SearchFilterElement;
 import application.view.helper.BooksTableContextMenuListener;
 import application.view.helper.EnableCompontentOnTableSelectionListener;
 import application.view.helper.HideTextOnFocusListener;
-import application.viewModel.BookTableModel;
-import application.viewModel.SearchFilterElement;
 import domain.Library;
 
 public class BookMasterSubView extends SubViewBase<Library, BookMasterController> {
@@ -244,16 +243,16 @@ public class BookMasterSubView extends SubViewBase<Library, BookMasterController
             }
         });
 
-        btnOpenBook.addActionListener(new LibraryActionListener() {
+        btnOpenBook.addActionListener(new ActionListener() {
             @Override
-            protected void execute() {
+            public void actionPerformed(ActionEvent e) {
                 getController().openBooks(booksTable.getSelectedRows());
             }
         });
-        btnNewBook.addActionListener(new LibraryActionListener() {
 
+        btnNewBook.addActionListener(new ActionListener() {
             @Override
-            protected void execute() {
+            public void actionPerformed(ActionEvent e) {
                 getController().openNewBook();
             }
         });

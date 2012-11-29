@@ -39,13 +39,13 @@ import application.controller.LoanDetailController;
 import application.core.Repository;
 import application.core.Texts;
 import application.presentationModel.LoansPMod;
+import application.presentationModel.componentModel.LoanDetailTableModel;
 import application.util.IconUtil;
 import application.view.component.JNumberTextField;
 import application.view.helper.CustomerListRenderer;
 import application.view.helper.DueDateTableCellRenderer;
 import application.view.helper.EnableCompontentOnTableSelectionListener;
 import application.view.helper.HideTextOnFocusListener;
-import application.viewModel.LoanDetailTableModel;
 
 import com.google.common.base.Joiner;
 import com.jgoodies.validation.ValidationResult;

@@ -1,6 +1,6 @@
 package application.presentationModel;
 
-import application.viewModel.CustomerListModel;
+import application.presentationModel.componentModel.CustomerListModel;
 import domain.Customer;
 
 public class CustomerPMod extends pModBase {

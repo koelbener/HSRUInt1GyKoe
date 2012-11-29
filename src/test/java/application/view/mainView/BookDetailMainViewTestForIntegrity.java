@@ -18,9 +18,9 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import application.LibraryApp;
+import application.presentationModel.componentModel.BookTableModel;
 import application.view.AbstractFestTest;
 import application.view.mainView.dialogView.EditBookDetailMainView;
-import application.viewModel.BookTableModel;
 import domain.Book;
 import domain.Copy;
 import domain.Customer;

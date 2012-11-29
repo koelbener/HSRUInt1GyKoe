@@ -21,13 +21,12 @@ import javax.swing.event.ListSelectionListener;
 
 import net.miginfocom.swing.MigLayout;
 import application.controller.BookDetailController;
-import application.core.LibraryActionListener;
 import application.core.Repository;
 import application.core.Texts;
+import application.presentationModel.componentModel.CopyListModel;
 import application.util.IconUtil;
 import application.view.helper.CopiesListCellRenderer;
 import application.view.helper.CopiesListContextMenuListener;
-import application.viewModel.CopyListModel;
 
 import com.jgoodies.validation.ValidationResult;
 import com.jgoodies.validation.ValidationResultModel;
@@ -260,18 +259,17 @@ public abstract class BookDetailMainViewBase extends DialogViewBase<Book, BookDe
 
     @Override
     protected void initListeners() {
-        btnCancel.addActionListener(new LibraryActionListener() {
+        btnCancel.addActionListener(new ActionListener() {
 
             @Override
-            protected void execute() {
+            public void actionPerformed(ActionEvent e) {
                 BookDetailMainViewBase.this.getContainer().dispose();
             }
         });
-        btnSave.addActionListener(new LibraryActionListener() {
 
+        btnSave.addActionListener(new ActionListener() {
             @Override
-            protected void execute() {
-
+            public void actionPerformed(ActionEvent e) {
                 Book bookToValidate = extractViewValues(new Book());
                 ValidationResult validation = new BookValidator().validate(bookToValidate);
 
@@ -283,7 +281,6 @@ public abstract class BookDetailMainViewBase extends DialogViewBase<Book, BookDe
                     BookDetailMainViewBase.this.getContainer().dispose();
                     getController().saveBook(bookToUpdate, copies);
                 }
-
             }
         });
 

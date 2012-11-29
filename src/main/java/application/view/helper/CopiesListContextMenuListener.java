@@ -8,7 +8,7 @@ import java.awt.event.MouseListener;
 import javax.swing.JList;
 
 import application.controller.BookDetailController;
-import application.viewModel.CopyListModel;
+import application.presentationModel.componentModel.CopyListModel;
 
 import com.google.common.base.Preconditions;
 import com.google.common.primitives.Ints;

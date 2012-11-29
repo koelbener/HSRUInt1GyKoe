@@ -1,4 +1,4 @@
-package application.viewModel;
+package application.presentationModel.componentModel;
 
 public class SearchFilterElement {
 

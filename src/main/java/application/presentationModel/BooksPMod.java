@@ -10,8 +10,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import application.core.Repository;
-import application.viewModel.BookSearchFilterComboBoxModel;
-import application.viewModel.BookTableModel;
+import application.presentationModel.componentModel.BookSearchFilterComboBoxModel;
+import application.presentationModel.componentModel.BookTableModel;
 import domain.Book;
 
 public class BooksPMod extends pModBase {

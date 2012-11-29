@@ -1,4 +1,4 @@
-package application.viewModel;
+package application.presentationModel.componentModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,7 +9,7 @@ import javax.swing.AbstractListModel;
 import javax.swing.ComboBoxModel;
 
 import application.core.Texts;
-import application.viewModel.LoanSearchFilterComboBoxModel.FilterOption;
+import application.presentationModel.componentModel.LoanSearchFilterComboBoxModel.FilterOption;
 
 public class LoanSearchFilterComboBoxModel extends AbstractListModel<FilterOption> implements ComboBoxModel<FilterOption>, Observer {
 

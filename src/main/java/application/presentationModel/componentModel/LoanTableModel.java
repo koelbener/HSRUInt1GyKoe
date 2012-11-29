@@ -1,4 +1,4 @@
-package application.viewModel;
+package application.presentationModel.componentModel;
 
 import java.util.Date;
 import java.util.GregorianCalendar;

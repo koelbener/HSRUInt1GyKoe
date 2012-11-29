@@ -8,11 +8,11 @@ import javax.swing.RowFilter;
 import javax.swing.table.TableRowSorter;
 
 import application.core.Repository;
-import application.viewModel.CopyStatusComboBoxModel;
-import application.viewModel.LoanDetailTableModel;
-import application.viewModel.LoanSearchFilterComboBoxModel;
-import application.viewModel.LoanSearchFilterComboBoxModel.FilterOption;
-import application.viewModel.LoanTableModel;
+import application.presentationModel.componentModel.CopyStatusComboBoxModel;
+import application.presentationModel.componentModel.LoanDetailTableModel;
+import application.presentationModel.componentModel.LoanSearchFilterComboBoxModel;
+import application.presentationModel.componentModel.LoanTableModel;
+import application.presentationModel.componentModel.LoanSearchFilterComboBoxModel.FilterOption;
 
 import com.google.common.base.Preconditions;
 
@@ -176,6 +176,10 @@ public class LoansPMod extends pModBase {
 
     public ComboBoxModel<FilterOption> getSearchFilterModel() {
         return loanSearchFilterComboBoxModel;
+    }
+
+    public void updateFilter() {
+        updateFilter(searchOption, searchString);
     }
 
     public void updateFilter(String searchString) {

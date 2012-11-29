@@ -7,9 +7,9 @@ import javax.swing.RowSorter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import application.presentationModel.componentModel.LoanTableModel;
+import application.presentationModel.componentModel.LoanSearchFilterComboBoxModel.FilterOption;
 import application.view.mainView.dialogView.LoanDetailMainView;
-import application.viewModel.LoanSearchFilterComboBoxModel.FilterOption;
-import application.viewModel.LoanTableModel;
 import domain.Loan;
 
 public class LendingMasterController extends ControllerBase {
@@ -43,6 +43,10 @@ public class LendingMasterController extends ControllerBase {
     public void newLoan() {
         openLoanView(null);
 
+    }
+
+    public void filterLoans() {
+        getRepository().getLoansPMod().updateFilter();
     }
 
     public void filterLoans(String searchString) {

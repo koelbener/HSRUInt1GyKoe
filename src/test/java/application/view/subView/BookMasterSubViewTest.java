@@ -1,5 +1,7 @@
 package application.view.subView;
 
+import static application.presentationModel.componentModel.BookTableModel.COLUMN_AMOUNT;
+import static application.presentationModel.componentModel.BookTableModel.COLUMN_TITLE;
 import static application.view.mainView.dialogView.BookDetailMainViewBase.NAME_BUTTON_CANCEL;
 import static application.view.mainView.dialogView.BookDetailMainViewBase.NAME_TEXTBOX_TITLE;
 import static application.view.subView.BookMasterSubView.NAME_BUTTON_OPEN;
@@ -7,8 +9,6 @@ import static application.view.subView.BookMasterSubView.NAME_COMBOBOX_FILTER;
 import static application.view.subView.BookMasterSubView.NAME_SEARCH_FIELD;
 import static application.view.subView.BookMasterSubView.NAME_TABLE_BOOKS;
 import static application.view.subView.BookMasterSubView.searchDefaultText;
-import static application.viewModel.BookTableModel.COLUMN_AMOUNT;
-import static application.viewModel.BookTableModel.COLUMN_TITLE;
 import static org.fest.swing.data.TableCell.row;
 
 import java.awt.event.KeyEvent;
