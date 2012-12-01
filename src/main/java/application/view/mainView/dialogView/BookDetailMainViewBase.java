@@ -153,7 +153,9 @@ public abstract class BookDetailMainViewBase extends DialogViewBase<Book, BookDe
     @Override
     protected void initUIElements() {
         super.initUIElements();
-        getContainer().setBounds(100, 100, 450, 450);
+        getContainer().setBounds(100, 100, 616, 445);
+        container.setMinimumSize(new Dimension(616, 445));
+
         Container contentPane = getContainer().getContentPane();
         contentPane.setLayout(new BorderLayout(0, 0));
 
@@ -163,9 +165,8 @@ public abstract class BookDetailMainViewBase extends DialogViewBase<Book, BookDe
 
         createBookInfoPanel(pnMainPanel);
 
-        createControlPanel();
-
         createCopiesPanel(pnMainPanel);
+        createControlPanel();
         JPanel pnValidationContainer = createValidationPanel(contentPane);
 
         createButtonsPanel(pnValidationContainer);

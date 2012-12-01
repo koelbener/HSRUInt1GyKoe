@@ -62,7 +62,7 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
 
     private static String defaultSearchValue;
 
-    private JPanel pnMain;
+    private JPanel pnCustomerSelection;
     private JPanel pnNewLoan;
     private JPanel pnLoanOverview;
     private JLabel lblSearch;
@@ -145,7 +145,7 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
 
         // border of panels
         pnNewLoan.setBorder(new TitledBorder(null, Texts.get("LoanDetailMainViewBase.newLoan.title"), TitledBorder.LEADING, TitledBorder.TOP, null, null));
-        pnMain.setBorder(new TitledBorder(null, Texts.get("LoanDetailMainViewBase.customerSelection.title"), TitledBorder.LEADING, TitledBorder.TOP, null, null));
+        pnCustomerSelection.setBorder(new TitledBorder(null, Texts.get("LoanDetailMainViewBase.customerSelection.title"), TitledBorder.LEADING, TitledBorder.TOP, null, null));
 
         // components
         lblCopyTitle.setText(Texts.get("LoanDetailMainViewBase.newLoan.bookDescriptionLabel"));
@@ -171,11 +171,12 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
         super.initUIElements();
 
         Container contentPane = getContainer().getContentPane();
-        getContainer().setBounds(100, 100, 600, 500);
+        getContainer().setBounds(100, 100, 616, 600);
+        getContainer().setMinimumSize(new Dimension(616, 600));
 
         JPanel mainPanel = new JPanel();
         contentPane.add(mainPanel, BorderLayout.CENTER);
-        mainPanel.setLayout(new MigLayout("", "[grow]", "[70.00][89.00,top][grow]"));
+        mainPanel.setLayout(new MigLayout("", "[grow]", "[70.00,grow][89.00,top][]"));
 
         createCustomerSelectionSection(mainPanel);
 
@@ -188,20 +189,20 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
     }
 
     private void createCustomerSelectionSection(JPanel panel_4) {
-        pnMain = new JPanel();
-        panel_4.add(pnMain, "cell 0 0,growx,aligny top");
-        pnMain.setLayout(new MigLayout("", "[][193.00][grow]", "[50.00,grow][26.00,grow]"));
+        pnCustomerSelection = new JPanel();
+        panel_4.add(pnCustomerSelection, "cell 0 0,grow");
+        pnCustomerSelection.setLayout(new MigLayout("", "[][193.00][grow]", "[50.00][26.00,grow,fill]"));
 
         lblSearch = new JLabel();
-        pnMain.add(lblSearch, "cell 0 0,alignx trailing");
+        pnCustomerSelection.add(lblSearch, "cell 0 0,alignx trailing");
 
         txtCustomerSearch = new JTextField();
-        pnMain.add(txtCustomerSearch, "cell 1 0,growx");
+        pnCustomerSelection.add(txtCustomerSearch, "cell 1 0,growx");
         txtCustomerSearch.setColumns(10);
         txtCustomerSearch.setToolTipText(defaultSearchValue);
 
         lblCustomer = new JLabel();
-        pnMain.add(lblCustomer, "cell 0 1,alignx trailing");
+        pnCustomerSelection.add(lblCustomer, "cell 0 1,alignx trailing");
 
         listCustomer = new JList<Customer>(Repository.getInstance().getCustomerPMod().getCustomerListModel());
 
@@ -213,7 +214,7 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
         scrollPaneCustomerList.setMinimumSize(new Dimension(200, 100));
         scrollPaneCustomerList.setPreferredSize(new Dimension(200, 100));
 
-        pnMain.add(scrollPaneCustomerList, "cell 1 1 2 1,growx");
+        pnCustomerSelection.add(scrollPaneCustomerList, "cell 1 1 2 1,grow");
     }
 
     private void updateCustomerSelectionSection() {
@@ -226,7 +227,7 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
     private void createLoanOverviewSection(JPanel panel_4) {
         pnLoanOverview = new JPanel();
         panel_4.add(pnLoanOverview, "cell 0 2,grow");
-        pnLoanOverview.setLayout(new MigLayout("", "[][][][grow]", "[grow][grow][][]"));
+        pnLoanOverview.setLayout(new MigLayout("", "[][][][grow]", "[grow][][][]"));
 
         lblNumberOfLoans = new JLabel();
         pnLoanOverview.add(lblNumberOfLoans, "cell 0 0");
@@ -238,7 +239,10 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
         tblLoans = new JTable(loanDetailTableModel);
         tblLoans.setDefaultRenderer(Date.class, new DueDateTableCellRenderer());
 
-        pnLoanOverview.add(new JScrollPane(tblLoans), "cell 0 1 4 1,grow");
+        JScrollPane scrollPane = new JScrollPane(tblLoans);
+        scrollPane.setMaximumSize(new Dimension(32767, 75));
+        scrollPane.setMinimumSize(new Dimension(23, 75));
+        pnLoanOverview.add(scrollPane, "cell 0 1 4 1,grow");
 
         JPanel panel_5 = new JPanel();
         pnLoanOverview.add(panel_5, "cell 0 2 4 1,grow");
