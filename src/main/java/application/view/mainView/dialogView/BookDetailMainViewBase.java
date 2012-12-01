@@ -56,24 +56,24 @@ public abstract class BookDetailMainViewBase extends DialogViewBase<Book, BookDe
     protected JTextField txtFieldTitle;
     protected JTextField txtFieldAuthor;
     protected JTextField txtFieldPublisher;
-    protected JTextField valNrOfCopies;
-    protected JComboBox<Shelf> comboBoxShelf;
+    protected JTextField txtValNrOfCopies;
+    protected JComboBox<Shelf> comboShelf;
     private JButton btnSave;
     private JButton btnCancel;
     private JButton btnAdd;
     private JButton btnRemove;
-    private JPanel panel;
+    private JPanel pnBookInfo;
     private JLabel lblTitle;
     private JLabel lblAuthor;
     private JLabel lblPublisher;
     private JLabel lblShelf;
-    private JPanel panel_1;
+    private JPanel pnCopies;
     private JLabel lblNrOfCopies;
-    private JList<Copy> copiesList;
-    protected CopyListModel copyListModel;
+    private JList<Copy> listCopies;
+    protected CopyListModel listModelCopies;
     protected ValidationResultModel validationModel;
     protected JComponent validationResultList;
-    protected JPanel validationPanel;
+    protected JPanel pnValidation;
 
     public BookDetailMainViewBase(Book book) {
         super(book, "book_closed.gif");
@@ -93,12 +93,12 @@ public abstract class BookDetailMainViewBase extends DialogViewBase<Book, BookDe
         if (referenceObject != null) {
             copiesOfBook = Repository.getInstance().getBooksPMod().getCopiesOfBook(referenceObject);
         }
-        copyListModel = new CopyListModel(Copy.cloneCopies(copiesOfBook));
+        listModelCopies = new CopyListModel(Copy.cloneCopies(copiesOfBook));
     }
 
     private void updateViewValues() {
         // retrieve new possible shelves-data
-        comboBoxShelf.setModel(Repository.getInstance().getShelfPMod().getShelfComboBoxModel());
+        comboShelf.setModel(Repository.getInstance().getShelfPMod().getShelfComboBoxModel());
 
         Book referenceObject = getReferenceObject();
         if (referenceObject != null) {
@@ -106,9 +106,9 @@ public abstract class BookDetailMainViewBase extends DialogViewBase<Book, BookDe
             txtFieldAuthor.setText(referenceObject.getAuthor());
             txtFieldPublisher.setText(referenceObject.getPublisher());
             // select the correct shelf
-            comboBoxShelf.setSelectedItem(referenceObject.getShelf());
+            comboShelf.setSelectedItem(referenceObject.getShelf());
         } else {
-            comboBoxShelf.setSelectedItem(Shelf.A1);
+            comboShelf.setSelectedItem(Shelf.A1);
         }
         updateCopiesCount();
     }
@@ -120,7 +120,7 @@ public abstract class BookDetailMainViewBase extends DialogViewBase<Book, BookDe
         book.setAuthor(txtFieldAuthor.getText());
         book.setName(txtFieldTitle.getText());
         book.setPublisher(txtFieldPublisher.getText());
-        book.setShelf((Shelf) comboBoxShelf.getSelectedItem());
+        book.setShelf((Shelf) comboShelf.getSelectedItem());
         return book;
     }
 
@@ -130,8 +130,8 @@ public abstract class BookDetailMainViewBase extends DialogViewBase<Book, BookDe
         getContainer().setTitle(Texts.get("BookDetailMainView.this.title")); //$NON-NLS-1$
 
         // border of panels
-        panel.setBorder(new TitledBorder(null, Texts.get("BookDetailMainView.panel.borderTitle"), TitledBorder.LEADING, TitledBorder.TOP, null, null));
-        panel_1.setBorder(new TitledBorder(null, Texts.get("BookDetailMainView.panel_1.borderTitle"), TitledBorder.LEADING, TitledBorder.TOP, null, null)); //$NON-NLS-1$
+        pnBookInfo.setBorder(new TitledBorder(null, Texts.get("BookDetailMainView.bookInfo.borderTitle"), TitledBorder.LEADING, TitledBorder.TOP, null, null));
+        pnCopies.setBorder(new TitledBorder(null, Texts.get("BookDetailMainView.copies.borderTitle"), TitledBorder.LEADING, TitledBorder.TOP, null, null)); //$NON-NLS-1$
 
         // components
         lblTitle.setText(Texts.get("BookDetailMainView.lblTitel.text"));
@@ -159,56 +159,56 @@ public abstract class BookDetailMainViewBase extends DialogViewBase<Book, BookDe
         contentPane.add(panel_4, BorderLayout.CENTER);
         panel_4.setLayout(new BorderLayout(0, 0));
 
-        panel = new JPanel();
-        panel_4.add(panel, BorderLayout.NORTH);
-        panel.setLayout(new MigLayout("", "[][grow]", "[][][][]"));
+        pnBookInfo = new JPanel();
+        panel_4.add(pnBookInfo, BorderLayout.NORTH);
+        pnBookInfo.setLayout(new MigLayout("", "[][grow]", "[][][][]"));
 
         lblTitle = new JLabel();
-        panel.add(lblTitle, "cell 0 0,alignx trailing");
+        pnBookInfo.add(lblTitle, "cell 0 0,alignx trailing");
 
         txtFieldTitle = new JTextField();
-        panel.add(txtFieldTitle, "cell 1 0,growx");
+        pnBookInfo.add(txtFieldTitle, "cell 1 0,growx");
         txtFieldTitle.setColumns(10);
         txtFieldTitle.setName(NAME_TEXTBOX_TITLE);
 
         lblAuthor = new JLabel();
-        panel.add(lblAuthor, "cell 0 1,alignx trailing");
+        pnBookInfo.add(lblAuthor, "cell 0 1,alignx trailing");
 
         txtFieldAuthor = new JTextField();
         txtFieldAuthor.setName(NAME_TEXTBOX_AUTHOR);
-        panel.add(txtFieldAuthor, "cell 1 1,growx");
+        pnBookInfo.add(txtFieldAuthor, "cell 1 1,growx");
         txtFieldAuthor.setColumns(10);
 
         lblPublisher = new JLabel();
-        panel.add(lblPublisher, "cell 0 2,alignx trailing");
+        pnBookInfo.add(lblPublisher, "cell 0 2,alignx trailing");
 
         txtFieldPublisher = new JTextField();
         txtFieldPublisher.setName(NAME_TEXTBOX_PUBLISHER);
-        panel.add(txtFieldPublisher, "cell 1 2,growx");
+        pnBookInfo.add(txtFieldPublisher, "cell 1 2,growx");
         txtFieldPublisher.setColumns(10);
 
         lblShelf = new JLabel();
-        panel.add(lblShelf, "cell 0 3,alignx trailing");
+        pnBookInfo.add(lblShelf, "cell 0 3,alignx trailing");
 
-        comboBoxShelf = new JComboBox<Shelf>();
-        comboBoxShelf.setName(NAME_COMBOBOX_SHELF);
-        panel.add(comboBoxShelf, "cell 1 3,growx");
+        comboShelf = new JComboBox<Shelf>();
+        comboShelf.setName(NAME_COMBOBOX_SHELF);
+        pnBookInfo.add(comboShelf, "cell 1 3,growx");
 
-        panel_1 = new JPanel();
-        panel_4.add(panel_1, BorderLayout.CENTER);
-        panel_1.setLayout(new BorderLayout(0, 0));
+        pnCopies = new JPanel();
+        panel_4.add(pnCopies, BorderLayout.CENTER);
+        pnCopies.setLayout(new BorderLayout(0, 0));
 
         JPanel panel_2 = new JPanel();
-        panel_1.add(panel_2, BorderLayout.NORTH);
+        pnCopies.add(panel_2, BorderLayout.NORTH);
         panel_2.setLayout(new MigLayout("", "[][grow][][]", "[]"));
 
         lblNrOfCopies = new JLabel();
         panel_2.add(lblNrOfCopies, "cell 0 0,alignx trailing");
 
-        valNrOfCopies = new JTextField();
-        valNrOfCopies.setEnabled(false);
-        panel_2.add(valNrOfCopies, "flowx,cell 1 0");
-        valNrOfCopies.setColumns(10);
+        txtValNrOfCopies = new JTextField();
+        txtValNrOfCopies.setEnabled(false);
+        panel_2.add(txtValNrOfCopies, "flowx,cell 1 0");
+        txtValNrOfCopies.setColumns(10);
 
         btnAdd = new JButton();
         btnAdd.setName(NAME_BUTTON_ADD_COPY);
@@ -222,27 +222,27 @@ public abstract class BookDetailMainViewBase extends DialogViewBase<Book, BookDe
         panel_2.add(btnRemove, "cell 3 0");
 
         JPanel panel_3 = new JPanel();
-        panel_1.add(panel_3, BorderLayout.CENTER);
+        pnCopies.add(panel_3, BorderLayout.CENTER);
         panel_3.setLayout(new BorderLayout(0, 0));
 
-        copiesList = new JList<Copy>();
-        copiesList.setModel(copyListModel);
-        copiesList.setCellRenderer(new CopiesListCellRenderer());
-        panel_3.add(copiesList);
+        listCopies = new JList<Copy>();
+        listCopies.setModel(listModelCopies);
+        listCopies.setCellRenderer(new CopiesListCellRenderer());
+        panel_3.add(listCopies);
 
         JPanel panel_5 = new JPanel();
         contentPane.add(panel_5, BorderLayout.SOUTH);
         panel_5.setLayout(new BorderLayout(0, 0));
 
-        validationPanel = new JPanel();
-        validationPanel.setMinimumSize(new Dimension(0, 0));
-        validationPanel.setName(NAME_VALIDATION_PANEL);
+        pnValidation = new JPanel();
+        pnValidation.setMinimumSize(new Dimension(0, 0));
+        pnValidation.setName(NAME_VALIDATION_PANEL);
 
         validationModel = new DefaultValidationResultModel();
-        validationPanel.setLayout(new MigLayout("", "[grow]", "[40px,grow]"));
+        pnValidation.setLayout(new MigLayout("", "[grow]", "[40px,grow]"));
         validationResultList = ValidationResultViewFactory.createReportList(validationModel);
-        validationPanel.add(validationResultList, "cell 0 0,alignx right,growy");
-        panel_5.add(validationPanel, BorderLayout.NORTH);
+        pnValidation.add(validationResultList, "cell 0 0,alignx right,growy");
+        panel_5.add(pnValidation, BorderLayout.NORTH);
 
         JPanel panel_8 = new JPanel();
         panel_8.setLayout(new MigLayout("", "[grow][85px][]", "[23px]"));
@@ -285,7 +285,7 @@ public abstract class BookDetailMainViewBase extends DialogViewBase<Book, BookDe
 
                 if (validateBook()) {
                     Book bookToUpdate = extractViewValues(getReferenceObject());
-                    List<Copy> copies = copyListModel.getAll();
+                    List<Copy> copies = listModelCopies.getAll();
                     BookDetailMainViewBase.this.getContainer().dispose();
                     getController().saveBook(bookToUpdate, copies);
                 }
@@ -296,7 +296,7 @@ public abstract class BookDetailMainViewBase extends DialogViewBase<Book, BookDe
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                copyListModel.addCopy(new Copy());
+                listModelCopies.addCopy(new Copy());
                 updateCopiesCount();
             }
 
@@ -305,21 +305,21 @@ public abstract class BookDetailMainViewBase extends DialogViewBase<Book, BookDe
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (copyListModel.removeCopy(copiesList.getSelectedValuesList()))
+                if (listModelCopies.removeCopy(listCopies.getSelectedValuesList()))
                     btnRemove.setEnabled(false);
                 updateCopiesCount();
             }
         });
-        copiesList.addListSelectionListener(new ListSelectionListener() {
+        listCopies.addListSelectionListener(new ListSelectionListener() {
 
             @Override
             public void valueChanged(ListSelectionEvent e) {
-                int selectedCopies = copiesList.getSelectedIndices().length;
-                btnRemove.setEnabled(selectedCopies > 0 && Repository.getInstance().getCopyPMod().areCopiesDeletable(copiesList.getSelectedValuesList()));
+                int selectedCopies = listCopies.getSelectedIndices().length;
+                btnRemove.setEnabled(selectedCopies > 0 && Repository.getInstance().getCopyPMod().areCopiesDeletable(listCopies.getSelectedValuesList()));
             }
         });
 
-        copiesList.addMouseListener(new CopiesListContextMenuListener(copiesList, copyListModel));
+        listCopies.addMouseListener(new CopiesListContextMenuListener(listCopies, listModelCopies));
     }
 
     protected boolean validateBook() {
@@ -331,7 +331,7 @@ public abstract class BookDetailMainViewBase extends DialogViewBase<Book, BookDe
     }
 
     private void updateCopiesCount() {
-        valNrOfCopies.setText("" + copyListModel.getSize());
+        txtValNrOfCopies.setText("" + listModelCopies.getSize());
     }
 
     @Override
@@ -340,8 +340,8 @@ public abstract class BookDetailMainViewBase extends DialogViewBase<Book, BookDe
             List<Copy> copiesOfBook = null;
             if (getReferenceObject() != null) {
                 copiesOfBook = Repository.getInstance().getBooksPMod().getCopiesOfBook(getReferenceObject());
-                copyListModel = new CopyListModel(Copy.cloneCopies(copiesOfBook));
-                copiesList.setModel(copyListModel);
+                listModelCopies = new CopyListModel(Copy.cloneCopies(copiesOfBook));
+                listCopies.setModel(listModelCopies);
             }
         }
     }

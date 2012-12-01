@@ -48,9 +48,9 @@ public class EditBookDetailMainView extends BookDetailMainViewBase {
                 /*
                  * Otherwise just update the validationPanel
                  */
-                validationPanel.removeAll();
-                validationPanel.add(ValidationResultViewFactory.createReportList(validationModel), "cell 0 0,alignx right,growy");
-                validationPanel.revalidate();
+                pnValidation.removeAll();
+                pnValidation.add(ValidationResultViewFactory.createReportList(validationModel), "cell 0 0,alignx right,growy");
+                pnValidation.revalidate();
             }
 
         }

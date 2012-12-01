@@ -32,7 +32,7 @@ public class MasterMainView extends MainViewBase<Library, MasterController, JFra
     private JComboBox<Language> languageComboBox;
     private JTabbedPane tabbedPane;
     private JLabel lblSwingingLibrary;
-    private JPanel panel;
+    private JPanel pnMainPanel;
 
     public MasterMainView() {
         super(null);
@@ -71,8 +71,8 @@ public class MasterMainView extends MainViewBase<Library, MasterController, JFra
         lblSwingingLibrary = new JLabel("test");
         headerPanel.add(lblSwingingLibrary, "cell 0 0,alignx left,aligny center");
 
-        panel = new JPanel();
-        headerPanel.add(panel, "cell 10 0,grow");
+        pnMainPanel = new JPanel();
+        headerPanel.add(pnMainPanel, "cell 10 0,grow");
 
         languageComboBox = new JComboBox<Language>();
         languageComboBox.setModel(new DefaultComboBoxModel<Language>(Language.values()));

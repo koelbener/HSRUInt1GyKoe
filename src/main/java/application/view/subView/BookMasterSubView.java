@@ -51,22 +51,23 @@ public class BookMasterSubView extends SubViewBase<Library, BookMasterController
 
     public static String searchDefaultText;
 
-    public JTextField txtFieldSearch;
-    public JLabel numberOfCopies;
-    public JLabel numberOfBooks;
+    public JTextField txtSearch;
+    public JLabel lblNumberOfCopies;
+    public JLabel lblNumberOfBooks;
     public JButton btnOpenBook;
-    public BooksPMod booksPMod;
     public JButton btnNewBook;
-    public JTable booksTable;
-    public JComboBox<SearchFilterElement> searchFilterComboBox;
+    public JTable tblBooks;
+    public JComboBox<SearchFilterElement> comboSearchFilter;
     public JLabel lblAnzahlExemplare;
     public JLabel lblLasd;
-    public JPanel inventoryPanel;
+    public JPanel pnInventory;
     public JLabel lblAllBooksHint;
     public JLabel lblNurVerfgbare;
-    public JPanel statisticsPanel;
+    public JPanel pnStatistics;
     private HideTextOnFocusListener hideTextOnFocusListener;
     private JCheckBox checkBoxOnlyAvailable;
+
+    public BooksPMod booksPMod;
 
     public BookMasterSubView() {
         super(null);
@@ -83,44 +84,44 @@ public class BookMasterSubView extends SubViewBase<Library, BookMasterController
     @Override
     protected void initUIElements() {
         container.setLayout(new BorderLayout());
-        statisticsPanel = new JPanel();
-        container.add(statisticsPanel, BorderLayout.NORTH);
-        statisticsPanel.setLayout(new MigLayout("", "[][][fill][][]", "[]"));
+        pnStatistics = new JPanel();
+        container.add(pnStatistics, BorderLayout.NORTH);
+        pnStatistics.setLayout(new MigLayout("", "[][][fill][][]", "[]"));
 
         lblLasd = new JLabel();
-        statisticsPanel.add(lblLasd, "cell 0 0");
-        numberOfBooks = new JLabel();
-        numberOfBooks.setName(NAME_LABEL_NUMBER_OF_BOOKS);
-        statisticsPanel.add(numberOfBooks, "cell 1 0");
+        pnStatistics.add(lblLasd, "cell 0 0");
+        lblNumberOfBooks = new JLabel();
+        lblNumberOfBooks.setName(NAME_LABEL_NUMBER_OF_BOOKS);
+        pnStatistics.add(lblNumberOfBooks, "cell 1 0");
 
         lblAnzahlExemplare = new JLabel();
-        statisticsPanel.add(lblAnzahlExemplare, "cell 3 0");
+        pnStatistics.add(lblAnzahlExemplare, "cell 3 0");
 
-        numberOfCopies = new JLabel();
-        statisticsPanel.add(numberOfCopies, "cell 4 0");
+        lblNumberOfCopies = new JLabel();
+        pnStatistics.add(lblNumberOfCopies, "cell 4 0");
 
         updateStatistics();
 
-        inventoryPanel = new JPanel();
-        container.add(inventoryPanel, BorderLayout.CENTER);
-        inventoryPanel.setLayout(new BorderLayout(0, 0));
+        pnInventory = new JPanel();
+        container.add(pnInventory, BorderLayout.CENTER);
+        pnInventory.setLayout(new BorderLayout(0, 0));
 
         JPanel panel_5 = new JPanel();
-        inventoryPanel.add(panel_5, BorderLayout.NORTH);
+        pnInventory.add(panel_5, BorderLayout.NORTH);
         panel_5.setLayout(new MigLayout("", "[grow][grow][][]", "[][]"));
 
         lblAllBooksHint = new JLabel();
         panel_5.add(lblAllBooksHint, "cell 0 0");
 
-        txtFieldSearch = new JTextField();
-        txtFieldSearch.setName(NAME_SEARCH_FIELD);
-        panel_5.add(txtFieldSearch, "flowx,cell 0 1,growx");
-        txtFieldSearch.setColumns(10);
+        txtSearch = new JTextField();
+        txtSearch.setName(NAME_SEARCH_FIELD);
+        panel_5.add(txtSearch, "flowx,cell 0 1,growx");
+        txtSearch.setColumns(10);
 
-        searchFilterComboBox = new JComboBox<SearchFilterElement>();
-        searchFilterComboBox.setName(NAME_COMBOBOX_FILTER);
-        searchFilterComboBox.setModel(booksPMod.getFilterComboBoxModel());
-        panel_5.add(searchFilterComboBox, "cell 1 1,growx");
+        comboSearchFilter = new JComboBox<SearchFilterElement>();
+        comboSearchFilter.setName(NAME_COMBOBOX_FILTER);
+        comboSearchFilter.setModel(booksPMod.getFilterComboBoxModel());
+        panel_5.add(comboSearchFilter, "cell 1 1,growx");
 
         checkBoxOnlyAvailable = new JCheckBox();
         panel_5.add(checkBoxOnlyAvailable, "cell 2 1");
@@ -129,19 +130,19 @@ public class BookMasterSubView extends SubViewBase<Library, BookMasterController
         panel_5.add(lblNurVerfgbare, "cell 3 1,alignx trailing");
 
         JPanel panel_6 = new JPanel();
-        inventoryPanel.add(panel_6, BorderLayout.CENTER);
+        pnInventory.add(panel_6, BorderLayout.CENTER);
         panel_6.setLayout(new BorderLayout(0, 0));
 
         JScrollPane scrollPane = new JScrollPane();
 
         panel_6.add(scrollPane, BorderLayout.CENTER);
 
-        booksTable = new JTable(booksPMod.getBookTableModel());
-        booksTable.setRowSorter(booksPMod.getBookTableRowSorter());
-        booksTable.setName(NAME_TABLE_BOOKS);
+        tblBooks = new JTable(booksPMod.getBookTableModel());
+        tblBooks.setRowSorter(booksPMod.getBookTableRowSorter());
+        tblBooks.setName(NAME_TABLE_BOOKS);
         setBookTableColumnWidths();
 
-        scrollPane.setViewportView(booksTable);
+        scrollPane.setViewportView(tblBooks);
 
         JPanel panel_7 = new JPanel();
         panel_6.add(panel_7, BorderLayout.EAST);
@@ -163,21 +164,21 @@ public class BookMasterSubView extends SubViewBase<Library, BookMasterController
     private void setBookTableColumnWidths() {
         TableColumn column = null;
         for (int i = 0; i < 5; i++) {
-            column = booksTable.getColumnModel().getColumn(i);
+            column = tblBooks.getColumnModel().getColumn(i);
             if (i == BookTableModel.COLUMN_SHELF || i == BookTableModel.COLUMN_AMOUNT) {
                 column.setPreferredWidth(30);
             } else {
                 column.setPreferredWidth(100);
             }
         }
-        booksTable.doLayout();
+        tblBooks.doLayout();
     }
 
     @Override
     protected void setTexts() {
         // panel titles
-        statisticsPanel.setBorder(new TitledBorder(null, Texts.get("BookMasterMainView.statisticsPanel.borderTitle"), TitledBorder.LEADING, TitledBorder.TOP, null, null));
-        inventoryPanel.setBorder(new TitledBorder(null, Texts.get("BookMasterMainView.inventoryPanel.borderTitle"), TitledBorder.LEADING, TitledBorder.TOP, null, null));
+        pnStatistics.setBorder(new TitledBorder(null, Texts.get("BookMasterMainView.statisticsPanel.borderTitle"), TitledBorder.LEADING, TitledBorder.TOP, null, null));
+        pnInventory.setBorder(new TitledBorder(null, Texts.get("BookMasterMainView.inventoryPanel.borderTitle"), TitledBorder.LEADING, TitledBorder.TOP, null, null));
 
         // components
         lblAnzahlExemplare.setText(Texts.get("BookMasterMainView.lblAnzahlExemplare.text"));
@@ -186,7 +187,7 @@ public class BookMasterSubView extends SubViewBase<Library, BookMasterController
         lblAllBooksHint.setText(Texts.get("BookMasterMainView.allBooksHint.text"));
         btnOpenBook.setText(Texts.get("BookMasterMainView.btnOpenBook.text"));
         searchDefaultText = Texts.get("BookMasterMainView.searchDefault");
-        txtFieldSearch.setText(searchDefaultText);
+        txtSearch.setText(searchDefaultText);
         if (hideTextOnFocusListener != null)
             hideTextOnFocusListener.updateText(searchDefaultText);
         lblNurVerfgbare.setText(Texts.get("BookMasterMainView.lblNurVerfgbare.text"));
@@ -218,27 +219,27 @@ public class BookMasterSubView extends SubViewBase<Library, BookMasterController
     @Override
     protected void initListeners() {
 
-        new EnableCompontentOnTableSelectionListener(booksTable, btnOpenBook);
+        new EnableCompontentOnTableSelectionListener(tblBooks, btnOpenBook);
 
-        searchFilterComboBox.addActionListener(new ActionListener() {
+        comboSearchFilter.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent arg0) {
                 search();
             }
 
             private void search() {
-                if (!txtFieldSearch.getText().equals(searchDefaultText)) {
-                    getController().setSearchFilter(((SearchFilterElement) searchFilterComboBox.getSelectedItem()).getTableModelColumn());
+                if (!txtSearch.getText().equals(searchDefaultText)) {
+                    getController().setSearchFilter(((SearchFilterElement) comboSearchFilter.getSelectedItem()).getTableModelColumn());
                 }
             }
         });
 
-        booksTable.addMouseListener(new MouseAdapter() {
+        tblBooks.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() == 2) {
                     logger.trace("doubleClick detected");
-                    getController().openBooks(new int[] { booksTable.rowAtPoint(e.getPoint()) });
+                    getController().openBooks(new int[] { tblBooks.rowAtPoint(e.getPoint()) });
                 }
             }
         });
@@ -246,7 +247,7 @@ public class BookMasterSubView extends SubViewBase<Library, BookMasterController
         btnOpenBook.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                getController().openBooks(booksTable.getSelectedRows());
+                getController().openBooks(tblBooks.getSelectedRows());
             }
         });
 
@@ -265,7 +266,7 @@ public class BookMasterSubView extends SubViewBase<Library, BookMasterController
             }
         });
 
-        txtFieldSearch.getDocument().addDocumentListener(new DocumentListener() {
+        txtSearch.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void changedUpdate(DocumentEvent e) {
                 search();
@@ -283,9 +284,9 @@ public class BookMasterSubView extends SubViewBase<Library, BookMasterController
 
         });
 
-        hideTextOnFocusListener = new HideTextOnFocusListener(txtFieldSearch, searchDefaultText);
+        hideTextOnFocusListener = new HideTextOnFocusListener(txtSearch, searchDefaultText);
 
-        booksTable.addMouseListener(new BooksTableContextMenuListener(booksTable, new ActionListener() {
+        tblBooks.addMouseListener(new BooksTableContextMenuListener(tblBooks, new ActionListener() {
 
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -295,15 +296,15 @@ public class BookMasterSubView extends SubViewBase<Library, BookMasterController
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                getController().openBooks(booksTable.getSelectedRows());
+                getController().openBooks(tblBooks.getSelectedRows());
             }
         }));
 
     }
 
     private void search() {
-        if (!txtFieldSearch.getText().equals(searchDefaultText)) {
-            getController().searchBooks(txtFieldSearch.getText());
+        if (!txtSearch.getText().equals(searchDefaultText)) {
+            getController().searchBooks(txtSearch.getText());
         }
     }
 
@@ -318,8 +319,8 @@ public class BookMasterSubView extends SubViewBase<Library, BookMasterController
     }
 
     private void updateStatistics() {
-        numberOfBooks.setText(String.valueOf(booksPMod.getBooksCount()));
-        numberOfCopies.setText(String.valueOf(booksPMod.getCopiesCount()));
+        lblNumberOfBooks.setText(String.valueOf(booksPMod.getBooksCount()));
+        lblNumberOfCopies.setText(String.valueOf(booksPMod.getCopiesCount()));
     }
 
 }

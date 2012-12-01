@@ -46,15 +46,15 @@ public class LendingMasterSubView extends SubViewBase<Library, LendingMasterCont
 
     public static String searchDefaultText;
 
-    private JPanel inventoryPanel;
-    private JPanel statisticsPanel;
+    private JPanel pnInventory;
+    private JPanel pnStatistics;
 
     private JLabel lblNumberOfLoans;
     private JLabel lblCurrentLoans;
     private JLabel lblOverdueLoans;
 
     private JTextField txtSearch;
-    private JComboBox<LoanSearchFilterComboBoxModel.FilterOption> comboBoxSearchFilter;
+    private JComboBox<LoanSearchFilterComboBoxModel.FilterOption> comboSearchFilter;
     private JButton btnNew;
     private JButton btnOpen;
     private LoansPMod loansPMod;
@@ -75,50 +75,50 @@ public class LendingMasterSubView extends SubViewBase<Library, LendingMasterCont
     @Override
     public void initUIElements() {
         container.setLayout(new BorderLayout());
-        statisticsPanel = new JPanel();
-        container.add(statisticsPanel, BorderLayout.NORTH);
+        pnStatistics = new JPanel();
+        container.add(pnStatistics, BorderLayout.NORTH);
 
-        statisticsPanel.setLayout(new MigLayout("", "[][][][][][][][]", "[]"));
+        pnStatistics.setLayout(new MigLayout("", "[][][][][][][][]", "[]"));
 
         lblNumberOfLoans = new JLabel();
-        statisticsPanel.add(lblNumberOfLoans, "cell 0 0");
+        pnStatistics.add(lblNumberOfLoans, "cell 0 0");
 
         valNumberOfLoans = new JLabel();
-        statisticsPanel.add(valNumberOfLoans, "cell 1 0");
+        pnStatistics.add(valNumberOfLoans, "cell 1 0");
 
         lblCurrentLoans = new JLabel();
-        statisticsPanel.add(lblCurrentLoans, "cell 3 0");
+        pnStatistics.add(lblCurrentLoans, "cell 3 0");
 
         valCurrentLoans = new JLabel();
-        statisticsPanel.add(valCurrentLoans, "cell 4 0");
+        pnStatistics.add(valCurrentLoans, "cell 4 0");
 
         lblOverdueLoans = new JLabel();
-        statisticsPanel.add(lblOverdueLoans, "cell 6 0");
+        pnStatistics.add(lblOverdueLoans, "cell 6 0");
 
         valOverdueLoans = new JLabel();
-        statisticsPanel.add(valOverdueLoans, "cell 7 0");
+        pnStatistics.add(valOverdueLoans, "cell 7 0");
 
         updateStatistics();
 
-        inventoryPanel = new JPanel();
-        container.add(inventoryPanel, BorderLayout.CENTER);
-        inventoryPanel.setLayout(new BorderLayout(0, 0));
+        pnInventory = new JPanel();
+        container.add(pnInventory, BorderLayout.CENTER);
+        pnInventory.setLayout(new BorderLayout(0, 0));
 
         JPanel searchPanel = new JPanel();
-        inventoryPanel.add(searchPanel, BorderLayout.NORTH);
+        pnInventory.add(searchPanel, BorderLayout.NORTH);
         searchPanel.setLayout(new MigLayout("", "[grow][]", "[]"));
 
         txtSearch = new JTextField();
         searchPanel.add(txtSearch, "flowx,cell 0 0,growx");
         txtSearch.setColumns(10);
 
-        comboBoxSearchFilter = new JComboBox<LoanSearchFilterComboBoxModel.FilterOption>(Repository.getInstance().getLoansPMod().getSearchFilterModel());
-        comboBoxSearchFilter.setName(NAME_COMBOBOX_FILTER);
-        searchPanel.add(comboBoxSearchFilter, "cell 0 0");
+        comboSearchFilter = new JComboBox<LoanSearchFilterComboBoxModel.FilterOption>(Repository.getInstance().getLoansPMod().getSearchFilterModel());
+        comboSearchFilter.setName(NAME_COMBOBOX_FILTER);
+        searchPanel.add(comboSearchFilter, "cell 0 0");
 
         JPanel panel_13 = new JPanel();
         panel_13.setLayout(new MigLayout("", "[]", "[23px][]"));
-        inventoryPanel.add(panel_13, BorderLayout.EAST);
+        pnInventory.add(panel_13, BorderLayout.EAST);
 
         btnNew = new JButton();
         btnOpen = new JButton();
@@ -127,7 +127,7 @@ public class LendingMasterSubView extends SubViewBase<Library, LendingMasterCont
         panel_13.add(btnOpen, "cell 0 1,growx,aligny center");
 
         JScrollPane scrollPane_1 = new JScrollPane();
-        inventoryPanel.add(scrollPane_1, BorderLayout.CENTER);
+        pnInventory.add(scrollPane_1, BorderLayout.CENTER);
 
         loansTable = new JTable(loansPMod.getLoanTableModel());
         loansTable.setName(NAME_TABLE_LOANS);
@@ -141,8 +141,8 @@ public class LendingMasterSubView extends SubViewBase<Library, LendingMasterCont
     @Override
     protected void setTexts() {
         // panel titles
-        statisticsPanel.setBorder(new TitledBorder(null, Texts.get("LendingMasterMainView.statisticsPanel.borderTitle"), TitledBorder.LEADING, TitledBorder.TOP, null, null));
-        inventoryPanel.setBorder(new TitledBorder(null, Texts.get("LendingMasterMainView.inventoryPanel.borderTitle"), TitledBorder.LEADING, TitledBorder.TOP, null, null));
+        pnStatistics.setBorder(new TitledBorder(null, Texts.get("LendingMasterMainView.statisticsPanel.borderTitle"), TitledBorder.LEADING, TitledBorder.TOP, null, null));
+        pnInventory.setBorder(new TitledBorder(null, Texts.get("LendingMasterMainView.inventoryPanel.borderTitle"), TitledBorder.LEADING, TitledBorder.TOP, null, null));
 
         // components
         lblNumberOfLoans.setText(Texts.get("LendingMasterMainView.lblAnzahlAusleihen.text"));
@@ -203,11 +203,11 @@ public class LendingMasterSubView extends SubViewBase<Library, LendingMasterCont
             }
         });
 
-        comboBoxSearchFilter.addActionListener(new ActionListener() {
+        comboSearchFilter.addActionListener(new ActionListener() {
 
             @Override
             public void actionPerformed(ActionEvent arg0) {
-                getController().filterLoans((LoanSearchFilterComboBoxModel.FilterOption) comboBoxSearchFilter.getSelectedItem());
+                getController().filterLoans((LoanSearchFilterComboBoxModel.FilterOption) comboSearchFilter.getSelectedItem());
             }
         });
 
