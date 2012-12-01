@@ -301,21 +301,7 @@ public abstract class BookDetailMainViewBase extends DialogViewBase<Book, BookDe
             }
         });
 
-        // add a listener to the delete button
-        listCopies.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0), "DELETE");
-        listCopies.getActionMap().put("DELETE", new AbstractAction() {
-            private static final long serialVersionUID = -5664120575484177305L;
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (btnRemove.isEnabled()) {
-                    if (listModelCopies.removeCopy(listCopies.getSelectedValuesList())) {
-                        btnRemove.setEnabled(false);
-                    }
-                    updateCopiesCount();
-                }
-            }
-        });
+        initKeyboardListener();
 
         btnSave.addActionListener(new ActionListener() {
             @Override
@@ -363,6 +349,24 @@ public abstract class BookDetailMainViewBase extends DialogViewBase<Book, BookDe
         });
 
         listCopies.addMouseListener(new CopiesListContextMenuListener(listCopies, listModelCopies));
+    }
+
+    private void initKeyboardListener() {
+        // add a listener to the delete button
+        listCopies.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0), "DELETE");
+        listCopies.getActionMap().put("DELETE", new AbstractAction() {
+            private static final long serialVersionUID = -5664120575484177305L;
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (btnRemove.isEnabled()) {
+                    if (listModelCopies.removeCopy(listCopies.getSelectedValuesList())) {
+                        btnRemove.setEnabled(false);
+                    }
+                    updateCopiesCount();
+                }
+            }
+        });
     }
 
     protected boolean validateBook() {

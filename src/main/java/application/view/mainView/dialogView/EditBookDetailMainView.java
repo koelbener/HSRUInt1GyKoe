@@ -1,5 +1,6 @@
 package application.view.mainView.dialogView;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
@@ -44,6 +45,7 @@ public class EditBookDetailMainView extends BookDetailMainViewBase {
             if (validationModel.getResult().hasErrors() && (!hasErrorsBefore || componentIsInvalidComponent)) {
                 invalidComponent = e.getComponent();
                 e.getComponent().requestFocus();
+                e.getComponent().setBackground(Color.RED);
             } else {
                 /*
                  * Otherwise just update the validationPanel
@@ -51,6 +53,8 @@ public class EditBookDetailMainView extends BookDetailMainViewBase {
                 pnValidation.removeAll();
                 pnValidation.add(ValidationResultViewFactory.createReportList(validationModel), "cell 0 0,alignx right,growy");
                 pnValidation.revalidate();
+
+                e.getComponent().setBackground(Color.WHITE);
             }
 
         }

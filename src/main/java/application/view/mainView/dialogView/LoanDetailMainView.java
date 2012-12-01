@@ -1,6 +1,7 @@
 package application.view.mainView.dialogView;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
@@ -460,6 +461,11 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
                 if (!txtCustomerSearch.getText().equals(defaultSearchValue)) {
                     logger.debug("search for value {}", txtCustomerSearch.getText());
                     getController().filterCustomers(txtCustomerSearch.getText());
+                    if (listCustomer.getModel().getSize() > 0) {
+                        txtCustomerSearch.setBackground(Color.WHITE);
+                    } else {
+                        txtCustomerSearch.setBackground(Color.RED);
+                    }
                 }
             }
         });
@@ -547,6 +553,11 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
                     currentSelectedCopy = copyPMod.searchCopy(copyId);
                     updateNewLoanSection();
                     updateMakeLoanButtonVisibility();
+                    if (currentSelectedCopy == null) {
+                        txtCopyId.setBackground(Color.RED);
+                    } else {
+                        txtCopyId.setBackground(Color.WHITE);
+                    }
                 }
             }
         });
