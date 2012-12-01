@@ -27,6 +27,12 @@ public class BookDetailController extends ControllerBase {
         }
 
         List<Copy> existingCopies = new ArrayList<Copy>(getRepository().getBooksPMod().getCopiesOfBook(book));
+        updateCopies(newCopies, existingBook, existingCopies);
+
+        getRepository().getBooksPMod().updateBook(existingBook);
+    }
+
+    private void updateCopies(List<Copy> newCopies, Book existingBook, List<Copy> existingCopies) {
         for (Copy copy : newCopies) {
             if (newlyAdded(copy)) {
                 logger.debug("Adding copy \"{}\"", copy);
@@ -47,8 +53,6 @@ public class BookDetailController extends ControllerBase {
             logger.debug("Removing copy \"{}\"", copy);
             getRepository().getCopyPMod().removeCopy(copy);
         }
-
-        getRepository().getBooksPMod().updateBook(existingBook);
     }
 
     private boolean newlyAdded(Copy copy) {

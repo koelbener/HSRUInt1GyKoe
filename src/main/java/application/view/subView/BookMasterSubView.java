@@ -106,36 +106,35 @@ public class BookMasterSubView extends SubViewBase<Library, BookMasterController
         container.add(pnInventory, BorderLayout.CENTER);
         pnInventory.setLayout(new BorderLayout(0, 0));
 
-        JPanel panel_5 = new JPanel();
-        pnInventory.add(panel_5, BorderLayout.NORTH);
-        panel_5.setLayout(new MigLayout("", "[grow][grow][][]", "[][]"));
+        createBookMasterHeader();
 
-        lblAllBooksHint = new JLabel();
-        panel_5.add(lblAllBooksHint, "cell 0 0");
+        createControlsPanel();
+    }
 
-        txtSearch = new JTextField();
-        txtSearch.setName(NAME_SEARCH_FIELD);
-        panel_5.add(txtSearch, "flowx,cell 0 1,growx");
-        txtSearch.setColumns(10);
+    private void createControlsPanel() {
+        JPanel pnControlls = createBookOverviewPanel();
+        pnControlls.setLayout(new MigLayout("", "[]", "[23px][]"));
 
-        comboSearchFilter = new JComboBox<SearchFilterElement>();
-        comboSearchFilter.setName(NAME_COMBOBOX_FILTER);
-        comboSearchFilter.setModel(booksPMod.getFilterComboBoxModel());
-        panel_5.add(comboSearchFilter, "cell 1 1,growx");
+        btnNewBook = new JButton();
+        btnNewBook.setName(NAME_BUTTON_NEW);
+        btnNewBook.setMnemonic('n');
+        pnControlls.add(btnNewBook, "cell 0 0,growx,aligny center");
 
-        checkBoxOnlyAvailable = new JCheckBox();
-        panel_5.add(checkBoxOnlyAvailable, "cell 2 1");
+        btnOpenBook = new JButton();
+        btnOpenBook.setName(NAME_BUTTON_OPEN);
+        btnOpenBook.setMnemonic('o');
+        pnControlls.add(btnOpenBook, "cell 0 1,growx,aligny center");
+        btnOpenBook.setEnabled(false);
+    }
 
-        lblNurVerfgbare = new JLabel();
-        panel_5.add(lblNurVerfgbare, "cell 3 1,alignx trailing");
-
-        JPanel panel_6 = new JPanel();
-        pnInventory.add(panel_6, BorderLayout.CENTER);
-        panel_6.setLayout(new BorderLayout(0, 0));
+    private JPanel createBookOverviewPanel() {
+        JPanel pnBookOverview = new JPanel();
+        pnInventory.add(pnBookOverview, BorderLayout.CENTER);
+        pnBookOverview.setLayout(new BorderLayout(0, 0));
 
         JScrollPane scrollPane = new JScrollPane();
 
-        panel_6.add(scrollPane, BorderLayout.CENTER);
+        pnBookOverview.add(scrollPane, BorderLayout.CENTER);
 
         tblBooks = new JTable(booksPMod.getBookTableModel());
         tblBooks.setRowSorter(booksPMod.getBookTableRowSorter());
@@ -144,20 +143,34 @@ public class BookMasterSubView extends SubViewBase<Library, BookMasterController
 
         scrollPane.setViewportView(tblBooks);
 
-        JPanel panel_7 = new JPanel();
-        panel_6.add(panel_7, BorderLayout.EAST);
-        panel_7.setLayout(new MigLayout("", "[]", "[23px][]"));
+        JPanel pnControlls = new JPanel();
+        pnBookOverview.add(pnControlls, BorderLayout.EAST);
+        return pnControlls;
+    }
 
-        btnNewBook = new JButton();
-        btnNewBook.setName(NAME_BUTTON_NEW);
-        btnNewBook.setMnemonic('n');
-        panel_7.add(btnNewBook, "cell 0 0,growx,aligny center");
+    private void createBookMasterHeader() {
+        JPanel pnBookMasterHeader = new JPanel();
+        pnInventory.add(pnBookMasterHeader, BorderLayout.NORTH);
+        pnBookMasterHeader.setLayout(new MigLayout("", "[grow][grow][][]", "[][]"));
 
-        btnOpenBook = new JButton();
-        btnOpenBook.setName(NAME_BUTTON_OPEN);
-        btnOpenBook.setMnemonic('o');
-        panel_7.add(btnOpenBook, "cell 0 1,growx,aligny center");
-        btnOpenBook.setEnabled(false);
+        lblAllBooksHint = new JLabel();
+        pnBookMasterHeader.add(lblAllBooksHint, "cell 0 0");
+
+        txtSearch = new JTextField();
+        txtSearch.setName(NAME_SEARCH_FIELD);
+        pnBookMasterHeader.add(txtSearch, "flowx,cell 0 1,growx");
+        txtSearch.setColumns(10);
+
+        comboSearchFilter = new JComboBox<SearchFilterElement>();
+        comboSearchFilter.setName(NAME_COMBOBOX_FILTER);
+        comboSearchFilter.setModel(booksPMod.getFilterComboBoxModel());
+        pnBookMasterHeader.add(comboSearchFilter, "cell 1 1,growx");
+
+        checkBoxOnlyAvailable = new JCheckBox();
+        pnBookMasterHeader.add(checkBoxOnlyAvailable, "cell 2 1");
+
+        lblNurVerfgbare = new JLabel();
+        pnBookMasterHeader.add(lblNurVerfgbare, "cell 3 1,alignx trailing");
     }
 
     // TODO: Code doesn't work
@@ -188,8 +201,9 @@ public class BookMasterSubView extends SubViewBase<Library, BookMasterController
         btnOpenBook.setText(Texts.get("BookMasterMainView.btnOpenBook.text"));
         searchDefaultText = Texts.get("BookMasterMainView.searchDefault");
         txtSearch.setText(searchDefaultText);
-        if (hideTextOnFocusListener != null)
+        if (hideTextOnFocusListener != null) {
             hideTextOnFocusListener.updateText(searchDefaultText);
+        }
         lblNurVerfgbare.setText(Texts.get("BookMasterMainView.lblNurVerfgbare.text"));
 
         // Tooltips

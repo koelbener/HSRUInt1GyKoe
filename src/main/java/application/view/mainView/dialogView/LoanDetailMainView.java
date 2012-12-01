@@ -341,11 +341,7 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
 
         btnLinkToLoan.setVisible(false);
         if (currentSelectedCopy == null) {
-            lblValCopyTitle.setText("");
-            lblConditionValue.setText("");
-            lblConditionValue.setIcon(null);
-            lblAvailabilityValue.setIcon(null);
-            lblAvailabilityValue.setText("");
+            emptyNewLoanSection();
         } else {
             String titleName = currentSelectedCopy.getTitle().getName();
             lblValCopyTitle.setText(titleName);
@@ -354,24 +350,36 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
             lblConditionValue.setText(currentSelectedCopy.getCondition().name());
             lblConditionValue.setIcon(IconUtil.loadIcon(currentSelectedCopy.getCondition().getIcon()));
             // lblLoanStatus
-            boolean isCopyLent = Repository.getInstance().getCopyPMod().isCopyLent(currentSelectedCopy);
-            if (currentSelectedCopy.getCondition().equals(Condition.LOST)) {
-                lblAvailabilityValue.setText(Texts.get("validation.copy.lost"));
-                lblAvailabilityValue.setIcon(IconUtil.loadIcon("warning.png"));
-            } else {
-                if (!isCopyLent) {
-                    lblAvailabilityValue.setIcon(IconUtil.loadIcon("check.png"));
-                    lblAvailabilityValue.setText(Texts.get("validation.copy.isLent.false"));
-                } else {
-                    String lender = copyPMod.getLender(currentSelectedCopy).getFullName();
-                    lblAvailabilityValue.setText(Texts.get("validation.copy.isLent.true") + lender + ".");
-                    lblAvailabilityValue.setIcon(IconUtil.loadIcon("warning.png"));
-                    btnLinkToLoan.setVisible(true);
-                }
-            }
+            updateNewLoanStatus();
         }
 
         updateMakeLoanButtonVisibility();
+    }
+
+    private void updateNewLoanStatus() {
+        boolean isCopyLent = Repository.getInstance().getCopyPMod().isCopyLent(currentSelectedCopy);
+        if (currentSelectedCopy.getCondition().equals(Condition.LOST)) {
+            lblAvailabilityValue.setText(Texts.get("validation.copy.lost"));
+            lblAvailabilityValue.setIcon(IconUtil.loadIcon("warning.png"));
+        } else {
+            if (!isCopyLent) {
+                lblAvailabilityValue.setIcon(IconUtil.loadIcon("check.png"));
+                lblAvailabilityValue.setText(Texts.get("validation.copy.isLent.false"));
+            } else {
+                String lender = copyPMod.getLender(currentSelectedCopy).getFullName();
+                lblAvailabilityValue.setText(Texts.get("validation.copy.isLent.true") + lender + ".");
+                lblAvailabilityValue.setIcon(IconUtil.loadIcon("warning.png"));
+                btnLinkToLoan.setVisible(true);
+            }
+        }
+    }
+
+    private void emptyNewLoanSection() {
+        lblValCopyTitle.setText("");
+        lblConditionValue.setText("");
+        lblConditionValue.setIcon(null);
+        lblAvailabilityValue.setIcon(null);
+        lblAvailabilityValue.setText("");
     }
 
     private void updateMakeLoanButtonVisibility() {

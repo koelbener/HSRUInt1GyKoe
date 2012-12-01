@@ -147,6 +147,8 @@ public abstract class BookDetailMainViewBase extends DialogViewBase<Book, BookDe
 
     /**
      * Initialize the contents of the frame.
+     * 
+     * @wbp.parser.entryPoint
      */
     @Override
     protected void initUIElements() {
@@ -155,12 +157,96 @@ public abstract class BookDetailMainViewBase extends DialogViewBase<Book, BookDe
         Container contentPane = getContainer().getContentPane();
         contentPane.setLayout(new BorderLayout(0, 0));
 
-        JPanel panel_4 = new JPanel();
-        contentPane.add(panel_4, BorderLayout.CENTER);
-        panel_4.setLayout(new BorderLayout(0, 0));
+        JPanel pnMainPanel = new JPanel();
+        contentPane.add(pnMainPanel, BorderLayout.CENTER);
+        pnMainPanel.setLayout(new BorderLayout(0, 0));
 
+        createBookInfoPanel(pnMainPanel);
+
+        createControlPanel();
+
+        createCopiesPanel(pnMainPanel);
+        JPanel pnValidationContainer = createValidationPanel(contentPane);
+
+        createButtonsPanel(pnValidationContainer);
+    }
+
+    private void createButtonsPanel(JPanel pnValidationContainer) {
+        JPanel pnButtons = new JPanel();
+        pnButtons.setLayout(new MigLayout("", "[grow][85px][]", "[23px]"));
+
+        btnSave = new JButton();
+        pnButtons.add(btnSave, "cell 1 0,alignx left,aligny top");
+        btnSave.setMnemonic('s');
+        btnSave.setName(NAME_BUTTON_SAVE);
+        pnValidationContainer.add(pnButtons, BorderLayout.SOUTH);
+
+        btnCancel = new JButton();
+        pnButtons.add(btnCancel, "cell 2 0,alignx left,aligny top");
+        btnCancel.setName(NAME_BUTTON_CANCEL);
+        btnCancel.setMnemonic('c');
+    }
+
+    private JPanel createValidationPanel(Container contentPane) {
+        JPanel pnValidationContainer = new JPanel();
+        contentPane.add(pnValidationContainer, BorderLayout.SOUTH);
+        pnValidationContainer.setLayout(new BorderLayout(0, 0));
+
+        pnValidation = new JPanel();
+        pnValidation.setMinimumSize(new Dimension(0, 0));
+        pnValidation.setName(NAME_VALIDATION_PANEL);
+
+        validationModel = new DefaultValidationResultModel();
+        pnValidation.setLayout(new MigLayout("", "[grow]", "[40px,grow]"));
+        validationResultList = ValidationResultViewFactory.createReportList(validationModel);
+        pnValidation.add(validationResultList, "cell 0 0,alignx right,growy");
+        pnValidationContainer.add(pnValidation, BorderLayout.NORTH);
+        return pnValidationContainer;
+    }
+
+    private void createCopiesPanel(JPanel pnMainPanel) {
+        pnCopies = new JPanel();
+        pnMainPanel.add(pnCopies, BorderLayout.CENTER);
+        pnCopies.setLayout(new BorderLayout(0, 0));
+
+        JPanel pnCopiesOverview = new JPanel();
+        pnCopies.add(pnCopiesOverview, BorderLayout.CENTER);
+        pnCopiesOverview.setLayout(new BorderLayout(0, 0));
+
+        listCopies = new JList<Copy>();
+        listCopies.setModel(listModelCopies);
+        listCopies.setCellRenderer(new CopiesListCellRenderer());
+        pnCopiesOverview.add(listCopies);
+    }
+
+    private void createControlPanel() {
+        JPanel pnControls = new JPanel();
+        pnCopies.add(pnControls, BorderLayout.NORTH);
+        pnControls.setLayout(new MigLayout("", "[][grow][][]", "[]"));
+
+        lblNrOfCopies = new JLabel();
+        pnControls.add(lblNrOfCopies, "cell 0 0,alignx trailing");
+
+        txtValNrOfCopies = new JTextField();
+        txtValNrOfCopies.setEnabled(false);
+        pnControls.add(txtValNrOfCopies, "flowx,cell 1 0");
+        txtValNrOfCopies.setColumns(10);
+
+        btnAdd = new JButton();
+        btnAdd.setName(NAME_BUTTON_ADD_COPY);
+        btnAdd.setIcon(IconUtil.loadIcon("add.gif"));
+        pnControls.add(btnAdd, "cell 2 0");
+
+        btnRemove = new JButton();
+        btnRemove.setName(NAME_BUTTON_DELETE_COPY);
+        btnRemove.setEnabled(false);
+        btnRemove.setIcon(IconUtil.loadIcon("delete.gif"));
+        pnControls.add(btnRemove, "cell 3 0");
+    }
+
+    private void createBookInfoPanel(JPanel pnMainPanel) {
         pnBookInfo = new JPanel();
-        panel_4.add(pnBookInfo, BorderLayout.NORTH);
+        pnMainPanel.add(pnBookInfo, BorderLayout.NORTH);
         pnBookInfo.setLayout(new MigLayout("", "[][grow]", "[][][][]"));
 
         lblTitle = new JLabel();
@@ -193,70 +279,6 @@ public abstract class BookDetailMainViewBase extends DialogViewBase<Book, BookDe
         comboShelf = new JComboBox<Shelf>();
         comboShelf.setName(NAME_COMBOBOX_SHELF);
         pnBookInfo.add(comboShelf, "cell 1 3,growx");
-
-        pnCopies = new JPanel();
-        panel_4.add(pnCopies, BorderLayout.CENTER);
-        pnCopies.setLayout(new BorderLayout(0, 0));
-
-        JPanel panel_2 = new JPanel();
-        pnCopies.add(panel_2, BorderLayout.NORTH);
-        panel_2.setLayout(new MigLayout("", "[][grow][][]", "[]"));
-
-        lblNrOfCopies = new JLabel();
-        panel_2.add(lblNrOfCopies, "cell 0 0,alignx trailing");
-
-        txtValNrOfCopies = new JTextField();
-        txtValNrOfCopies.setEnabled(false);
-        panel_2.add(txtValNrOfCopies, "flowx,cell 1 0");
-        txtValNrOfCopies.setColumns(10);
-
-        btnAdd = new JButton();
-        btnAdd.setName(NAME_BUTTON_ADD_COPY);
-        btnAdd.setIcon(IconUtil.loadIcon("add.gif"));
-        panel_2.add(btnAdd, "cell 2 0");
-
-        btnRemove = new JButton();
-        btnRemove.setName(NAME_BUTTON_DELETE_COPY);
-        btnRemove.setEnabled(false);
-        btnRemove.setIcon(IconUtil.loadIcon("delete.gif"));
-        panel_2.add(btnRemove, "cell 3 0");
-
-        JPanel panel_3 = new JPanel();
-        pnCopies.add(panel_3, BorderLayout.CENTER);
-        panel_3.setLayout(new BorderLayout(0, 0));
-
-        listCopies = new JList<Copy>();
-        listCopies.setModel(listModelCopies);
-        listCopies.setCellRenderer(new CopiesListCellRenderer());
-        panel_3.add(listCopies);
-
-        JPanel panel_5 = new JPanel();
-        contentPane.add(panel_5, BorderLayout.SOUTH);
-        panel_5.setLayout(new BorderLayout(0, 0));
-
-        pnValidation = new JPanel();
-        pnValidation.setMinimumSize(new Dimension(0, 0));
-        pnValidation.setName(NAME_VALIDATION_PANEL);
-
-        validationModel = new DefaultValidationResultModel();
-        pnValidation.setLayout(new MigLayout("", "[grow]", "[40px,grow]"));
-        validationResultList = ValidationResultViewFactory.createReportList(validationModel);
-        pnValidation.add(validationResultList, "cell 0 0,alignx right,growy");
-        panel_5.add(pnValidation, BorderLayout.NORTH);
-
-        JPanel panel_8 = new JPanel();
-        panel_8.setLayout(new MigLayout("", "[grow][85px][]", "[23px]"));
-
-        btnSave = new JButton();
-        panel_8.add(btnSave, "cell 1 0,alignx left,aligny top");
-        btnSave.setMnemonic('s');
-        btnSave.setName(NAME_BUTTON_SAVE);
-        panel_5.add(panel_8, BorderLayout.SOUTH);
-
-        btnCancel = new JButton();
-        panel_8.add(btnCancel, "cell 2 0,alignx left,aligny top");
-        btnCancel.setName(NAME_BUTTON_CANCEL);
-        btnCancel.setMnemonic('c');
     }
 
     @Override
@@ -305,8 +327,9 @@ public abstract class BookDetailMainViewBase extends DialogViewBase<Book, BookDe
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (listModelCopies.removeCopy(listCopies.getSelectedValuesList()))
+                if (listModelCopies.removeCopy(listCopies.getSelectedValuesList())) {
                     btnRemove.setEnabled(false);
+                }
                 updateCopiesCount();
             }
         });

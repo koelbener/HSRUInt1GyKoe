@@ -31,6 +31,12 @@ public class CustomerListRenderer extends JLabel implements ListCellRenderer<Obj
             setText(customer.getFullNameAndAddress());
         }
 
+        setIconAndBackground(isSelected, newLoanAllowed);
+
+        return this;
+    }
+
+    private void setIconAndBackground(boolean isSelected, boolean newLoanAllowed) {
         if (isSelected) {
             setBackground(Color.LIGHT_GRAY);
         } else {
@@ -42,7 +48,5 @@ public class CustomerListRenderer extends JLabel implements ListCellRenderer<Obj
         } else {
             setIcon(IconUtil.loadIcon("warning.png"));
         }
-
-        return this;
     }
 }

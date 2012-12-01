@@ -90,20 +90,11 @@ public class LoanTableModel extends AbstractTableModel implements Observer {
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
-
         Loan loan = loans.get(rowIndex);
-
         Object result = null;
-
         switch (columnIndex) {
         case COLUMN_STATUS:
-            if (loan.isOverdue()) {
-                result = Texts.get("LendingMasterMainView.table.cell.due");
-            } else if (loan.isLent()) {
-                result = Texts.get("LendingMasterMainView.table.cell.lent");
-            } else {
-                result = Texts.get("LendingMasterMainView.table.cell.back");
-            }
+            result = getStatus(loan);
             break;
         case COLUMN_COPY_ID:
             result = loan.getCopy().getInventoryNumber();
@@ -112,16 +103,10 @@ public class LoanTableModel extends AbstractTableModel implements Observer {
             result = loan.getCopy().getTitle().getName();
             break;
         case COLUMN_LENT_UNTIL:
-            GregorianCalendar returnDate = loan.getReturnDate();
-            if (returnDate != null) {
-                result = returnDate.getTime();
-            }
+            result = getLentUntil(loan);
             break;
         case COLUMN_LENT_FROM:
-            GregorianCalendar pickupDate = loan.getPickupDate();
-            if (pickupDate != null) {
-                result = pickupDate.getTime();
-            }
+            result = getLentFrom(loan);
             break;
         case COLUMN_LENT_TO:
             result = loan.getCustomer().getSurname() + " " + loan.getCustomer().getName();
@@ -131,6 +116,36 @@ public class LoanTableModel extends AbstractTableModel implements Observer {
             break;
         }
 
+        return result;
+    }
+
+    private Object getLentFrom(Loan loan) {
+        Object result = null;
+        GregorianCalendar pickupDate = loan.getPickupDate();
+        if (pickupDate != null) {
+            result = pickupDate.getTime();
+        }
+        return result;
+    }
+
+    private Object getLentUntil(Loan loan) {
+        Object result = null;
+        GregorianCalendar returnDate = loan.getReturnDate();
+        if (returnDate != null) {
+            result = returnDate.getTime();
+        }
+        return result;
+    }
+
+    private Object getStatus(Loan loan) {
+        Object result;
+        if (loan.isOverdue()) {
+            result = Texts.get("LendingMasterMainView.table.cell.due");
+        } else if (loan.isLent()) {
+            result = Texts.get("LendingMasterMainView.table.cell.lent");
+        } else {
+            result = Texts.get("LendingMasterMainView.table.cell.back");
+        }
         return result;
     }
 

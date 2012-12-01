@@ -18,8 +18,10 @@ import domain.Loan;
 public class CopiesListCellRenderer extends JLabel implements ListCellRenderer<Copy> {
 
     private static final long serialVersionUID = 6995598407842395910L;
+    private final CopyPMod pMod;
 
     public CopiesListCellRenderer() {
+        pMod = Repository.getInstance().getCopyPMod();
         setOpaque(true);
         setHorizontalAlignment(LEFT);
         setVerticalAlignment(CENTER);
@@ -27,8 +29,6 @@ public class CopiesListCellRenderer extends JLabel implements ListCellRenderer<C
 
     @Override
     public Component getListCellRendererComponent(JList<? extends Copy> list, Copy copy, int index, boolean isSelected, boolean cellHasFocus) {
-        CopyPMod pMod = Repository.getInstance().getCopyPMod();
-
         StringBuilder sb = new StringBuilder();
         sb.append(copy.getInventoryNumber()).append(" - ");
         sb.append(Texts.get(copy.getCondition().getKey())).append(" - ");
@@ -42,6 +42,12 @@ public class CopiesListCellRenderer extends JLabel implements ListCellRenderer<C
             sb.append(Texts.get("BookDetailMainView.copyList.available"));
         }
         setText(sb.toString());
+        setIconAndBackground(copy, isSelected);
+
+        return this;
+    }
+
+    private void setIconAndBackground(Copy copy, boolean isSelected) {
         if (isSelected) {
             setBackground(Color.LIGHT_GRAY);
         } else {
@@ -49,7 +55,5 @@ public class CopiesListCellRenderer extends JLabel implements ListCellRenderer<C
         }
 
         setIcon(IconUtil.loadIcon(copy.getCondition().getIcon()));
-
-        return this;
     }
 }
