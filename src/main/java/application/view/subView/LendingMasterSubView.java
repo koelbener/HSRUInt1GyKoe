@@ -3,17 +3,21 @@ package application.view.subView;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Observable;
 
+import javax.swing.AbstractAction;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.KeyStroke;
 import javax.swing.ListSelectionModel;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.DocumentEvent;
@@ -202,6 +206,16 @@ public class LendingMasterSubView extends SubViewBase<Library, LendingMasterCont
     protected void initListeners() {
 
         new EnableCompontentOnTableSelectionListener(tblLoans, btnOpen);
+
+        tblLoans.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0), "Enter");
+        tblLoans.getActionMap().put("Enter", new AbstractAction() {
+            private static final long serialVersionUID = -5664120575484177305L;
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                getController().openLoans(tblLoans.getSelectedRows());
+            }
+        });
 
         hideTextOnFocusListener = new HideTextOnFocusListener(txtSearch, searchDefaultText);
 

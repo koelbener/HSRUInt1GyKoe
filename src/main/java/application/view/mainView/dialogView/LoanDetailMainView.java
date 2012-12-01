@@ -7,6 +7,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Date;
@@ -14,14 +15,17 @@ import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
+import javax.swing.AbstractAction;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.KeyStroke;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
 import javax.swing.border.TitledBorder;
@@ -406,6 +410,8 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
         new EnableCompontentOnTableSelectionListener(tblLoans, btnReturnButton);
         new EnableCompontentOnTableSelectionListener(tblLoans, comboStatus, true);
 
+        initKeyListeners();
+
         getContainer().addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent arg0) {
@@ -429,25 +435,9 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                List<Long> returnedCopies;
-                Condition newCondition = null;
-                if (tblLoans.getSelectedRowCount() == 1) {
-                    newCondition = getSelectedCondition();
-                    getController().changeCondition(tblLoans.getSelectedRow(), newCondition);
-                }
-                returnedCopies = getController().returnCopies(tblLoans.getSelectedRows());
-                String key = "LoanDetailMainViewBase.loansOverview.returnMessage";
-                if (returnedCopies.size() > 1) {
-                    key += "s";
-                }
-                String message = Texts.get(key, Joiner.on(", ").join(returnedCopies));
-                if (newCondition != null) {
-                    message = message + " " + Texts.get("LoanDetailMainViewBase.loansOverview.conditionChanged", Texts.get(newCondition.getKey()));
-                }
-                lblReturnFeedbackLabel.setText(message);
-                updateLoanOverViewSection();
-                updateMakeLoanButtonVisibility();
+                returnCopy();
             }
+
         });
 
         txtCustomerSearch.getDocument().addDocumentListener(new DocumentListener() {
@@ -571,6 +561,34 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
         });
     }
 
+    private void initKeyListeners() {
+        // make loan on enter key
+        txtCopyId.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0), "Enter");
+        txtCopyId.getActionMap().put("Enter", new AbstractAction() {
+            private static final long serialVersionUID = -5664120575484177305L;
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (btnCreateLoan.isEnabled()) {
+                    saveLoan();
+                }
+            }
+        });
+
+        // Return book on enter key
+        tblLoans.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0), "Enter");
+        tblLoans.getActionMap().put("Enter", new AbstractAction() {
+            private static final long serialVersionUID = -5664120575484177305L;
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (btnReturnButton.isEnabled()) {
+                    returnCopy();
+                }
+            }
+        });
+    }
+
     private Customer getCurrentCustomer() {
         if (getReferenceObject() != null) {
             return getReferenceObject().getCustomer();
@@ -586,8 +604,32 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
             if (!validationResult.hasErrors()) {
                 getController().saveLoan(currentSelectedCopy, getCurrentCustomer());
                 txtCopyId.setText("");
+                currentSelectedCopy = null;
             }
         }
+        updateNewLoanSection();
+    }
+
+    private void returnCopy() {
+        List<Long> returnedCopies;
+        Condition newCondition = null;
+        int[] selectedRows = tblLoans.getSelectedRows();
+        if (tblLoans.getSelectedRowCount() == 1) {
+            newCondition = getSelectedCondition();
+            getController().changeCondition(tblLoans.getSelectedRow(), newCondition);
+        }
+        returnedCopies = getController().returnCopies(selectedRows);
+        String key = "LoanDetailMainViewBase.loansOverview.returnMessage";
+        if (returnedCopies.size() > 1) {
+            key += "s";
+        }
+        String message = Texts.get(key, Joiner.on(", ").join(returnedCopies));
+        if (newCondition != null) {
+            message = message + " " + Texts.get("LoanDetailMainViewBase.loansOverview.conditionChanged", Texts.get(newCondition.getKey()));
+        }
+        lblReturnFeedbackLabel.setText(message);
+        updateLoanOverViewSection();
+        updateMakeLoanButtonVisibility();
     }
 
     @Override

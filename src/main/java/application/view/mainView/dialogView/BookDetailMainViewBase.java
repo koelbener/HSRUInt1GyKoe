@@ -5,11 +5,13 @@ import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
+import javax.swing.AbstractAction;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
@@ -17,6 +19,7 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.KeyStroke;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -295,6 +298,22 @@ public abstract class BookDetailMainViewBase extends DialogViewBase<Book, BookDe
             @Override
             public void actionPerformed(ActionEvent e) {
                 BookDetailMainViewBase.this.getContainer().dispose();
+            }
+        });
+
+        // add a listener to the delete button
+        listCopies.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0), "DELETE");
+        listCopies.getActionMap().put("DELETE", new AbstractAction() {
+            private static final long serialVersionUID = -5664120575484177305L;
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (btnRemove.isEnabled()) {
+                    if (listModelCopies.removeCopy(listCopies.getSelectedValuesList())) {
+                        btnRemove.setEnabled(false);
+                    }
+                    updateCopiesCount();
+                }
             }
         });
 
