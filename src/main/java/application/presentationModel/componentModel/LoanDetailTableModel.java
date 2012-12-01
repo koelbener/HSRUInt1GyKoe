@@ -71,7 +71,7 @@ public class LoanDetailTableModel extends AbstractTableModel implements Observer
 
         switch (columnIndex) {
         case COLUMN_COPY_ID:
-            result = Long.class;
+            result = String.class;
             break;
         case COLUMN_TITLE:
             result = String.class;

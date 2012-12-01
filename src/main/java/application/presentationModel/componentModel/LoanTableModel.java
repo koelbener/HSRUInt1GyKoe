@@ -67,7 +67,9 @@ public class LoanTableModel extends AbstractTableModel implements Observer {
             result = String.class;
             break;
         case COLUMN_COPY_ID:
-            result = Long.class;
+            // to get hAlign = left
+            // TODO: better solution with DefaultTableCellRenderer?
+            result = String.class;
             break;
         case COLUMN_BOOK_TITLE:
             result = String.class;
@@ -169,8 +171,9 @@ public class LoanTableModel extends AbstractTableModel implements Observer {
     }
 
     public void updateStateValues() {
-        if (getRowCount() > 0)
+        if (getRowCount() > 0) {
             fireTableRowsUpdated(0, getRowCount() - 1);
+        }
     }
 
     @Override
