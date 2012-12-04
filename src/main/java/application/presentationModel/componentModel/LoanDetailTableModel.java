@@ -59,7 +59,7 @@ public class LoanDetailTableModel extends AbstractTableModel implements Observer
 
     public Long getCopyOfRow(int index) {
         if (index >= 0 && index < loans.size()) {
-            return (long) getValueAt(index, COLUMN_COPY_ID);
+            return (Long) getValueAt(index, COLUMN_COPY_ID);
         }
         return null;
 
