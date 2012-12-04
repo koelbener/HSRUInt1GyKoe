@@ -1,5 +1,5 @@
 
-Libraries used
+Libraries
 =====
 
 This project uses:
@@ -15,3 +15,8 @@ For testing:
 * [JUnit](http://junit.org)
 * [Mockito] (http://code.google.com/p/mockito/)
 * The Swing Module of [FEST](http://fest.easytesting.org/)
+
+Build
+=====
+
+`mvn assembly:single`
