@@ -5,6 +5,7 @@ import application.presentationModel.CopyPMod;
 import application.presentationModel.CustomerPMod;
 import application.presentationModel.LoansPMod;
 import application.presentationModel.ShelfPMod;
+import application.view.mainView.MainViewFactory;
 import domain.Library;
 
 /**
@@ -19,6 +20,7 @@ public class Repository {
     private ShelfPMod shelfPMod;
     private LoansPMod loansPMod;
     private CopyPMod copyPMod;
+    private MainViewFactory mainViewFactory;
 
     private CustomerPMod cutomerPMod;
 
@@ -30,6 +32,14 @@ public class Repository {
             instance = new Repository();
         }
         return instance;
+    }
+
+    public MainViewFactory getMainViewFactory() {
+        return mainViewFactory;
+    }
+
+    public void setMainViewFactory(MainViewFactory mainViewFactory) {
+        this.mainViewFactory = mainViewFactory;
     }
 
     public void setLibrary(Library library) {

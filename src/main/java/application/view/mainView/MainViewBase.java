@@ -44,8 +44,9 @@ public abstract class MainViewBase<R, T extends ControllerBase, S extends Window
 
     protected void setIcon(String file) {
         ImageIcon myAppImage = IconUtil.loadIcon(file);
-        if (myAppImage != null)
+        if (myAppImage != null) {
             container.setIconImage(myAppImage.getImage());
+        }
     }
 
     /**
@@ -59,16 +60,18 @@ public abstract class MainViewBase<R, T extends ControllerBase, S extends Window
         while (needToCheck) {
             needToCheck = false;
             for (Window window : windows) {
-                // change location of this frame and start checking all frames
-                // again
-                Point framePosition = window.getLocation();
-                Point myPosition = container.getLocation();
-                logger.trace("check frame position {} against {}", myPosition, framePosition);
-                if (!window.equals(getContainer()) && window.getLocation().equals(container.getLocation())) {
-                    container.setLocation(container.getLocation().x + gap, container.getLocation().y + gap);
-                    logger.debug("change location of frame {} from {} to {}", new Object[] { container.getName(), myPosition, container.getLocation() });
-                    needToCheck = true;
-                    break;
+                if (window.isVisible()) {
+                    // change location of this frame and start checking all frames
+                    // again
+                    Point framePosition = window.getLocation();
+                    Point myPosition = container.getLocation();
+                    logger.trace("check frame position {} against {}", myPosition, framePosition);
+                    if (!window.equals(getContainer()) && window.getLocation().equals(container.getLocation())) {
+                        container.setLocation(container.getLocation().x + gap, container.getLocation().y + gap);
+                        logger.debug("change location of frame {} from {} to {}", new Object[] { container.getName(), myPosition, container.getLocation() });
+                        needToCheck = true;
+                        break;
+                    }
                 }
             }
         }
@@ -91,5 +94,4 @@ public abstract class MainViewBase<R, T extends ControllerBase, S extends Window
             }
         });
     }
-
 }

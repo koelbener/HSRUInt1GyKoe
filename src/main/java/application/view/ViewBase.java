@@ -48,7 +48,7 @@ public abstract class ViewBase<R, T extends ControllerBase, S extends Container>
         return controller;
     }
 
-    protected R getReferenceObject() {
+    public R getReferenceObject() {
         return referenceObject;
     }
 

@@ -74,9 +74,6 @@ public class LendingMasterSubView extends SubViewBase<Library, LendingMasterCont
         super(null);
     }
 
-    /**
-     * @wbp.parser.entryPoint
-     */
     @Override
     public void initUIElements() {
         container.setLayout(new BorderLayout());

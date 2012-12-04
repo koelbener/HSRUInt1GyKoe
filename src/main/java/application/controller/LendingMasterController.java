@@ -1,15 +1,13 @@
 package application.controller;
 
-import java.awt.Frame;
-
 import javax.swing.RowSorter;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import application.presentationModel.componentModel.LoanTableModel;
+import application.core.Repository;
 import application.presentationModel.componentModel.LoanSearchFilterComboBoxModel.FilterOption;
-import application.view.mainView.dialogView.LoanDetailMainView;
+import application.presentationModel.componentModel.LoanTableModel;
 import domain.Loan;
 
 public class LendingMasterController extends ControllerBase {
@@ -28,16 +26,7 @@ public class LendingMasterController extends ControllerBase {
     }
 
     private void openLoanView(Loan loan) {
-        boolean loanViewAlreadyOpen = false;
-        // close already opened frames
-        for (Frame frame : Frame.getFrames()) {
-            if (frame.getName().equals(LoanDetailMainView.class.getSimpleName())) {
-                frame.dispose();
-            }
-        }
-        if (!loanViewAlreadyOpen) {
-            new LoanDetailMainView(loan);
-        }
+        Repository.getInstance().getMainViewFactory().getLoanDetailMainView(loan);
     }
 
     public void newLoan() {

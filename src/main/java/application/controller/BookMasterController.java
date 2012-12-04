@@ -5,9 +5,8 @@ import javax.swing.RowSorter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import application.core.Repository;
 import application.presentationModel.componentModel.BookTableModel;
-import application.view.mainView.dialogView.EditBookDetailMainView;
-import application.view.mainView.dialogView.NewBookDetailMainView;
 import domain.Book;
 
 public class BookMasterController extends ControllerBase {
@@ -20,9 +19,8 @@ public class BookMasterController extends ControllerBase {
         for (int index : selectedIndices) {
             Book book = bookTableModel.getBook(sorter.convertRowIndexToModel(index));
             logger.debug("opening book {}", book.getName());
-            new EditBookDetailMainView(book);
+            Repository.getInstance().getMainViewFactory().getBookDetailMainView(book);
         }
-
     }
 
     public void searchBooks(String filter) {
@@ -38,7 +36,7 @@ public class BookMasterController extends ControllerBase {
     }
 
     public void openNewBook() {
-        new NewBookDetailMainView();
+        Repository.getInstance().getMainViewFactory().getNewBookDetailMainView();
     }
 
 }

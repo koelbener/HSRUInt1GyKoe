@@ -223,9 +223,10 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
     }
 
     private void updateCustomerSelectionSection() {
-        txtCustomerSearch.setText(getReferenceObject().getCustomer().getFullName());
+        if (getReferenceObject() != null) {
+            txtCustomerSearch.setText(getReferenceObject().getCustomer().getFullName());
+        }
         listCustomer.setSelectedIndex(0);
-
         updateMakeLoanButtonVisibility();
     }
 

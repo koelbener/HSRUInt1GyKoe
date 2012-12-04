@@ -67,9 +67,7 @@ public class LoanTableModel extends AbstractTableModel implements Observer {
             result = String.class;
             break;
         case COLUMN_COPY_ID:
-            // to get hAlign = left
-            // TODO: better solution with DefaultTableCellRenderer?
-            result = String.class;
+            result = Long.class;
             break;
         case COLUMN_BOOK_TITLE:
             result = String.class;
@@ -132,8 +130,10 @@ public class LoanTableModel extends AbstractTableModel implements Observer {
 
     private Object getLentUntil(Loan loan) {
         Object result = null;
-        GregorianCalendar returnDate = loan.getReturnDate();
-        if (returnDate != null) {
+        if (loan.isLent()) {
+            result = loan.getDueDate().getTime();
+        } else {
+            GregorianCalendar returnDate = loan.getReturnDate();
             result = returnDate.getTime();
         }
         return result;

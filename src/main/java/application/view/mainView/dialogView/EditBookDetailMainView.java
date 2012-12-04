@@ -4,6 +4,10 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+
+import application.core.Repository;
 
 import com.jgoodies.validation.view.ValidationResultViewFactory;
 
@@ -22,6 +26,14 @@ public class EditBookDetailMainView extends BookDetailMainViewBase {
         txtFieldTitle.addFocusListener(new BookDetailValidateFocusListener());
         txtFieldAuthor.addFocusListener(new BookDetailValidateFocusListener());
         txtFieldPublisher.addFocusListener(new BookDetailValidateFocusListener());
+
+        final EditBookDetailMainView thisObject = this;
+        getContainer().addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosed(WindowEvent arg0) {
+                Repository.getInstance().getMainViewFactory().closeMainView(thisObject);
+            }
+        });
 
     }
 

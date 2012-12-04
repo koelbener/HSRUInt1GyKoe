@@ -16,6 +16,7 @@ import application.presentationModel.CopyPMod;
 import application.presentationModel.CustomerPMod;
 import application.presentationModel.LoansPMod;
 import application.presentationModel.ShelfPMod;
+import application.view.mainView.MainViewFactory;
 import application.view.mainView.MasterMainView;
 import domain.Library;
 
@@ -55,6 +56,7 @@ public class LibraryApp {
         Repository.getInstance().setLibrary(library);
 
         initPMods();
+        Repository.getInstance().setMainViewFactory(new MainViewFactory());
 
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -62,9 +64,9 @@ public class LibraryApp {
             logger.error("Unable to set a native look and feel.", e);
         }
 
-        MasterMainView bookMasterView = new MasterMainView();
+        MasterMainView masterView = Repository.getInstance().getMainViewFactory().getMasterMainView();
 
-        return bookMasterView;
+        return masterView;
     }
 
     private static void initPMods() {

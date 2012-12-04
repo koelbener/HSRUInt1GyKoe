@@ -61,7 +61,6 @@ public class BookTableModel extends AbstractTableModel {
             result = false;
             break;
         case COLUMN_SHELF:
-            // Todo: in-place edit?
             result = false;
             break;
         default:

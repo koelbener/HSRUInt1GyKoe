@@ -36,7 +36,7 @@ public class MasterMainView extends MainViewBase<Library, MasterController, JFra
 
     public MasterMainView() {
         super(null);
-        container.setMinimumSize(new Dimension(616, 445));
+        container.setMinimumSize(new Dimension(716, 445));
         setIcon("book.gif");
     }
 
@@ -51,9 +51,6 @@ public class MasterMainView extends MainViewBase<Library, MasterController, JFra
 
     }
 
-    /**
-     * @wbp.parser.entryPoint
-     */
     @Override
     /**
      * @wbp.parser.entryPoint
