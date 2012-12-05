@@ -33,6 +33,8 @@ import application.core.Repository;
 import application.core.Texts;
 import application.presentationModel.LoansPMod;
 import application.presentationModel.componentModel.LoanSearchFilterComboBoxModel;
+import application.view.ShortcutsManager;
+import application.view.ShortcutsManager.ShortcutAction;
 import application.view.helper.EnableCompontentOnTableSelectionListener;
 import application.view.helper.HideTextOnFocusListener;
 import domain.Library;
@@ -293,4 +295,15 @@ public class LendingMasterSubView extends SubViewBase<Library, LendingMasterCont
         lblValOverdueLoans.setText(String.valueOf(loansPMod.getOverdueLoansCount()));
     }
 
+    @Override
+    protected void initShortcuts(ShortcutsManager shortcutsManager) {
+        shortcutsManager.registerShortcut(KeyEvent.VK_L, new ShortcutAction() {
+
+            @Override
+            public void run() {
+                getController().newLoan();
+
+            }
+        });
+    }
 }

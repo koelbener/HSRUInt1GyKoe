@@ -37,6 +37,8 @@ import application.core.Texts;
 import application.presentationModel.BooksPMod;
 import application.presentationModel.componentModel.BookTableModel;
 import application.presentationModel.componentModel.SearchFilterElement;
+import application.view.ShortcutsManager;
+import application.view.ShortcutsManager.ShortcutAction;
 import application.view.helper.BooksTableContextMenuListener;
 import application.view.helper.EnableCompontentOnTableSelectionListener;
 import application.view.helper.HideTextOnFocusListener;
@@ -351,4 +353,15 @@ public class BookMasterSubView extends SubViewBase<Library, BookMasterController
         lblNumberOfCopies.setText(String.valueOf(booksPMod.getCopiesCount()));
     }
 
+    @Override
+    protected void initShortcuts(ShortcutsManager shortcutsManager) {
+        shortcutsManager.registerShortcut(KeyEvent.VK_B, new ShortcutAction() {
+
+            @Override
+            public void run() {
+                getController().openNewBook();
+
+            }
+        });
+    }
 }

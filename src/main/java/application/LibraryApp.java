@@ -18,6 +18,9 @@ import application.presentationModel.LoansPMod;
 import application.presentationModel.ShelfPMod;
 import application.view.mainView.MainViewFactory;
 import application.view.mainView.MasterMainView;
+
+import com.google.common.base.Preconditions;
+
 import domain.Library;
 
 public class LibraryApp {
@@ -53,6 +56,8 @@ public class LibraryApp {
      * Must run in the <strong>AWT event dispatching thread</strong>!
      */
     public static MasterMainView createMainWindow(Library library) {
+        Preconditions.checkState(SwingUtilities.isEventDispatchThread());
+
         Repository.getInstance().setLibrary(library);
 
         initPMods();
