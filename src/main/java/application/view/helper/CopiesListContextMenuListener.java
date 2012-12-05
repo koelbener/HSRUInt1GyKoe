@@ -12,8 +12,8 @@ import application.presentationModel.componentModel.CopyListModel;
 
 import com.google.common.primitives.Ints;
 
+import domain.Condition;
 import domain.Copy;
-import domain.Copy.Condition;
 
 public class CopiesListContextMenuListener implements MouseListener, ActionListener {
 

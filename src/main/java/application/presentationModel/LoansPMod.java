@@ -17,8 +17,8 @@ import application.presentationModel.componentModel.LoanTableModel;
 import com.google.common.base.Preconditions;
 import com.jgoodies.validation.ValidationResult;
 
+import domain.Condition;
 import domain.Copy;
-import domain.Copy.Condition;
 import domain.Customer;
 import domain.Loan;
 

@@ -2,22 +2,22 @@ package application.presentationModel;
 
 import java.util.List;
 
-import application.presentationModel.componentModel.CopyStatusComboBoxModel;
+import application.presentationModel.componentModel.ConditionComboBoxModel;
+import domain.Condition;
 import domain.Copy;
-import domain.Copy.Condition;
 import domain.Customer;
 import domain.Loan;
 
 public class CopyPMod extends pModBase {
 
-    private final CopyStatusComboBoxModel copyStatusModel;
+    private final ConditionComboBoxModel copyStatusModel;
 
     public CopyPMod() {
         super();
-        copyStatusModel = new CopyStatusComboBoxModel();
+        copyStatusModel = new ConditionComboBoxModel();
     }
 
-    public CopyStatusComboBoxModel getCopyStatusModel() {
+    public ConditionComboBoxModel getCopyStatusModel() {
         return copyStatusModel;
     }
 

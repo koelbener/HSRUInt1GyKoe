@@ -47,6 +47,7 @@ import application.core.Repository;
 import application.core.Texts;
 import application.presentationModel.CopyPMod;
 import application.presentationModel.LoansPMod;
+import application.presentationModel.componentModel.ConditionListCellRenderer;
 import application.presentationModel.componentModel.LoanDetailTableModel;
 import application.util.IconUtil;
 import application.view.component.JNumberTextField;
@@ -58,8 +59,8 @@ import application.view.helper.HideTextOnFocusListener;
 import com.google.common.base.Joiner;
 import com.jgoodies.validation.ValidationResult;
 
+import domain.Condition;
 import domain.Copy;
-import domain.Copy.Condition;
 import domain.Customer;
 import domain.Loan;
 
@@ -88,7 +89,7 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
     private JButton btnLinkToLoan;
     private JTextField txtCustomerSearch;
     private JNumberTextField txtCopyId;
-    private JComboBox<Condition> comboStatus;
+    private JComboBox<Condition> comboCondition;
     private JList<Customer> listCustomer;
     private JLabel lblReturnFeedbackLabel;
 
@@ -261,8 +262,9 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
         panel_5.add(btnReturnButton, "cell 2 0");
         btnReturnButton.setEnabled(false);
 
-        comboStatus = new JComboBox<Condition>(copyPMod.getCopyStatusModel());
-        panel_5.add(comboStatus, "cell 1 0");
+        comboCondition = new JComboBox<Condition>(copyPMod.getCopyStatusModel());
+        comboCondition.setRenderer(new ConditionListCellRenderer());
+        panel_5.add(comboCondition, "cell 1 0");
 
         lblReturnFeedbackLabel = new JLabel();
         panel_5.add(lblReturnFeedbackLabel, "cell 3 0");
@@ -338,7 +340,7 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
     }
 
     private Condition getSelectedCondition() {
-        return (Condition) comboStatus.getSelectedItem();
+        return (Condition) comboCondition.getSelectedItem();
     }
 
     private void clearNewLoanSection() {
@@ -410,7 +412,7 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
     protected void initListeners() {
 
         new EnableCompontentOnTableSelectionListener(tblLoans, btnReturnButton);
-        new EnableCompontentOnTableSelectionListener(tblLoans, comboStatus, true);
+        new EnableCompontentOnTableSelectionListener(tblLoans, comboCondition, true);
 
         initKeyListeners();
 
@@ -428,7 +430,7 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
                 Long copyId = pMod.getLoanDetailTableModel().getCopyOfRow(tblLoans.getSelectedRow());
                 if (copyId != null) {
                     Copy copy = copyPMod.searchCopy(copyId);
-                    comboStatus.setSelectedItem(copy.getCondition());
+                    comboCondition.setSelectedItem(copy.getCondition());
                 }
             }
         });
@@ -653,7 +655,7 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
             Long copyId = pMod.getLoanDetailTableModel().getCopyOfRow(tblLoans.getSelectedRow());
             if (copyId != null) {
                 Copy copy = copyPMod.searchCopy(copyId);
-                comboStatus.setSelectedItem(copy.getCondition());
+                comboCondition.setSelectedItem(copy.getCondition());
             }
         }
     }

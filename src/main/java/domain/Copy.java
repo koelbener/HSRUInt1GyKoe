@@ -3,38 +3,8 @@ package domain;
 import java.util.ArrayList;
 import java.util.List;
 
-import application.core.Texts;
 
 public class Copy {
-
-    public enum Condition {
-        NEW("General.condition.new", "cond_new.gif"), //
-        GOOD("General.condition.good", "cond_good.gif"), //
-        DAMAGED("General.condition.damaged", "cond_damaged.gif"), //
-        WASTE("General.condition.waste", "cond_waste.gif"), //
-        LOST("General.condition.lost", "cond_lost.gif");
-
-        private String key;
-        private final String icon;
-
-        Condition(String key, String icon) {
-            this.key = key;
-            this.icon = icon;
-        }
-
-        @Override
-        public String toString() {
-            return Texts.get(getKey());
-        }
-
-        public String getKey() {
-            return key;
-        }
-
-        public String getIcon() {
-            return icon;
-        }
-    }
 
     public static long nextInventoryNumber = 1;
 
@@ -98,7 +68,6 @@ public class Copy {
             result.add(new Copy(copy));
         }
         return result;
-
     }
 
     public void updateFrom(Copy copy) {

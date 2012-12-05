@@ -18,6 +18,7 @@ import org.xml.sax.SAXException;
 import com.google.common.io.Resources;
 
 import domain.Book;
+import domain.Condition;
 import domain.Copy;
 import domain.Customer;
 import domain.IllegalLoanOperationException;
@@ -63,13 +64,13 @@ public class XmlDataLoader implements DataLoder {
             switch (i % 4) {
             case 0:
                 Copy c1 = library.createAndAddCopy(library.getBooks().get(i));
-                c1.setCondition(Copy.Condition.GOOD);
+                c1.setCondition(Condition.GOOD);
                 createLoansForCopy(library, c1, i, 5);
                 Copy c2 = library.createAndAddCopy(library.getBooks().get(i));
-                c2.setCondition(Copy.Condition.DAMAGED);
+                c2.setCondition(Condition.DAMAGED);
                 createLoansForCopy(library, c2, i, 2);
                 Copy c3 = library.createAndAddCopy(library.getBooks().get(i));
-                c3.setCondition(Copy.Condition.WASTE);
+                c3.setCondition(Condition.WASTE);
                 break;
             case 1:
                 Copy c4 = library.createAndAddCopy(library.getBooks().get(i));

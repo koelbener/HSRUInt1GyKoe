@@ -3,6 +3,7 @@ package application.view.mainView.dialogView;
 import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -29,6 +30,8 @@ import application.controller.BookDetailController;
 import application.core.Repository;
 import application.core.Texts;
 import application.presentationModel.CopyPMod;
+import application.presentationModel.componentModel.ConditionComboBoxModel;
+import application.presentationModel.componentModel.ConditionListCellRenderer;
 import application.presentationModel.componentModel.CopyListModel;
 import application.util.IconUtil;
 import application.view.helper.CopiesListCellRenderer;
@@ -40,6 +43,7 @@ import com.jgoodies.validation.util.DefaultValidationResultModel;
 import com.jgoodies.validation.view.ValidationResultViewFactory;
 
 import domain.Book;
+import domain.Condition;
 import domain.Copy;
 import domain.Shelf;
 import domain.validator.BookValidator;
@@ -65,6 +69,7 @@ public abstract class BookDetailMainViewBase extends DialogViewBase<Book, BookDe
     private JButton btnCancel;
     private JButton btnAdd;
     private JButton btnRemove;
+    private JButton btnSetCondition;
     private JPanel pnBookInfo;
     private JLabel lblTitle;
     private JLabel lblAuthor;
@@ -73,6 +78,7 @@ public abstract class BookDetailMainViewBase extends DialogViewBase<Book, BookDe
     private JPanel pnCopies;
     private JLabel lblNrOfCopies;
     private JList<Copy> listCopies;
+    private JComboBox<Condition> comboCondition;
     protected CopyListModel listModelCopies;
     protected ValidationResultModel validationModel;
     protected JComponent validationResultList;
@@ -144,6 +150,7 @@ public abstract class BookDetailMainViewBase extends DialogViewBase<Book, BookDe
         lblNrOfCopies.setText(Texts.get("BookDetailMainView.lblAnzahl.text"));
         btnRemove.setText(Texts.get("BookDetailMainView.btnEntfernen.text"));
         btnAdd.setText(Texts.get("BookDetailMainView.btnHinzufgen.text"));
+        btnSetCondition.setText(Texts.get("BookDetailMainView.btnSetCondition.text"));
         btnSave.setText(Texts.get("BookDetailMainView.btnSave.text"));
         btnCancel.setText(Texts.get("BookDetailMainView.btnCancel.text"));
     }
@@ -221,6 +228,25 @@ public abstract class BookDetailMainViewBase extends DialogViewBase<Book, BookDe
         listCopies.setModel(listModelCopies);
         listCopies.setCellRenderer(new CopiesListCellRenderer());
         pnCopiesOverview.add(listCopies);
+
+        JPanel pnCopiesAction = new JPanel();
+        pnCopiesAction.setLayout(new FlowLayout(FlowLayout.RIGHT));
+        Condition[] options = new Condition[Condition.values().length + 1];
+        options[0] = null;
+        for (int i = 1; i <= options.length - 1; i++) {
+            options[i] = Condition.values()[i - 1];
+        }
+        options[1] = Condition.LOST;
+        comboCondition = new JComboBox<Condition>(new ConditionComboBoxModel());
+        comboCondition.setRenderer(new ConditionListCellRenderer());
+        comboCondition.setEnabled(false);
+        pnCopiesAction.add(comboCondition);
+        btnSetCondition = new JButton();
+        btnSetCondition.setEnabled(false);
+        btnSetCondition.setMnemonic('t');
+        pnCopiesAction.add(btnSetCondition);
+
+        pnCopies.add(pnCopiesAction, BorderLayout.SOUTH);
     }
 
     private void createControlPanel() {
@@ -238,14 +264,17 @@ public abstract class BookDetailMainViewBase extends DialogViewBase<Book, BookDe
 
         btnAdd = new JButton();
         btnAdd.setName(NAME_BUTTON_ADD_COPY);
+        btnAdd.setMnemonic('a');
         btnAdd.setIcon(IconUtil.loadIcon("add.gif"));
         pnControls.add(btnAdd, "cell 2 0");
 
         btnRemove = new JButton();
         btnRemove.setName(NAME_BUTTON_DELETE_COPY);
         btnRemove.setEnabled(false);
+        btnRemove.setMnemonic('e');
         btnRemove.setIcon(IconUtil.loadIcon("delete.gif"));
         pnControls.add(btnRemove, "cell 3 0");
+
     }
 
     private void createBookInfoPanel(JPanel pnMainPanel) {
@@ -343,8 +372,35 @@ public abstract class BookDetailMainViewBase extends DialogViewBase<Book, BookDe
 
             @Override
             public void valueChanged(ListSelectionEvent e) {
-                int selectedCopies = listCopies.getSelectedIndices().length;
-                btnRemove.setEnabled(selectedCopies > 0 && Repository.getInstance().getCopyPMod().areCopiesDeletable(listCopies.getSelectedValuesList()));
+                List<Copy> selectedCopies = listCopies.getSelectedValuesList();
+                boolean copyIsSelected = selectedCopies.size() > 0;
+                btnRemove.setEnabled(copyIsSelected && Repository.getInstance().getCopyPMod().areCopiesDeletable(selectedCopies));
+                btnSetCondition.setEnabled(copyIsSelected);
+                comboCondition.setEnabled(copyIsSelected);
+                if (copyIsSelected) {
+                    Condition worstCondition = Condition.NEW;
+                    for (Copy copy : selectedCopies) {
+                        if (copy.getCondition().isWorseThan(worstCondition)) {
+                            worstCondition = copy.getCondition();
+                        }
+                    }
+                    comboCondition.setSelectedItem(worstCondition.getNextWorse());
+                } else {
+                    comboCondition.setSelectedIndex(0);
+                }
+            }
+        });
+
+        btnSetCondition.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                List<Copy> selectedValuesList = listCopies.getSelectedValuesList();
+                Condition condition = (Condition) comboCondition.getSelectedItem();
+                for (Copy copy : selectedValuesList) {
+                    copy.setCondition(condition);
+                    listModelCopies.updateCopy(copy);
+                }
             }
         });
 

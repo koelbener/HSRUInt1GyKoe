@@ -7,8 +7,8 @@ import application.core.Repository;
 
 import com.jgoodies.validation.ValidationResult;
 
+import domain.Condition;
 import domain.Copy;
-import domain.Copy.Condition;
 import domain.Customer;
 import domain.Loan;
 

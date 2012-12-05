@@ -10,7 +10,7 @@ import javax.swing.JPopupMenu;
 
 import application.core.Texts;
 import application.util.IconUtil;
-import domain.Copy.Condition;
+import domain.Condition;
 
 public class CopiesContextMenu extends JPopupMenu {
     private static final long serialVersionUID = 1L;

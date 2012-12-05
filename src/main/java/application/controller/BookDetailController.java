@@ -40,9 +40,9 @@ public class BookDetailController extends ControllerBase {
                 getRepository().getCopyPMod().addCopy(copy);
             } else {
                 if (existingCopies.remove(copy)) {
-                    logger.debug("Updating copy \"{}\"", copy);
                     // the copy has not been removed
                     Copy copyToPersist = getRepository().getCopyPMod().getCopyByInventoryId(copy.getInventoryNumber());
+                    logger.debug("Updating copy \"{}\" -> \"{}\"", copyToPersist, copy);
                     copyToPersist.updateFrom(copy);
                     Repository.getInstance().getCopyPMod().update(copy);
                 }

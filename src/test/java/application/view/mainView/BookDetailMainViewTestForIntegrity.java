@@ -81,7 +81,7 @@ public class BookDetailMainViewTestForIntegrity extends AbstractFestTest {
     }
 
     @Test
-    public void deleteNotPossibleOnLentCopy() {
+    public void deleteNotPossibleOnLentCopy() throws InterruptedException {
         bookMaster.table(NAME_TABLE_BOOKS).cell(row(0).column(BookTableModel.COLUMN_AMOUNT)).requireValue("2/3");
 
         // open a book and edit the title

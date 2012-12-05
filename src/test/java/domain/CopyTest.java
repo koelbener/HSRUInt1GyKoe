@@ -12,11 +12,11 @@ public class CopyTest {
         assertEquals(Copy.nextInventoryNumber - 1, c1.getInventoryNumber());
         Copy c2 = new Copy(t);
         assertEquals(Copy.nextInventoryNumber - 1, c2.getInventoryNumber());
-        assertEquals(Copy.Condition.NEW, c2.getCondition());
+        assertEquals(Condition.NEW, c2.getCondition());
 
-        c1.setCondition(Copy.Condition.DAMAGED);
+        c1.setCondition(Condition.DAMAGED);
 
-        assertEquals(Copy.Condition.DAMAGED, c1.getCondition());
+        assertEquals(Condition.DAMAGED, c1.getCondition());
     }
 
 }
