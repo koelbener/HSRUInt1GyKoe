@@ -13,8 +13,6 @@ import javax.swing.SwingUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.base.Preconditions;
-
 public class ShortcutsManager implements KeyEventDispatcher {
 
     private final Logger logger = LoggerFactory.getLogger(ShortcutsManager.class);
@@ -32,8 +30,6 @@ public class ShortcutsManager implements KeyEventDispatcher {
 
     public void registerShortcut(int key, ShortcutAction action) {
         KeyStroke keyStroke = KeyStroke.getKeyStroke(key, KeyEvent.CTRL_DOWN_MASK);
-        Preconditions.checkState(!shortcuts.containsKey(keyStroke));
-        //
         shortcuts.put(keyStroke, action);
     }
 
