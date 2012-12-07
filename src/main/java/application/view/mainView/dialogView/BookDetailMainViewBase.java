@@ -438,8 +438,8 @@ public abstract class BookDetailMainViewBase extends DialogViewBase<Book, BookDe
     }
 
     @Override
-    public void update(Observable arg0, Object arg1) {
-        if (arg0.getClass().equals(CopyPMod.class)) {
+    public void update(Observable o, Object arg) {
+        if (o.getClass().equals(CopyPMod.class)) {
             List<Copy> copiesOfBook = null;
             if (getReferenceObject() != null) {
                 copiesOfBook = Repository.getInstance().getBooksPMod().getCopiesOfBook(getReferenceObject());

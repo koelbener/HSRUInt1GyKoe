@@ -339,12 +339,12 @@ public class BookMasterSubView extends SubViewBase<Library, BookMasterController
     }
 
     @Override
-    public void update(Observable observable, Object arg1) {
-        if (observable instanceof BooksPMod) {
+    public void update(Observable o, Object arg) {
+        if (o instanceof BooksPMod) {
             logger.debug("Updating statistics");
             updateStatistics();
         } else {
-            super.update(observable, arg1);
+            super.update(o, arg);
         }
     }
 

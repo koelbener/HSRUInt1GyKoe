@@ -29,7 +29,7 @@ public abstract class ViewBase<R, T extends ControllerBase, S extends Container>
     protected abstract S initContainer();
 
     @Override
-    public void update(Observable arg0, Object arg1) {
+    public void update(Observable o, Object arg) {
         setTexts();
     }
 
