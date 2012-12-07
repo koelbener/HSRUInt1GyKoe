@@ -219,4 +219,14 @@ public class LoansPMod extends pModBase {
 
     }
 
+    public int getOverdueLoans(Customer customer) {
+        int result = 0;
+        for (Loan loan : library.getCustomerOpenLoans(customer)) {
+            if (loan.isOverdue()) {
+                result++;
+            }
+        }
+        return result;
+    }
+
 }

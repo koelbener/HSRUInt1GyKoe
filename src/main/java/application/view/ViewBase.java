@@ -18,9 +18,9 @@ public abstract class ViewBase<R, T extends ControllerBase, S extends Container>
         container.setName(this.getClass().getSimpleName());
         this.referenceObject = referenceObject;
         initModel();
+        controller = initController();
         initUIElements();
         setTexts();
-        controller = initController();
         initListeners();
 
         Texts.getInstance().addObserver(this);

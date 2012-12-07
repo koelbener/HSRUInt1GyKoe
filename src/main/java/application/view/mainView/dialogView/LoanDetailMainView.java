@@ -66,6 +66,8 @@ import domain.Loan;
 
 public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailController> implements Observer {
 
+    private static final int FINE_PER_BOOK = 3;
+
     private static String defaultSearchValue;
 
     private JPanel pnCustomerSelection;
@@ -92,6 +94,7 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
     private JComboBox<Condition> comboCondition;
     private JList<Customer> listCustomer;
     private JLabel lblReturnFeedbackLabel;
+    private JLabel lblFine;
 
     private Copy currentSelectedCopy;
     private HideTextOnFocusListener hideTextOnFocusListener;
@@ -241,6 +244,9 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
 
         lblValNumberOfLoans = new JLabel("1");
         pnLoanOverview.add(lblValNumberOfLoans, "cell 1 0,alignx leading");
+
+        lblFine = new JLabel("");
+        pnLoanOverview.add(lblFine, "cell 3 0,alignx right");
 
         LoanDetailTableModel loanDetailTableModel = pMod.getLoanDetailTableModel();
         tblLoans = new JTable(loanDetailTableModel);
@@ -397,10 +403,23 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
     private void updateMakeLoanButtonVisibility() {
         boolean hasErrors = true;
         if (currentSelectedCopy != null) {
-            hasErrors = getController().validateLoan(currentSelectedCopy, getCurrentCustomer()).hasErrors();
+            ValidationResult validation = getController().validateLoan(currentSelectedCopy, getCurrentCustomer());
+            hasErrors = validation.hasErrors();
         }
         btnCreateLoan.setEnabled(!hasErrors);
-
+        //
+        if (getCurrentCustomer() != null) {
+            int overdueLoans = getController().getOverdueLoans(getCurrentCustomer());
+            if (overdueLoans > 0) {
+                int fine = overdueLoans * FINE_PER_BOOK;
+                logger.info("Customer {} has to pay CHF {} fine.", getCurrentCustomer().getFullName(), fine);
+                lblFine.setText(Texts.get("LoanDetailMainViewBase.loansOverview.fine", fine));
+                lblFine.setIcon(IconUtil.loadIcon("warning.png"));
+            } else {
+                lblFine.setText("");
+                lblFine.setIcon(null);
+            }
+        }
     }
 
     @Override
