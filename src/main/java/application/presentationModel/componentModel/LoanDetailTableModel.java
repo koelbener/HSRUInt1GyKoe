@@ -26,6 +26,7 @@ public class LoanDetailTableModel extends AbstractTableModel implements Observer
 
     public LoanDetailTableModel(Customer customer) {
         this.loans = new ArrayList<Loan>();
+        Texts.getInstance().addObserver(this);
         setColumns();
     }
 
@@ -145,6 +146,9 @@ public class LoanDetailTableModel extends AbstractTableModel implements Observer
     public void update(Observable o, Object arg) {
         if (o.getClass().equals(BooksPMod.class)) {
             fireTableDataChanged();
+        } else if (o.getClass().equals(Texts.class)) {
+            setColumns();
+            fireTableStructureChanged();
         }
     }
 }

@@ -155,8 +155,10 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
         }
 
         // border of panels
-        pnNewLoan.setBorder(new TitledBorder(null, Texts.get("LoanDetailMainViewBase.newLoan.title"), TitledBorder.LEADING, TitledBorder.TOP, null, null));
-        pnCustomerSelection.setBorder(new TitledBorder(null, Texts.get("LoanDetailMainViewBase.customerSelection.title"), TitledBorder.LEADING, TitledBorder.TOP, null, null));
+        pnNewLoan.setBorder(new TitledBorder(null, Texts.get("LoanDetailMainViewBase.newLoan.title"), TitledBorder.LEADING, TitledBorder.TOP, null,
+                null));
+        pnCustomerSelection.setBorder(new TitledBorder(null, Texts.get("LoanDetailMainViewBase.customerSelection.title"), TitledBorder.LEADING,
+                TitledBorder.TOP, null, null));
 
         // components
         lblCopyTitle.setText(Texts.get("LoanDetailMainViewBase.newLoan.bookDescriptionLabel"));
@@ -170,6 +172,9 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
         btnLinkToLoan.setText(Texts.get("LoanDetailMainViewBase.newLoan.VisitLoan"));
         lblReturnFeedbackLabel.setText("");
         lblAvailability.setText(Texts.get("LoanDetailMainViewBase.newLoan.availability"));
+
+        getContainer().pack();
+
     }
 
     /**
