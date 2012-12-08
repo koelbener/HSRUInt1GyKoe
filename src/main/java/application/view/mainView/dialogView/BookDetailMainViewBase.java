@@ -26,9 +26,14 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import net.miginfocom.swing.MigLayout;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import application.controller.BookDetailController;
 import application.core.Repository;
 import application.core.Texts;
+import application.presentationModel.BooksPMod;
 import application.presentationModel.CopyPMod;
 import application.presentationModel.componentModel.ConditionComboBoxModel;
 import application.presentationModel.componentModel.ConditionListCellRenderer;
@@ -37,6 +42,7 @@ import application.util.IconUtil;
 import application.view.helper.CopiesListCellRenderer;
 import application.view.helper.CopiesListContextMenuListener;
 
+import com.google.common.base.Preconditions;
 import com.jgoodies.validation.ValidationResult;
 import com.jgoodies.validation.ValidationResultModel;
 import com.jgoodies.validation.util.DefaultValidationResultModel;
@@ -83,6 +89,8 @@ public abstract class BookDetailMainViewBase extends DialogViewBase<Book, BookDe
     protected ValidationResultModel validationModel;
     protected JComponent validationResultList;
     protected JPanel pnValidation;
+    private final Logger logger = LoggerFactory.getLogger(BookDetailMainViewBase.class);
+    private JLabel lblMessage;
 
     public BookDetailMainViewBase(Book book) {
         super(book, "book_closed.gif");
@@ -92,6 +100,7 @@ public abstract class BookDetailMainViewBase extends DialogViewBase<Book, BookDe
     @Override
     protected void addObservables() {
         observables.add(Repository.getInstance().getCopyPMod());
+        observables.add(Repository.getInstance().getBooksPMod());
     }
 
     @Override
@@ -163,8 +172,8 @@ public abstract class BookDetailMainViewBase extends DialogViewBase<Book, BookDe
     @Override
     protected void initUIElements() {
         super.initUIElements();
-        getContainer().setBounds(100, 100, 616, 445);
-        container.setMinimumSize(new Dimension(616, 445));
+        getContainer().setBounds(100, 100, 650, 445);
+        container.setMinimumSize(new Dimension(650, 445));
 
         Container contentPane = getContainer().getContentPane();
         contentPane.setLayout(new BorderLayout(0, 0));
@@ -184,16 +193,19 @@ public abstract class BookDetailMainViewBase extends DialogViewBase<Book, BookDe
 
     private void createButtonsPanel(JPanel pnValidationContainer) {
         JPanel pnButtons = new JPanel();
-        pnButtons.setLayout(new MigLayout("", "[grow][85px][]", "[23px]"));
+        pnButtons.setLayout(new MigLayout("", "[grow][][85px][]", "[23px]"));
+
+        lblMessage = new JLabel();
+        pnButtons.add(lblMessage, "cell 1 0,alignx right");
 
         btnSave = new JButton();
-        pnButtons.add(btnSave, "cell 1 0,alignx left,aligny top");
+        pnButtons.add(btnSave, "cell 2 0,alignx left,aligny top");
         btnSave.setMnemonic('s');
         btnSave.setName(NAME_BUTTON_SAVE);
         pnValidationContainer.add(pnButtons, BorderLayout.SOUTH);
 
         btnCancel = new JButton();
-        pnButtons.add(btnCancel, "cell 2 0,alignx left,aligny top");
+        pnButtons.add(btnCancel, "cell 3 0,alignx left,aligny top");
         btnCancel.setName(NAME_BUTTON_CANCEL);
         btnCancel.setMnemonic('c');
     }
@@ -439,13 +451,22 @@ public abstract class BookDetailMainViewBase extends DialogViewBase<Book, BookDe
 
     @Override
     public void update(Observable o, Object arg) {
-        if (o.getClass().equals(CopyPMod.class)) {
-            List<Copy> copiesOfBook = null;
-            if (getReferenceObject() != null) {
-                copiesOfBook = Repository.getInstance().getBooksPMod().getCopiesOfBook(getReferenceObject());
-                listModelCopies = new CopyListModel(Copy.cloneCopies(copiesOfBook));
-                listCopies.setModel(listModelCopies);
+        if (o.getClass().equals(CopyPMod.class) || o.getClass().equals(BooksPMod.class)) {
+            Preconditions.checkNotNull(arg);
+            if (getReferenceObject().equals(arg)) {
+                lblMessage.setText(Texts.get("BookDetailMainView.optimisticlock.error"));
+                lblMessage.setIcon(IconUtil.loadIcon("warning.png"));
+                logger.info("Book changed in the background, disabling view...");
+                disableComponents(btnSave, btnAdd, btnRemove, btnSetCondition, listCopies, txtFieldAuthor, txtFieldPublisher, txtFieldTitle, comboShelf);
+            } else {
+                logger.info("A different book changed in the background. Doing nothing...");
             }
+        }
+    }
+
+    private void disableComponents(JComponent... components) {
+        for (JComponent component : components) {
+            component.setEnabled(false);
         }
     }
 }

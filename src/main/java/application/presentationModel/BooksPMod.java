@@ -64,13 +64,13 @@ public class BooksPMod extends pModBase {
     public void addBook(Book book) {
         bookTableModel.addBook(book);
         setChanged();
-        notifyObservers();
+        notifyObservers(book);
     }
 
     public void updateBook(Book book) {
         bookTableModel.updateBook(book);
         setChanged();
-        notifyObservers();
+        notifyObservers(book);
     }
 
     public int getBooksCount() {
@@ -117,7 +117,7 @@ public class BooksPMod extends pModBase {
     public Book createAndAddBook(String title) {
         Book book = library.createAndAddBook(title);
         setChanged();
-        notifyObservers();
+        notifyObservers(book);
         return book;
     }
 

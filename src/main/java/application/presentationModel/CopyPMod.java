@@ -42,7 +42,7 @@ public class CopyPMod extends pModBase {
             copy.setCondition(condition);
         }
         setChanged();
-        notifyObservers();
+        notifyObservers(copy.getTitle());
     }
 
     public boolean areCopiesDeletable(List<Copy> copies) {
@@ -67,11 +67,11 @@ public class CopyPMod extends pModBase {
     public void removeCopy(Copy copy) {
         library.removeCopy(copy);
         setChanged();
-        notifyObservers();
+        notifyObservers(copy.getTitle());
     }
 
     public void update(Copy copy) {
         setChanged();
-        notifyObservers();
+        notifyObservers(copy.getTitle());
     }
 }

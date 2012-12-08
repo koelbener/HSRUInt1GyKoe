@@ -6,7 +6,10 @@ import static application.view.subView.BookMasterSubView.NAME_BUTTON_OPEN;
 import static application.view.subView.BookMasterSubView.NAME_TABLE_BOOKS;
 import static org.fest.swing.data.TableCell.row;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.regex.Pattern;
+
+import javax.swing.SwingUtilities;
 
 import org.fest.swing.edt.FailOnThreadViolationRepaintManager;
 import org.fest.swing.edt.GuiActionRunner;
@@ -18,8 +21,11 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import application.LibraryApp;
+import application.core.Repository;
+import application.presentationModel.BooksPMod;
 import application.presentationModel.componentModel.BookTableModel;
 import application.view.AbstractFestTest;
+import application.view.mainView.dialogView.BookDetailMainViewBase;
 import application.view.mainView.dialogView.EditBookDetailMainView;
 import domain.Book;
 import domain.Copy;
@@ -104,6 +110,52 @@ public class BookDetailMainViewTestForIntegrity extends AbstractFestTest {
         bookDetail.button(NAME_BUTTON_SAVE).click();
         bookDetail.requireNotVisible();
         bookMaster.table(NAME_TABLE_BOOKS).cell(row(0).column(BookTableModel.COLUMN_AMOUNT)).requireValue("1/2");
+    }
+
+    @Test
+    public void parallelEditOnBook() {
+
+        // open a book
+        openFirstBook();
+        bookDetail = findFrame(bookMaster, EditBookDetailMainView.class.getSimpleName());
+
+        // edit it
+        bookMaster.focus();
+        bookMaster.table().cell(row(0).column(BookTableModel.COLUMN_AUTHOR)).enterValue("new title");
+
+        // the book detail view should be disabled...
+        bookDetail.focus();
+        bookDetail.button(BookDetailMainViewBase.NAME_BUTTON_SAVE).requireDisabled();
+
+    }
+
+    @Test
+    public void parallelEditOnDifferentBook() throws InvocationTargetException, InterruptedException {
+
+        // open a book
+        openFirstBook();
+        bookDetail = findFrame(bookMaster, EditBookDetailMainView.class.getSimpleName());
+
+        // edit it
+        bookMaster.focus();
+        SwingUtilities.invokeAndWait(new Runnable() {
+
+            @Override
+            public void run() {
+                BooksPMod booksPMod = Repository.getInstance().getBooksPMod();
+                Book newBook = booksPMod.createAndAddBook("new book");
+                newBook.setAuthor("my author");
+                newBook.setPublisher("my publisher");
+                newBook.setShelf(Shelf.C1);
+                booksPMod.addBook(newBook);
+            }
+        });
+        bookMaster.table().cell(row(1).column(BookTableModel.COLUMN_AUTHOR)).enterValue("new title");
+
+        // the book detail view should be disabled...
+        bookDetail.focus();
+        bookDetail.button(BookDetailMainViewBase.NAME_BUTTON_SAVE).requireEnabled();
+
     }
 
     void selectCopy(Copy lentCopy2) {
