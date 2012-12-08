@@ -439,6 +439,17 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
         new EnableCompontentOnTableSelectionListener(tblLoans, btnReturnButton);
         new EnableCompontentOnTableSelectionListener(tblLoans, comboCondition, true);
 
+        tblLoans.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                if (tblLoans.getSelectedRows().length > 1) {
+                    btnReturnButton.setText(Texts.get("LoanDetailMainViewBase.loansOverview.returnButtonMultipleBooks"));
+                } else {
+                    btnReturnButton.setText(Texts.get("LoanDetailMainViewBase.loansOverview.returnButton"));
+                }
+            }
+        });
+
         initKeyListeners();
 
         getContainer().addMouseListener(new MouseAdapter() {
