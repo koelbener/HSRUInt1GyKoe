@@ -12,7 +12,7 @@ import domain.Loan;
 
 public class LendingMasterController extends ControllerBase {
 
-    private static final Logger logger = LoggerFactory.getLogger(LendingMasterController.class);
+    private final Logger logger = LoggerFactory.getLogger(LendingMasterController.class);
 
     public void openLoans(int[] selectedRows) {
         LoanTableModel loanTableModel = getRepository().getLoansPMod().getLoanTableModel();

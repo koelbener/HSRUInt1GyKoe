@@ -6,7 +6,7 @@ import application.presentationModel.componentModel.CustomerListModel;
 import domain.Customer;
 import domain.Loan;
 
-public class CustomerPMod extends pModBase {
+public class CustomerPMod extends AbstractPresentationModel {
 
     private CustomerListModel customerListModel = new CustomerListModel();
 

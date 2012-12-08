@@ -11,7 +11,7 @@ import domain.Book;
 import domain.Copy;
 
 public class BookDetailController extends ControllerBase {
-    private static final Logger logger = LoggerFactory.getLogger(BookDetailController.class);
+    private final Logger logger = LoggerFactory.getLogger(BookDetailController.class);
 
     public void saveBook(Book book, List<Copy> newCopies) {
 

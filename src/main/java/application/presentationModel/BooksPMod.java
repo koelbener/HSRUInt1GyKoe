@@ -15,7 +15,7 @@ import application.presentationModel.componentModel.BookTableModel;
 import domain.Book;
 import domain.Copy;
 
-public class BooksPMod extends pModBase {
+public class BooksPMod extends AbstractPresentationModel {
 
     private final Logger logger = LoggerFactory.getLogger(BooksPMod.class);
     private final BookTableModel bookTableModel;

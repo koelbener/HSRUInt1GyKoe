@@ -24,7 +24,7 @@ import com.google.common.base.Preconditions;
 import domain.Library;
 
 public class LibraryApp {
-    private static final Logger logger = LoggerFactory.getLogger(LibraryApp.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(LibraryApp.class);
 
     /**
      * Launch the application.
@@ -35,7 +35,7 @@ public class LibraryApp {
 
             @Override
             public void uncaughtException(Thread t, Throwable e) {
-                logger.error("Uncaught exception", e);
+                LOGGER.error("Uncaught exception", e);
             }
         });
 
@@ -66,7 +66,7 @@ public class LibraryApp {
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (Exception e) {
-            logger.error("Unable to set a native look and feel.", e);
+            LOGGER.error("Unable to set a native look and feel.", e);
         }
 
         MasterMainView masterView = Repository.getInstance().getMainViewFactory().getMasterMainView();

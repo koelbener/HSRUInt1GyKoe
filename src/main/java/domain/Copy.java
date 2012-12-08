@@ -3,7 +3,6 @@ package domain;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class Copy {
 
     public static long nextInventoryNumber = 1;

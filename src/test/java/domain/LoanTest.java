@@ -44,25 +44,24 @@ public class LoanTest {
 
     }
 
-    @Test
+    @Test(expected = IllegalLoanOperationException.class)
     public void testDateConsistency() throws IllegalLoanOperationException {
         Loan l = createSampleLoan();
         l.setPickupDate(new GregorianCalendar(2009, 01, 01));
         assertTrue(l.isLent());
-        try {
-            l.returnCopy(new GregorianCalendar(2008, 12, 31));
-            fail("Book cannot retuned before the pickup date");
-        } catch (IllegalLoanOperationException e) {
+        l.returnCopy(new GregorianCalendar(2008, 12, 31));
+        fail("Book cannot retuned before the pickup date");
+    }
 
-        }
+    @Test(expected = IllegalLoanOperationException.class)
+    public void testDateConsistency2() throws IllegalLoanOperationException {
+        Loan l = createSampleLoan();
+        l.setPickupDate(new GregorianCalendar(2009, 01, 01));
         assertTrue(l.isLent());
         l.returnCopy(new GregorianCalendar(2009, 12, 31));
         assertFalse(l.isLent());
-        try {
-            l.setPickupDate(new GregorianCalendar(2008, 10, 31));
-            fail("pickup date cannot be set after the book was returned");
-        } catch (IllegalLoanOperationException e) {
-        }
+        l.setPickupDate(new GregorianCalendar(2008, 10, 31));
+        fail("pickup date cannot be set after the book was returned");
     }
 
     private Loan createSampleLoan() {

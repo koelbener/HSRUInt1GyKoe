@@ -22,13 +22,14 @@ public class BooksTableContextMenuListener implements MouseListener {
             public void mouseReleased(MouseEvent e) {
                 if (e.isMetaDown()) {
                     int r = table.rowAtPoint(e.getPoint());
-                    if (Ints.contains(table.getSelectedRows(), r)) {
-                        // current row is selected, do nothing.
-                    } else if (r >= 0 && r < table.getRowCount()) {
-                        table.setRowSelectionInterval(r, r);
-                    } else {
-                        table.clearSelection();
-                    }
+                    if (!Ints.contains(table.getSelectedRows(), r)) {
+
+                        if (r >= 0 && r < table.getRowCount()) {
+                            table.setRowSelectionInterval(r, r);
+                        } else {
+                            table.clearSelection();
+                        }
+                    } // else: current row is selected, do nothing
                 }
             }
 

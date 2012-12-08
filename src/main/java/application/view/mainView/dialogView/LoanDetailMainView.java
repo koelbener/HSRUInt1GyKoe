@@ -97,7 +97,7 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
     private Copy currentSelectedCopy;
     private HideTextOnFocusListener hideTextOnFocusListener;
 
-    private static final Logger logger = LoggerFactory.getLogger(LoanDetailMainView.class);
+    private final Logger logger = LoggerFactory.getLogger(LoanDetailMainView.class);
 
     private LoansPMod pMod;
     private CopyPMod copyPMod;
@@ -155,8 +155,10 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
         }
 
         // border of panels
-        pnNewLoan.setBorder(new TitledBorder(null, Texts.get("LoanDetailMainViewBase.newLoan.title"), TitledBorder.LEADING, TitledBorder.TOP, null, null));
-        pnCustomerSelection.setBorder(new TitledBorder(null, Texts.get("LoanDetailMainViewBase.customerSelection.title"), TitledBorder.LEADING, TitledBorder.TOP, null, null));
+        pnNewLoan.setBorder(new TitledBorder(null, Texts.get("LoanDetailMainViewBase.newLoan.title"), TitledBorder.LEADING, TitledBorder.TOP, null,
+                null));
+        pnCustomerSelection.setBorder(new TitledBorder(null, Texts.get("LoanDetailMainViewBase.customerSelection.title"), TitledBorder.LEADING,
+                TitledBorder.TOP, null, null));
 
         // components
         lblCopyTitle.setText(Texts.get("LoanDetailMainViewBase.newLoan.bookDescriptionLabel"));
@@ -199,9 +201,9 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
         updateLoanOverViewSection();
     }
 
-    private void createCustomerSelectionSection(JPanel panel_4) {
+    private void createCustomerSelectionSection(JPanel customerSelectionPanel) {
         pnCustomerSelection = new JPanel();
-        panel_4.add(pnCustomerSelection, "cell 0 0,grow");
+        customerSelectionPanel.add(pnCustomerSelection, "cell 0 0,grow");
         pnCustomerSelection.setLayout(new MigLayout("", "[][193.00][grow]", "[50.00][26.00,grow,fill]"));
 
         lblSearch = new JLabel();
@@ -236,9 +238,9 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
         updateMakeLoanButtonVisibility();
     }
 
-    private void createLoanOverviewSection(JPanel panel_4) {
+    private void createLoanOverviewSection(JPanel loanOverviewTable) {
         pnLoanOverview = new JPanel();
-        panel_4.add(pnLoanOverview, "cell 0 2,grow");
+        loanOverviewTable.add(pnLoanOverview, "cell 0 2,grow");
         pnLoanOverview.setLayout(new MigLayout("", "[][][][grow]", "[grow][][][]"));
 
         lblNumberOfLoans = new JLabel();
@@ -305,9 +307,9 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
 
     }
 
-    private void createNewLoanSection(JPanel panel_4) {
+    private void createNewLoanSection(JPanel newLoanSelectionPanel) {
         pnNewLoan = new JPanel();
-        panel_4.add(pnNewLoan, "cell 0 1,growx,aligny top");
+        newLoanSelectionPanel.add(pnNewLoan, "cell 0 1,growx,aligny top");
         pnNewLoan.setLayout(new MigLayout("", "[][][][]", "[][][][][][][]"));
 
         lblCopyId = new JLabel();

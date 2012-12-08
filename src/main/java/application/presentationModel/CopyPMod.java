@@ -8,7 +8,7 @@ import domain.Copy;
 import domain.Customer;
 import domain.Loan;
 
-public class CopyPMod extends pModBase {
+public class CopyPMod extends AbstractPresentationModel {
 
     private final ConditionComboBoxModel copyStatusModel;
 

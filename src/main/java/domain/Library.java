@@ -146,16 +146,19 @@ public class Library {
     }
 
     public boolean canCustomerMakeMoreLoans(Customer customer) {
+        boolean result = true;
         List<Loan> openLoans = getCustomerOpenLoans(customer);
         if (openLoans.size() >= 3) {
-            return false;
-        }
-        for (Loan loan : openLoans) {
-            if (loan.isOverdue()) {
-                return false;
+            result = false;
+        } else {
+            for (Loan loan : openLoans) {
+                if (loan.isOverdue()) {
+                    result = false;
+                    break;
+                }
             }
         }
-        return true;
+        return result;
     }
 
     public List<Loan> getOverdueLoans() {

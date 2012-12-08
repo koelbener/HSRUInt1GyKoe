@@ -5,10 +5,10 @@ import java.util.Observable;
 import application.core.Repository;
 import domain.Library;
 
-public class pModBase extends Observable {
+public abstract class AbstractPresentationModel extends Observable {
     protected final Library library;
 
-    public pModBase() {
+    public AbstractPresentationModel() {
         library = Repository.getInstance().getLibrary();
     }
 }

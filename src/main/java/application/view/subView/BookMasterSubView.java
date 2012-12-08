@@ -53,7 +53,7 @@ public class BookMasterSubView extends SubViewBase<Library, BookMasterController
     public static final String NAME_SEARCH_FIELD = "textField.search";
     public static final String NAME_COMBOBOX_FILTER = "comboBox.searchFilter";
 
-    private static final Logger logger = LoggerFactory.getLogger(BookMasterSubView.class);
+    private final Logger logger = LoggerFactory.getLogger(BookMasterSubView.class);
 
     public static String searchDefaultText;
 
@@ -196,8 +196,10 @@ public class BookMasterSubView extends SubViewBase<Library, BookMasterController
     @Override
     protected void setTexts() {
         // panel titles
-        pnStatistics.setBorder(new TitledBorder(null, Texts.get("BookMasterMainView.statisticsPanel.borderTitle"), TitledBorder.LEADING, TitledBorder.TOP, null, null));
-        pnInventory.setBorder(new TitledBorder(null, Texts.get("BookMasterMainView.inventoryPanel.borderTitle"), TitledBorder.LEADING, TitledBorder.TOP, null, null));
+        pnStatistics.setBorder(new TitledBorder(null, Texts.get("BookMasterMainView.statisticsPanel.borderTitle"), TitledBorder.LEADING,
+                TitledBorder.TOP, null, null));
+        pnInventory.setBorder(new TitledBorder(null, Texts.get("BookMasterMainView.inventoryPanel.borderTitle"), TitledBorder.LEADING,
+                TitledBorder.TOP, null, null));
 
         // components
         lblAnzahlExemplare.setText(Texts.get("BookMasterMainView.lblAnzahlExemplare.text"));

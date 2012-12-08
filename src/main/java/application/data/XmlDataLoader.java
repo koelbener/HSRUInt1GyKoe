@@ -27,7 +27,7 @@ import domain.Loan;
 import domain.Shelf;
 
 public class XmlDataLoader implements DataLoder {
-    private static final Logger logger = LoggerFactory.getLogger(XmlDataLoader.class);
+    private final Logger logger = LoggerFactory.getLogger(XmlDataLoader.class);
 
     @Override
     public Library loadLibrary() throws Exception {
@@ -108,8 +108,10 @@ public class XmlDataLoader implements DataLoder {
             Node customer = customers.item(i);
 
             Customer c = library.createAndAddCustomer(getTextContentOf(customer, "name"), getTextContentOf(customer, "surname"));
-            c.setAdress(getTextContentOf(customer, "street"), Integer.parseInt(getTextContentOf(customer, "zip")), getTextContentOf(customer, "city"));
+            int zip = Integer.parseInt(getTextContentOf(customer, "zip"));
+            c.setAdress(getTextContentOf(customer, "street"), zip, getTextContentOf(customer, "city"));
         }
+
     }
 
     private void createLoansForCopy(Library library, Copy copy, int position, int count) throws IllegalLoanOperationException {

@@ -10,7 +10,7 @@ import application.presentationModel.componentModel.BookTableModel;
 import domain.Book;
 
 public class BookMasterController extends ControllerBase {
-    private static final Logger logger = LoggerFactory.getLogger(BookMasterController.class);
+    private final Logger logger = LoggerFactory.getLogger(BookMasterController.class);
 
     public void openBooks(int[] selectedIndices) {
         BookTableModel bookTableModel = getRepository().getBooksPMod().getBookTableModel();

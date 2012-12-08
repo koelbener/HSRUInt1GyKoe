@@ -13,7 +13,7 @@ import org.slf4j.LoggerFactory;
 public class Texts extends Observable {
     private Locale currentLocale = Language.DEUTSCH.getLocale();
     private ResourceBundle bundle = ResourceBundle.getBundle("messages", currentLocale);
-    private static final Logger logger = LoggerFactory.getLogger(Texts.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(Texts.class);
 
     private static Texts instance;
     private static final String PARAMETER_PATTERN = Pattern.compile("\\{\\}").toString();
@@ -32,7 +32,7 @@ public class Texts extends Observable {
         try {
             return getInstance().bundle.getString(key);
         } catch (java.util.MissingResourceException e) {
-            logger.error("Text with key " + key + " not available!");
+            LOGGER.error("Text with key " + key + " not available!");
             return "!" + key + "!";
         }
     }
@@ -50,10 +50,10 @@ public class Texts extends Observable {
 
     private void loadBundle() {
         ResourceBundle.clearCache();
-        logger.info("load new texts with locale " + currentLocale);
+        LOGGER.info("load new texts with locale " + currentLocale);
         bundle = ResourceBundle.getBundle("messages", currentLocale);
         if (!bundle.getLocale().equals(currentLocale)) {
-            logger.warn("did not load locale " + currentLocale + " correctly!");
+            LOGGER.warn("did not load locale " + currentLocale + " correctly!");
         }
         SwingUtilities.invokeLater(new Runnable() {
 

@@ -41,7 +41,7 @@ import domain.Library;
 
 public class LendingMasterSubView extends SubViewBase<Library, LendingMasterController> {
 
-    private static final Logger logger = LoggerFactory.getLogger(LendingMasterSubView.class);
+    private final Logger logger = LoggerFactory.getLogger(LendingMasterSubView.class);
 
     public static final String NAME_BUTTON_OPEN = "button.open";
     public static final String NAME_BUTTON_NEW = "button.new";
@@ -168,8 +168,10 @@ public class LendingMasterSubView extends SubViewBase<Library, LendingMasterCont
     @Override
     protected void setTexts() {
         // panel titles
-        pnStatistics.setBorder(new TitledBorder(null, Texts.get("LendingMasterMainView.statisticsPanel.borderTitle"), TitledBorder.LEADING, TitledBorder.TOP, null, null));
-        pnInventory.setBorder(new TitledBorder(null, Texts.get("LendingMasterMainView.inventoryPanel.borderTitle"), TitledBorder.LEADING, TitledBorder.TOP, null, null));
+        pnStatistics.setBorder(new TitledBorder(null, Texts.get("LendingMasterMainView.statisticsPanel.borderTitle"), TitledBorder.LEADING,
+                TitledBorder.TOP, null, null));
+        pnInventory.setBorder(new TitledBorder(null, Texts.get("LendingMasterMainView.inventoryPanel.borderTitle"), TitledBorder.LEADING,
+                TitledBorder.TOP, null, null));
 
         // components
         lblNumberOfLoans.setText(Texts.get("LendingMasterMainView.lblAnzahlAusleihen.text"));

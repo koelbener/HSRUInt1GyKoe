@@ -38,9 +38,11 @@ public class EditBookDetailMainView extends BookDetailMainViewBase {
     }
 
     /**
-     * Responsible for correct foucsHandling for validating components. On focusLost, it validates the current input. This Listener tries to always get the focus back to the
-     * invalid component
+     * Responsible for correct foucsHandling for validating components.
      * 
+     * On focusLost, it validates the current input.
+     * 
+     * This Listener tries to always get the focus back to the invalid component
      */
     private class BookDetailValidateFocusListener implements FocusListener {
         Component invalidComponent;

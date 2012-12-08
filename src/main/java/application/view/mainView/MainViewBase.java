@@ -27,7 +27,7 @@ import application.view.ViewBase;
  */
 public abstract class MainViewBase<R, T extends ControllerBase, S extends Window> extends ViewBase<R, T, S> implements Observer {
 
-    private static final Logger logger = LoggerFactory.getLogger(MainViewBase.class);
+    private final Logger logger = LoggerFactory.getLogger(MainViewBase.class);
     protected final List<Observable> observables = new ArrayList<Observable>();
 
     public MainViewBase(R referenceObject) {
@@ -68,7 +68,8 @@ public abstract class MainViewBase<R, T extends ControllerBase, S extends Window
                     logger.trace("check frame position {} against {}", myPosition, framePosition);
                     if (!window.equals(getContainer()) && window.getLocation().equals(container.getLocation())) {
                         container.setLocation(container.getLocation().x + gap, container.getLocation().y + gap);
-                        logger.debug("change location of frame {} from {} to {}", new Object[] { container.getName(), myPosition, container.getLocation() });
+                        logger.debug("change location of frame {} from {} to {}",
+                                new Object[] { container.getName(), myPosition, container.getLocation() });
                         needToCheck = true;
                         break;
                     }

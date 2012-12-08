@@ -119,13 +119,13 @@ public class BookDetailMainViewTest extends AbstractFestTest {
 
     @Test
     public void editBook() {
-        final String OLD_TITLE = bookMaster.table(NAME_TABLE_BOOKS).cell(row(0).column(BookTableModel.COLUMN_TITLE)).value();
+        final String oldTitle = bookMaster.table(NAME_TABLE_BOOKS).cell(row(0).column(BookTableModel.COLUMN_TITLE)).value();
 
         // open a book and edit the title
         openFirstBook();
         bookDetail = findFrame(bookMaster, EditBookDetailMainView.class.getSimpleName());
-        final String NEW_TITLE = "newTitle";
-        bookDetail.textBox(NAME_TEXTBOX_TITLE).setText(NEW_TITLE);
+        final String newTitle = "newTitle";
+        bookDetail.textBox(NAME_TEXTBOX_TITLE).setText(newTitle);
 
         // add two new copies
         bookDetail.list().requireItemCount(0);
@@ -138,11 +138,11 @@ public class BookDetailMainViewTest extends AbstractFestTest {
         bookDetail.requireNotVisible();
 
         // verify that the changes were applied
-        bookMaster.table(NAME_TABLE_BOOKS).cell(row(0).column(BookTableModel.COLUMN_TITLE)).requireValue(NEW_TITLE);
+        bookMaster.table(NAME_TABLE_BOOKS).cell(row(0).column(BookTableModel.COLUMN_TITLE)).requireValue(newTitle);
         bookMaster.table(NAME_TABLE_BOOKS).cell(row(0).column(BookTableModel.COLUMN_AMOUNT)).requireValue("2/2");
 
         // restore original state
-        bookMaster.table(NAME_TABLE_BOOKS).cell(row(0).column(BookTableModel.COLUMN_TITLE)).enterValue(OLD_TITLE);
+        bookMaster.table(NAME_TABLE_BOOKS).cell(row(0).column(BookTableModel.COLUMN_TITLE)).enterValue(oldTitle);
         bookMaster.button(NAME_BUTTON_OPEN).click();
         bookDetail = findFrame(bookMaster, EditBookDetailMainView.class.getSimpleName());
         bookDetail.list().selectItems(0, 1);

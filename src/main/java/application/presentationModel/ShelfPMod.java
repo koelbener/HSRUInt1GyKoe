@@ -5,7 +5,7 @@ import javax.swing.DefaultComboBoxModel;
 
 import domain.Shelf;
 
-public class ShelfPMod extends pModBase {
+public class ShelfPMod extends AbstractPresentationModel {
 
     private final ComboBoxModel<Shelf> shelfComboBoxModel;
 

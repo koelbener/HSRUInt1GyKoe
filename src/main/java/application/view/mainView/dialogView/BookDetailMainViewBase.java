@@ -149,8 +149,10 @@ public abstract class BookDetailMainViewBase extends DialogViewBase<Book, BookDe
         getContainer().setTitle(Texts.get("BookDetailMainView.this.title")); //$NON-NLS-1$
 
         // border of panels
-        pnBookInfo.setBorder(new TitledBorder(null, Texts.get("BookDetailMainView.bookInfo.borderTitle"), TitledBorder.LEADING, TitledBorder.TOP, null, null));
-        pnCopies.setBorder(new TitledBorder(null, Texts.get("BookDetailMainView.copies.borderTitle"), TitledBorder.LEADING, TitledBorder.TOP, null, null)); //$NON-NLS-1$
+        pnBookInfo.setBorder(new TitledBorder(null, Texts.get("BookDetailMainView.bookInfo.borderTitle"), TitledBorder.LEADING, TitledBorder.TOP,
+                null, null));
+        pnCopies.setBorder(new TitledBorder(null,
+                Texts.get("BookDetailMainView.copies.borderTitle"), TitledBorder.LEADING, TitledBorder.TOP, null, null)); //$NON-NLS-1$
 
         // components
         lblTitle.setText(Texts.get("BookDetailMainView.lblTitel.text"));
@@ -465,7 +467,8 @@ public abstract class BookDetailMainViewBase extends DialogViewBase<Book, BookDe
                 lblMessage.setText(Texts.get("BookDetailMainView.optimisticlock.error"));
                 lblMessage.setIcon(IconUtil.loadIcon("warning.png"));
                 logger.info("Book changed in the background, disabling view...");
-                disableComponents(btnSave, btnAdd, btnRemove, btnSetCondition, listCopies, txtFieldAuthor, txtFieldPublisher, txtFieldTitle, comboShelf);
+                disableComponents(btnSave, btnAdd, btnRemove, btnSetCondition, listCopies, txtFieldAuthor, txtFieldPublisher, txtFieldTitle,
+                        comboShelf);
             } else {
                 logger.info("A different book changed in the background. Doing nothing...");
             }

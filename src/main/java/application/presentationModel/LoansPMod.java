@@ -23,7 +23,7 @@ import domain.Copy;
 import domain.Customer;
 import domain.Loan;
 
-public class LoansPMod extends pModBase {
+public class LoansPMod extends AbstractPresentationModel {
     private static BatchReturnLoansTableModel batchReturnLoansTableModel;
     private final LoanTableModel loanTableModel;
     private final TableRowSorter<LoanTableModel> loanTableRowSorter;

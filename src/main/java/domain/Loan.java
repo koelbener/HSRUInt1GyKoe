@@ -63,8 +63,8 @@ public class Loan {
 
     @Override
     public String toString() {
-        return "Loan of: " + copy.getTitle().getName() + "\tFrom: " + customer.getName() + " " + customer.getSurname() + "\tPick up: " + getFormattedDate(pickupDate)
-                + "\tReturn: " + getFormattedDate(returnDate) + "\tDays: " + getDaysOfLoanDuration();
+        return "Loan of: " + copy.getTitle().getName() + "\tFrom: " + customer.getName() + " " + customer.getSurname() + "\tPick up: "
+                + getFormattedDate(pickupDate) + "\tReturn: " + getFormattedDate(returnDate) + "\tDays: " + getDaysOfLoanDuration();
     }
 
     private String getFormattedDate(GregorianCalendar date) {

@@ -124,12 +124,12 @@ public class BookMasterSubViewTest extends AbstractFestTest {
 
     @Test
     public void testEditableTable() {
-        final String NEW_TITLE_VALUE = "C for dummies";
-        window.table(NAME_TABLE_BOOKS).enterValue(row(3).column(COLUMN_TITLE), NEW_TITLE_VALUE);
+        final String newTitle = "C for dummies";
+        window.table(NAME_TABLE_BOOKS).enterValue(row(3).column(COLUMN_TITLE), newTitle);
         window.table(NAME_TABLE_BOOKS).click(row(3).column(COLUMN_AMOUNT), MouseClickInfo.leftButton().times(2));
 
         FrameFixture bookDetailDialog = findFrame(window, EditBookDetailMainView.class.getSimpleName());
-        bookDetailDialog.textBox(NAME_TEXTBOX_TITLE).requireText(NEW_TITLE_VALUE);
+        bookDetailDialog.textBox(NAME_TEXTBOX_TITLE).requireText(newTitle);
     }
 
     @Test
