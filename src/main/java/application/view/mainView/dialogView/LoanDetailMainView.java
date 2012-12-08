@@ -147,7 +147,7 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
     @Override
     protected void setTexts() {
         // title
-        getContainer().setTitle(Texts.get("LoanDetailMainView.this.title")); //$NON-NLS-1$
+        getContainer().setTitle(Texts.get("LoanDetailMainView.this.title"));
 
         defaultSearchValue = Texts.get("LoanDetailMainViewBase.defaultSearchValue");
         if (hideTextOnFocusListener != null) {
@@ -155,10 +155,8 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
         }
 
         // border of panels
-        pnNewLoan.setBorder(new TitledBorder(null, Texts.get("LoanDetailMainViewBase.newLoan.title"), TitledBorder.LEADING, TitledBorder.TOP, null,
-                null));
-        pnCustomerSelection.setBorder(new TitledBorder(null, Texts.get("LoanDetailMainViewBase.customerSelection.title"), TitledBorder.LEADING,
-                TitledBorder.TOP, null, null));
+        pnNewLoan.setBorder(new TitledBorder(null, Texts.get("LoanDetailMainViewBase.newLoan.title"), TitledBorder.LEADING, TitledBorder.TOP, null, null));
+        pnCustomerSelection.setBorder(new TitledBorder(null, Texts.get("LoanDetailMainViewBase.customerSelection.title"), TitledBorder.LEADING, TitledBorder.TOP, null, null));
 
         // components
         lblCopyTitle.setText(Texts.get("LoanDetailMainViewBase.newLoan.bookDescriptionLabel"));
@@ -184,12 +182,12 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
         super.initUIElements();
 
         Container contentPane = getContainer().getContentPane();
-        getContainer().setBounds(100, 100, 616, 600);
-        getContainer().setMinimumSize(new Dimension(616, 600));
+        getContainer().setBounds(100, 100, 650, 600);
+        getContainer().setMinimumSize(new Dimension(650, 600));
 
         JPanel mainPanel = new JPanel();
         contentPane.add(mainPanel, BorderLayout.CENTER);
-        mainPanel.setLayout(new MigLayout("", "[grow]", "[70.00,grow][89.00,top][]"));
+        mainPanel.setLayout(new MigLayout("", "[grow]", "[70.00][89.00,top][]"));
 
         createCustomerSelectionSection(mainPanel);
 
@@ -323,7 +321,7 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
         txtCopyId.setColumns(10);
 
         btnCreateLoan = new JButton();
-        pnNewLoan.add(btnCreateLoan, "cell 2 0,alignx left,growy");
+        pnNewLoan.add(btnCreateLoan, "cell 2 0,grow");
 
         lblCopyTitle = new JLabel();
         pnNewLoan.add(lblCopyTitle, "cell 0 1,grow");
@@ -366,13 +364,17 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
             emptyNewLoanSection();
         } else {
             String titleName = currentSelectedCopy.getTitle().getName();
+            lblValCopyTitle.setToolTipText(titleName);
+            if (titleName.length() > 80) {
+                titleName = titleName.substring(0, 75) + "...";
+            }
             lblValCopyTitle.setText(titleName);
             // set it as title as well in case the content is too long
-            lblValCopyTitle.setToolTipText(titleName);
             lblConditionValue.setText(currentSelectedCopy.getCondition().name());
             lblConditionValue.setIcon(IconUtil.loadIcon(currentSelectedCopy.getCondition().getIcon()));
             // lblLoanStatus
             updateNewLoanStatus();
+            getContainer().pack();
         }
 
         updateMakeLoanButtonVisibility();
@@ -577,14 +579,18 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
             private void searchCopy(Long copyId) {
                 if (copyId != null) {
                     currentSelectedCopy = copyPMod.searchCopy(copyId);
-                    updateNewLoanSection();
-                    updateMakeLoanButtonVisibility();
                     if (currentSelectedCopy == null) {
                         txtCopyId.setBackground(Color.RED);
                     } else {
                         txtCopyId.setBackground(Color.WHITE);
                     }
+                } else {
+                    currentSelectedCopy = null;
+                    txtCopyId.setBackground(Color.WHITE);
                 }
+                updateNewLoanSection();
+                updateMakeLoanButtonVisibility();
+
             }
         });
 
