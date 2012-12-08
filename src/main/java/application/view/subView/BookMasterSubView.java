@@ -24,7 +24,6 @@ import javax.swing.KeyStroke;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import javax.swing.table.TableColumn;
 
 import net.miginfocom.swing.MigLayout;
 
@@ -35,7 +34,6 @@ import application.controller.BookMasterController;
 import application.core.Repository;
 import application.core.Texts;
 import application.presentationModel.BooksPMod;
-import application.presentationModel.componentModel.BookTableModel;
 import application.presentationModel.componentModel.SearchFilterElement;
 import application.view.ShortcutsManager;
 import application.view.ShortcutsManager.ShortcutAction;
@@ -145,12 +143,12 @@ public class BookMasterSubView extends SubViewBase<Library, BookMasterController
         tblBooks = new JTable(booksPMod.getBookTableModel());
         tblBooks.setRowSorter(booksPMod.getBookTableRowSorter());
         tblBooks.setName(NAME_TABLE_BOOKS);
-        setBookTableColumnWidths();
 
         scrollPane.setViewportView(tblBooks);
 
         JPanel pnControlls = new JPanel();
         pnBookOverview.add(pnControlls, BorderLayout.EAST);
+
         return pnControlls;
     }
 
@@ -179,27 +177,11 @@ public class BookMasterSubView extends SubViewBase<Library, BookMasterController
         pnBookMasterHeader.add(lblNurVerfgbare, "cell 3 1,alignx trailing");
     }
 
-    // TODO: Code doesn't work
-    private void setBookTableColumnWidths() {
-        TableColumn column = null;
-        for (int i = 0; i < 5; i++) {
-            column = tblBooks.getColumnModel().getColumn(i);
-            if (i == BookTableModel.COLUMN_SHELF || i == BookTableModel.COLUMN_AMOUNT) {
-                column.setPreferredWidth(30);
-            } else {
-                column.setPreferredWidth(100);
-            }
-        }
-        tblBooks.doLayout();
-    }
-
     @Override
     protected void setTexts() {
         // panel titles
-        pnStatistics.setBorder(new TitledBorder(null, Texts.get("BookMasterMainView.statisticsPanel.borderTitle"), TitledBorder.LEADING,
-                TitledBorder.TOP, null, null));
-        pnInventory.setBorder(new TitledBorder(null, Texts.get("BookMasterMainView.inventoryPanel.borderTitle"), TitledBorder.LEADING,
-                TitledBorder.TOP, null, null));
+        pnStatistics.setBorder(new TitledBorder(null, Texts.get("BookMasterMainView.statisticsPanel.borderTitle"), TitledBorder.LEADING, TitledBorder.TOP, null, null));
+        pnInventory.setBorder(new TitledBorder(null, Texts.get("BookMasterMainView.inventoryPanel.borderTitle"), TitledBorder.LEADING, TitledBorder.TOP, null, null));
 
         // components
         lblAnzahlExemplare.setText(Texts.get("BookMasterMainView.lblAnzahlExemplare.text"));

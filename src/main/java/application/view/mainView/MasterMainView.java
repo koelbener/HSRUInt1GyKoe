@@ -58,7 +58,8 @@ public class MasterMainView extends MainViewBase<Library, MasterController, JFra
     protected void initUIElements() {
         container.getContentPane().removeAll();
 
-        container.setBounds(100, 100, 616, 445);
+        container.setBounds(100, 100, 800, 445);
+        container.setMinimumSize(new Dimension(800, 445));
         Container contentPane = container.getContentPane();
         contentPane.setLayout(new BorderLayout());
 

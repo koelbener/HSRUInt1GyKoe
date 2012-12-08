@@ -26,11 +26,13 @@ import javax.swing.SwingUtilities;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.table.TableColumn;
 
 import net.miginfocom.swing.MigLayout;
 import application.controller.ReturnLoansController;
 import application.core.Repository;
 import application.core.Texts;
+import application.presentationModel.componentModel.BatchReturnLoansTableModel;
 import application.util.IconUtil;
 import application.view.component.JNumberTextField;
 import application.view.helper.EnableCompontentOnTableSelectionListener;
@@ -69,8 +71,8 @@ public class ReturnLoansMainView extends DialogViewBase<Object, ReturnLoansContr
         txtLoanSearchDefault = Texts.get("ReturnLoansMainView.button.txtLoanSearchDefault");
 
         Container contentPane = getContainer().getContentPane();
-        getContainer().setBounds(100, 100, 600, 300);
-        getContainer().setMinimumSize(new Dimension(600, 300));
+        getContainer().setBounds(100, 100, 700, 400);
+        getContainer().setMinimumSize(new Dimension(700, 400));
 
         mainPanel = new JPanel();
         contentPane.add(mainPanel);
@@ -106,6 +108,23 @@ public class ReturnLoansMainView extends DialogViewBase<Object, ReturnLoansContr
 
         getContainer().getRootPane().setDefaultButton(btnReturnLoans);
         setMinMaxDates();
+        setBookTableColumnWidths();
+    }
+
+    private void setBookTableColumnWidths() {
+        TableColumn column = null;
+        for (int i = 0; i < 5; i++) {
+            column = tblLoansToReturn.getColumnModel().getColumn(i);
+            if (i == BatchReturnLoansTableModel.COLUMN_COPY_ID) {
+                column.setPreferredWidth(45);
+            } else if (i == BatchReturnLoansTableModel.COLUMN_ENDDATE) {
+                column.setPreferredWidth(65);
+            } else if (i == BatchReturnLoansTableModel.COLUMN_MESSAGE) {
+                column.setPreferredWidth(160);
+            } else {
+                column.setPreferredWidth(70);
+            }
+        }
     }
 
     @Override
