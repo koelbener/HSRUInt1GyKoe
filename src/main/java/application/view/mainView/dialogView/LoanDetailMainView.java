@@ -321,7 +321,7 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
         txtCopyId.setColumns(10);
 
         btnCreateLoan = new JButton();
-        pnNewLoan.add(btnCreateLoan, "cell 2 0,grow");
+        pnNewLoan.add(btnCreateLoan, "cell 2 0,alignx left,growy");
 
         lblCopyTitle = new JLabel();
         pnNewLoan.add(lblCopyTitle, "cell 0 1,grow");
