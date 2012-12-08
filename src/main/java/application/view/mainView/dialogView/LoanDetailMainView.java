@@ -97,7 +97,7 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
     private Copy currentSelectedCopy;
     private HideTextOnFocusListener hideTextOnFocusListener;
 
-    private final Logger logger = LoggerFactory.getLogger(LoanDetailMainView.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(LoanDetailMainView.class);
 
     private LoansPMod pMod;
     private CopyPMod copyPMod;
@@ -107,7 +107,7 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
     }
 
     public void switchToLoan(Loan loan, boolean reloadAll) {
-        logger.debug("switch to loan {}", loan);
+        LOGGER.debug("switch to loan {}", loan);
         setReferenceObject(loan);
         if (loan == null) {
             txtCustomerSearch.setText("");
@@ -416,7 +416,7 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
             int overdueLoans = getController().getOverdueLoans(getCurrentCustomer());
             if (overdueLoans > 0) {
                 int fine = overdueLoans * Loan.FINE_PER_BOOK;
-                logger.info("Customer {} has to pay CHF {} fine.", getCurrentCustomer().getFullName(), fine);
+                LOGGER.info("Customer {} has to pay CHF {} fine.", getCurrentCustomer().getFullName(), fine);
                 lblFine.setText(Texts.get("LoanDetailMainViewBase.loansOverview.fine", fine));
                 lblFine.setIcon(IconUtil.loadIcon("warning.png"));
             } else {
@@ -485,7 +485,7 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
 
             private void search() {
                 if (!txtCustomerSearch.getText().equals(defaultSearchValue)) {
-                    logger.debug("search for value {}", txtCustomerSearch.getText());
+                    LOGGER.debug("search for value {}", txtCustomerSearch.getText());
                     getController().filterCustomers(txtCustomerSearch.getText());
                     if (listCustomer.getModel().getSize() > 0) {
                         txtCustomerSearch.setBackground(Color.WHITE);
