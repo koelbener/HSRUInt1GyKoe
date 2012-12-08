@@ -445,6 +445,7 @@ public abstract class BookDetailMainViewBase extends DialogViewBase<Book, BookDe
                 }
             }
         });
+        getContainer().getRootPane().setDefaultButton(btnSave);
     }
 
     protected boolean validateBook() {
