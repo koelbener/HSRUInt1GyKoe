@@ -43,7 +43,8 @@ public class ReturnLoansController extends ControllerBase {
             Repository.getInstance().getLoansPMod().updateLoan(loan);
         }
 
-        JOptionPane.showMessageDialog(Repository.getInstance().getMainViewFactory().getReturnLoansView().getContainer(), Texts.get("ReturnLoansMainView.feedbackDialog"));
+        JOptionPane.showMessageDialog(Repository.getInstance().getMainViewFactory().getReturnLoansView().getContainer(),
+                Texts.get("ReturnLoansMainView.feedbackDialog"));
         Repository.getInstance().getMainViewFactory().closeReturnLoansView();
 
     }
