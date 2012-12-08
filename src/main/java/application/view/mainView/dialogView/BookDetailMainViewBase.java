@@ -91,6 +91,7 @@ public abstract class BookDetailMainViewBase extends DialogViewBase<Book, BookDe
     protected JPanel pnValidation;
     private final Logger logger = LoggerFactory.getLogger(BookDetailMainViewBase.class);
     private JLabel lblMessage;
+    private CopiesListContextMenuListener contextMenuListener;
 
     public BookDetailMainViewBase(Book book) {
         super(book, "book_closed.gif");
@@ -162,6 +163,12 @@ public abstract class BookDetailMainViewBase extends DialogViewBase<Book, BookDe
         btnSetCondition.setText(Texts.get("BookDetailMainView.btnSetCondition.text"));
         btnSave.setText(Texts.get("BookDetailMainView.btnSave.text"));
         btnCancel.setText(Texts.get("BookDetailMainView.btnCancel.text"));
+
+        // context menu
+        if (contextMenuListener != null) {
+            contextMenuListener.updateTexts();
+        }
+
     }
 
     /**
@@ -193,7 +200,7 @@ public abstract class BookDetailMainViewBase extends DialogViewBase<Book, BookDe
 
     private void createButtonsPanel(JPanel pnValidationContainer) {
         JPanel pnButtons = new JPanel();
-        pnButtons.setLayout(new MigLayout("", "[grow][][85px][]", "[23px]"));
+        pnButtons.setLayout(new MigLayout("", "[grow][][][]", "[23px]"));
 
         lblMessage = new JLabel();
         pnButtons.add(lblMessage, "cell 1 0,alignx right");
@@ -416,7 +423,8 @@ public abstract class BookDetailMainViewBase extends DialogViewBase<Book, BookDe
             }
         });
 
-        listCopies.addMouseListener(new CopiesListContextMenuListener(listCopies, listModelCopies));
+        contextMenuListener = new CopiesListContextMenuListener(listCopies, listModelCopies);
+        listCopies.addMouseListener(contextMenuListener);
     }
 
     private void initKeyboardListener() {
@@ -461,6 +469,8 @@ public abstract class BookDetailMainViewBase extends DialogViewBase<Book, BookDe
             } else {
                 logger.info("A different book changed in the background. Doing nothing...");
             }
+        } else {
+            super.update(o, arg);
         }
     }
 

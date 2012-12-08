@@ -666,8 +666,8 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
     }
 
     @Override
-    public void update(Observable arg0, Object arg1) {
-        if (arg0.getClass().equals(CopyPMod.class)) {
+    public void update(Observable o, Object arg) {
+        if (o.getClass().equals(CopyPMod.class)) {
             updateNewLoanSection();
             updateLoanOverViewSection();
 
@@ -676,6 +676,8 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
                 Copy copy = copyPMod.searchCopy(copyId);
                 comboCondition.setSelectedItem(copy.getCondition());
             }
+        } else {
+            super.update(o, arg);
         }
     }
 }

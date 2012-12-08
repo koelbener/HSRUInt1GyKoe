@@ -16,12 +16,15 @@ public class CopiesContextMenu extends JPopupMenu {
     private static final long serialVersionUID = 1L;
     private final List<JMenuItem> copyAwareMenuItems = new ArrayList<JMenuItem>();
     private final JMenuItem deleteMenuItem;
+    private final List<JMenuItem> menuItems = new ArrayList<JMenuItem>();
 
     public CopiesContextMenu(ActionListener listener) {
         createMenuItem(null, "BookDetailMainView.copyList.context.add", listener, "add.gif");
         deleteMenuItem = createMenuItem(null, "BookDetailMainView.copyList.context.remove", listener, "delete.gif");
         copyAwareMenuItems.add(deleteMenuItem);
-        JMenu submenu = new JMenu("Set condition");
+        JMenu submenu = new JMenu(Texts.get("BookDetailMainView.copyList.context.setcondition"));
+        submenu.setActionCommand("BookDetailMainView.copyList.context.setcondition"); // a dummy to update texts afterwards..
+        menuItems.add(submenu);
         add(submenu);
         for (Condition c : Condition.values()) {
             copyAwareMenuItems.add(createMenuItem(submenu, c.getKey(), listener, c.getIcon()));
@@ -31,6 +34,7 @@ public class CopiesContextMenu extends JPopupMenu {
     private JMenuItem createMenuItem(JMenu menu, String text, ActionListener listener, String iconName) {
         JMenuItem result = new JMenuItem(Texts.get(text));
         result.setActionCommand(text);
+        menuItems.add(result);
         if (menu != null) {
             menu.add(result);
         } else {
@@ -50,5 +54,12 @@ public class CopiesContextMenu extends JPopupMenu {
 
     public void enableDelete(boolean enable) {
         deleteMenuItem.setEnabled(enable);
+    }
+
+    public void updateTexts() {
+        for (JMenuItem menu : menuItems) {
+            String newText = Texts.get(menu.getActionCommand());
+            menu.setText(newText);
+        }
     }
 }

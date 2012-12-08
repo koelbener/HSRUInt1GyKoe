@@ -117,4 +117,8 @@ public class CopiesListContextMenuListener implements MouseListener, ActionListe
             }
         }
     }
+
+    public void updateTexts() {
+        menu.updateTexts();
+    }
 }
