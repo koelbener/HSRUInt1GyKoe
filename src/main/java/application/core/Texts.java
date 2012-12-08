@@ -77,4 +77,8 @@ public class Texts extends Observable {
         Texts.instance = instance;
     }
 
+    public Locale getCurrentLocale() {
+        return currentLocale;
+    }
+
 }

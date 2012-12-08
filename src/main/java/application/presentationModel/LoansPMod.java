@@ -246,4 +246,9 @@ public class LoansPMod extends AbstractPresentationModel {
         return batchReturnLoansTableModel;
     }
 
+    public void renewBatchReturnLoansModel() {
+        batchReturnLoansTableModel = new BatchReturnLoansTableModel();
+
+    }
+
 }
