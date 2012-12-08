@@ -64,6 +64,7 @@ public class EditBookDetailMainView extends BookDetailMainViewBase {
                 /*
                  * Otherwise just update the validationPanel
                  */
+                invalidComponent = null;
                 pnValidation.removeAll();
                 pnValidation.add(ValidationResultViewFactory.createReportList(validationModel), "cell 0 0,alignx right,growy");
                 pnValidation.revalidate();
