@@ -109,10 +109,14 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
     public void switchToLoan(Loan loan, boolean reloadAll) {
         logger.debug("switch to loan {}", loan);
         setReferenceObject(loan);
-        updateLoanOverViewSection();
-        if (reloadAll) {
-            updateCustomerSelectionSection();
-            clearNewLoanSection();
+        if (loan == null) {
+            txtCustomerSearch.setText("");
+        } else {
+            updateLoanOverViewSection();
+            if (reloadAll) {
+                updateCustomerSelectionSection();
+                clearNewLoanSection();
+            }
         }
         updateMakeLoanButtonVisibility();
     }
