@@ -71,11 +71,15 @@ public class LendingMasterSubView extends SubViewBase<Library, LendingMasterCont
     private HideTextOnFocusListener hideTextOnFocusListener;
 
     private LoansPMod loansPMod;
+    private JButton btnBatchReturn;
 
     public LendingMasterSubView() {
         super(null);
     }
 
+    /**
+     * @wbp.parser.entryPoint
+     */
     @Override
     public void initUIElements() {
         container.setLayout(new BorderLayout());
@@ -109,7 +113,7 @@ public class LendingMasterSubView extends SubViewBase<Library, LendingMasterCont
 
     private void createControlPanel() {
         JPanel pnControls = new JPanel();
-        pnControls.setLayout(new MigLayout("", "[]", "[23px][]"));
+        pnControls.setLayout(new MigLayout("", "[]", "[23px][][]"));
         pnInventory.add(pnControls, BorderLayout.EAST);
 
         btnNew = new JButton();
@@ -117,6 +121,9 @@ public class LendingMasterSubView extends SubViewBase<Library, LendingMasterCont
         btnOpen.setEnabled(false);
         pnControls.add(btnNew, "cell 0 0,growx,aligny center");
         pnControls.add(btnOpen, "cell 0 1,growx,aligny center");
+
+        btnBatchReturn = new JButton();
+        pnControls.add(btnBatchReturn, "cell 0 2,aligny top");
     }
 
     private void createLoanOverviewPanel() {
@@ -177,6 +184,7 @@ public class LendingMasterSubView extends SubViewBase<Library, LendingMasterCont
 
         btnNew.setText(Texts.get("LendingMasterMainView.btnNew.text"));
         btnOpen.setText(Texts.get("LendingMasterMainView.btnOpen.text"));
+        btnBatchReturn.setText(Texts.get("LendingMasterMainView.btnBatchReturns.txt"));
 
         // Tooltips
         btnNew.setToolTipText(Texts.get("LendingMasterMainView.btnNew.toolTipText"));
@@ -231,6 +239,14 @@ public class LendingMasterSubView extends SubViewBase<Library, LendingMasterCont
             @Override
             public void actionPerformed(ActionEvent arg0) {
                 getController().openLoans(tblLoans.getSelectedRows());
+            }
+        });
+
+        btnBatchReturn.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent arg0) {
+                getController().openBackReturn();
             }
         });
 

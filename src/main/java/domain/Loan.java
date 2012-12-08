@@ -10,6 +10,7 @@ public class Loan {
     private final Customer customer;
     private GregorianCalendar pickupDate, returnDate;
     public final static int DAYS_TO_RETURN_BOOK = 30;
+    public static final int FINE_PER_BOOK = 3;
 
     public Loan(Customer customer, Copy copy) {
         this.copy = copy;
@@ -75,14 +76,16 @@ public class Loan {
     }
 
     public int getDaysOfLoanDuration() {
-        if (returnDate != null)
+        if (returnDate != null) {
             return (int) (returnDate.getTimeInMillis() - pickupDate.getTimeInMillis()) / 1000 / 60 / 60 / 24;
+        }
         return -1;
     }
 
     public int getDaysOverdue() {
-        if (!isOverdue())
+        if (!isOverdue()) {
             return 0;
+        }
 
         GregorianCalendar dueDate = (GregorianCalendar) pickupDate.clone();
         dueDate.add(GregorianCalendar.DAY_OF_YEAR, DAYS_TO_RETURN_BOOK);
@@ -91,8 +94,9 @@ public class Loan {
     }
 
     public boolean isOverdue() {
-        if (!isLent())
+        if (!isLent()) {
             return false;
+        }
 
         return (new GregorianCalendar().after(getDueDate()));
     }
