@@ -3,9 +3,9 @@ package application.view.helper;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 
 import javax.swing.JList;
+import javax.swing.JPopupMenu;
 
 import application.core.Repository;
 import application.presentationModel.componentModel.CopyListModel;
@@ -15,7 +15,7 @@ import com.google.common.primitives.Ints;
 import domain.Condition;
 import domain.Copy;
 
-public class CopiesListContextMenuListener implements MouseListener, ActionListener {
+public class CopiesListContextMenuListener extends AbstractContextMenuListener implements ActionListener {
 
     private final CopiesContextMenu menu;
     private final CopyListModel copyListModel;
@@ -26,7 +26,7 @@ public class CopiesListContextMenuListener implements MouseListener, ActionListe
         this.copyListModel = copyListModel;
         menu = new CopiesContextMenu(this);
 
-        list.addMouseListener(new MouseListener() {
+        list.addMouseListener(new SimpleMouseListener() {
 
             @Override
             public void mouseReleased(MouseEvent e) {
@@ -47,56 +47,8 @@ public class CopiesListContextMenuListener implements MouseListener, ActionListe
                     menu.enableDelete(enableDelete);
                 }
             }
-
-            @Override
-            public void mousePressed(MouseEvent e) {
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent e) {
-            }
-
-            @Override
-            public void mouseClicked(MouseEvent e) {
-            }
         });
-    }
 
-    @Override
-    public void mouseClicked(MouseEvent e) {
-
-    }
-
-    @Override
-    public void mousePressed(MouseEvent e) {
-        if (e.isPopupTrigger())
-            doPop(e);
-
-    }
-
-    @Override
-    public void mouseReleased(MouseEvent e) {
-        if (e.isPopupTrigger())
-            doPop(e);
-
-    }
-
-    @Override
-    public void mouseEntered(MouseEvent e) {
-
-    }
-
-    @Override
-    public void mouseExited(MouseEvent e) {
-
-    }
-
-    private void doPop(MouseEvent e) {
-        menu.show(e.getComponent(), e.getX(), e.getY());
     }
 
     @Override
@@ -120,5 +72,10 @@ public class CopiesListContextMenuListener implements MouseListener, ActionListe
 
     public void updateTexts() {
         menu.updateTexts();
+    }
+
+    @Override
+    protected JPopupMenu getMenu() {
+        return menu;
     }
 }

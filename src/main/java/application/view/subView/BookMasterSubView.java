@@ -72,6 +72,7 @@ public class BookMasterSubView extends SubViewBase<Library, BookMasterController
     private JCheckBox checkBoxOnlyAvailable;
 
     public BooksPMod booksPMod;
+    private BooksTableContextMenuListener contextMenuListener;
 
     public BookMasterSubView() {
         super(null);
@@ -180,8 +181,10 @@ public class BookMasterSubView extends SubViewBase<Library, BookMasterController
     @Override
     protected void setTexts() {
         // panel titles
-        pnStatistics.setBorder(new TitledBorder(null, Texts.get("BookMasterMainView.statisticsPanel.borderTitle"), TitledBorder.LEADING, TitledBorder.TOP, null, null));
-        pnInventory.setBorder(new TitledBorder(null, Texts.get("BookMasterMainView.inventoryPanel.borderTitle"), TitledBorder.LEADING, TitledBorder.TOP, null, null));
+        pnStatistics.setBorder(new TitledBorder(null, Texts.get("BookMasterMainView.statisticsPanel.borderTitle"), TitledBorder.LEADING,
+                TitledBorder.TOP, null, null));
+        pnInventory.setBorder(new TitledBorder(null, Texts.get("BookMasterMainView.inventoryPanel.borderTitle"), TitledBorder.LEADING,
+                TitledBorder.TOP, null, null));
 
         // components
         lblAnzahlExemplare.setText(Texts.get("BookMasterMainView.lblAnzahlExemplare.text"));
@@ -201,6 +204,9 @@ public class BookMasterSubView extends SubViewBase<Library, BookMasterController
 
         // table
         booksPMod.getBookTableModel().setColumns();
+        if (contextMenuListener != null) {
+            contextMenuListener.updateTexts();
+        }
 
         // filter comboBox
         booksPMod.getFilterComboBoxModel().updateTexts();
@@ -300,7 +306,7 @@ public class BookMasterSubView extends SubViewBase<Library, BookMasterController
 
         hideTextOnFocusListener = new HideTextOnFocusListener(txtSearch, searchDefaultText);
 
-        tblBooks.addMouseListener(new BooksTableContextMenuListener(tblBooks, new ActionListener() {
+        contextMenuListener = new BooksTableContextMenuListener(tblBooks, new ActionListener() {
 
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -312,7 +318,8 @@ public class BookMasterSubView extends SubViewBase<Library, BookMasterController
             public void actionPerformed(ActionEvent e) {
                 getController().openBooks(tblBooks.getSelectedRows());
             }
-        }));
+        });
+        tblBooks.addMouseListener(contextMenuListener);
 
     }
 

@@ -2,22 +2,21 @@ package application.view.helper;
 
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 
+import javax.swing.JPopupMenu;
 import javax.swing.JTable;
 
 import com.google.common.primitives.Ints;
 
-public class BooksTableContextMenuListener implements MouseListener {
+public class BooksTableContextMenuListener extends AbstractContextMenuListener {
 
     private final BooksContextMenu menu;
     private final JTable table;
 
     public BooksTableContextMenuListener(final JTable table, ActionListener newBookActionListener, ActionListener openBookActionListener) {
+        super();
         this.table = table;
-        menu = new BooksContextMenu(newBookActionListener, openBookActionListener);
-        this.table.addMouseListener(new MouseListener() {
-
+        this.table.addMouseListener(new SimpleMouseListener() {
             @Override
             public void mouseReleased(MouseEvent e) {
                 if (e.isMetaDown()) {
@@ -32,56 +31,17 @@ public class BooksTableContextMenuListener implements MouseListener {
                     } // else: current row is selected, do nothing
                 }
             }
-
-            @Override
-            public void mousePressed(MouseEvent e) {
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent e) {
-            }
-
-            @Override
-            public void mouseClicked(MouseEvent e) {
-            }
         });
+        menu = new BooksContextMenu(newBookActionListener, openBookActionListener);
     }
 
     @Override
-    public void mouseClicked(MouseEvent e) {
-
+    protected JPopupMenu getMenu() {
+        return menu;
     }
 
-    @Override
-    public void mousePressed(MouseEvent e) {
-        if (e.isPopupTrigger())
-            doPop(e);
-
-    }
-
-    @Override
-    public void mouseReleased(MouseEvent e) {
-        if (e.isPopupTrigger())
-            doPop(e);
-
-    }
-
-    @Override
-    public void mouseEntered(MouseEvent e) {
-
-    }
-
-    @Override
-    public void mouseExited(MouseEvent e) {
-
-    }
-
-    private void doPop(MouseEvent e) {
-        menu.show(e.getComponent(), e.getX(), e.getY());
+    public void updateTexts() {
+        menu.updateTexts();
     }
 
 }
