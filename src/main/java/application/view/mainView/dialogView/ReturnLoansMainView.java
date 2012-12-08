@@ -5,13 +5,24 @@ import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.Observable;
+import java.util.Observer;
 
+import javax.swing.AbstractAction;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.KeyStroke;
 import javax.swing.ListSelectionModel;
+import javax.swing.SwingUtilities;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -24,7 +35,11 @@ import application.util.IconUtil;
 import application.view.component.JNumberTextField;
 import application.view.helper.EnableCompontentOnTableSelectionListener;
 
-public class ReturnLoansMainView extends DialogViewBase<Object, ReturnLoansController> {
+import com.toedter.calendar.JDateChooser;
+
+import domain.Loan;
+
+public class ReturnLoansMainView extends DialogViewBase<Object, ReturnLoansController> implements Observer {
     private JNumberTextField txtLoanSearch;
     private JTable tblLoansToReturn;
     private JLabel lblLoanFeedback;
@@ -32,6 +47,8 @@ public class ReturnLoansMainView extends DialogViewBase<Object, ReturnLoansContr
     private JButton btnReturnLoans;
     private JPanel mainPanel;
     private JButton btnRemoveLoan;
+    private JDateChooser dtDate;
+    private String txtLoanSearchDefault;
 
     public ReturnLoansMainView(Object referenceObject, String icon) {
         super(referenceObject, icon);
@@ -39,6 +56,8 @@ public class ReturnLoansMainView extends DialogViewBase<Object, ReturnLoansContr
 
     @Override
     protected void addObservables() {
+        observables.add(Repository.getInstance().getLoansPMod());
+        observables.add(Repository.getInstance().getBooksPMod());
     }
 
     /**
@@ -47,6 +66,7 @@ public class ReturnLoansMainView extends DialogViewBase<Object, ReturnLoansContr
     @Override
     protected void initUIElements() {
         super.initUIElements();
+        txtLoanSearchDefault = Texts.get("ReturnLoansMainView.button.txtLoanSearchDefault");
 
         Container contentPane = getContainer().getContentPane();
         getContainer().setBounds(100, 100, 600, 300);
@@ -54,10 +74,10 @@ public class ReturnLoansMainView extends DialogViewBase<Object, ReturnLoansContr
 
         mainPanel = new JPanel();
         contentPane.add(mainPanel);
-        mainPanel.setLayout(new MigLayout("", "[grow][][]", "[][grow][]"));
+        mainPanel.setLayout(new MigLayout("", "[322.00,grow][][]", "[][grow][]"));
 
-        txtLoanSearch = new JNumberTextField();
-        mainPanel.add(txtLoanSearch, "cell 0 0,growx");
+        txtLoanSearch = new JNumberTextField(txtLoanSearchDefault);
+        mainPanel.add(txtLoanSearch, "cell 0 0 2 1,growx");
         txtLoanSearch.setColumns(10);
 
         lblLoanFeedback = new JLabel();
@@ -71,7 +91,7 @@ public class ReturnLoansMainView extends DialogViewBase<Object, ReturnLoansContr
         mainPanel.add(new JScrollPane(tblLoansToReturn), "cell 0 1 2 1,grow");
 
         btnRemoveLoan = new JButton("");
-        mainPanel.add(btnRemoveLoan, "cell 0 2,aligny bottom");
+        mainPanel.add(btnRemoveLoan, "flowx,cell 0 2,aligny bottom");
 
         btnReturnLoans = new JButton();
         mainPanel.add(btnReturnLoans, "cell 2 2");
@@ -79,6 +99,13 @@ public class ReturnLoansMainView extends DialogViewBase<Object, ReturnLoansContr
         btnAddLoan.setEnabled(false);
         btnReturnLoans.setEnabled(false);
         btnRemoveLoan.setEnabled(false);
+
+        dtDate = new JDateChooser(new Date());
+        dtDate.setMinimumSize(new Dimension(70, 20));
+        mainPanel.add(dtDate, "cell 1 2,alignx right");
+
+        getContainer().getRootPane().setDefaultButton(btnReturnLoans);
+        setMinMaxDates();
     }
 
     @Override
@@ -86,6 +113,11 @@ public class ReturnLoansMainView extends DialogViewBase<Object, ReturnLoansContr
         btnReturnLoans.setText(Texts.get("ReturnLoansMainView.button.returnLoans"));
         btnAddLoan.setText(Texts.get("ReturnLoansMainView.button.addLoan"));
         btnRemoveLoan.setText(Texts.get("ReturnLoansMainView.button.removeLoan"));
+
+        dtDate.setLocale(Texts.getInstance().getCurrentLocale());
+        txtLoanSearchDefault = Texts.get("ReturnLoansMainView.button.txtLoanSearchDefault");
+        txtLoanSearch.setToolTipText(txtLoanSearchDefault);
+        txtLoanSearch.setDefaultText(txtLoanSearchDefault);
 
         getContainer().setTitle(Texts.get("ReturnLoansMainView.frametitle"));
         mainPanel.setBorder(new TitledBorder(null, Texts.get("ReturnLoansMainView.frametitle"), TitledBorder.LEADING, TitledBorder.TOP, null, null));
@@ -102,7 +134,22 @@ public class ReturnLoansMainView extends DialogViewBase<Object, ReturnLoansContr
     @Override
     protected void initListeners() {
 
+        getContainer().addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosed(WindowEvent arg0) {
+                Repository.getInstance().getMainViewFactory().closeReturnLoansView();
+            }
+        });
+
         new EnableCompontentOnTableSelectionListener(tblLoansToReturn, btnRemoveLoan, true);
+
+        btnReturnLoans.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                getController().returnBooks(dtDate.getCalendar());
+            }
+        });
 
         btnRemoveLoan.addActionListener(new ActionListener() {
 
@@ -110,7 +157,9 @@ public class ReturnLoansMainView extends DialogViewBase<Object, ReturnLoansContr
             public void actionPerformed(ActionEvent arg0) {
                 getController().removeLoan(tblLoansToReturn.getSelectedRow());
                 setBtnReturnLoansStatus();
+                setMinMaxDates();
             }
+
         });
 
         txtLoanSearch.getDocument().addDocumentListener(new DocumentListener() {
@@ -135,6 +184,15 @@ public class ReturnLoansMainView extends DialogViewBase<Object, ReturnLoansContr
                 Long copyId = txtLoanSearch.getNumber();
                 if (copyId != null) {
                     hasLoan = Repository.getInstance().getLoansPMod().hasOpenLoan(copyId);
+                    if (hasLoan) {
+                        // if the loan already is in the table, don't add it again
+                        for (Loan loan : Repository.getInstance().getLoansPMod().getBatchReturnLoansTableModel().getLoans()) {
+                            if (loan.getCopy().getInventoryNumber() == copyId) {
+                                hasLoan = false;
+                                break;
+                            }
+                        }
+                    }
                 }
                 if (hasLoan) {
                     txtLoanSearch.setBackground(Color.GREEN);
@@ -155,6 +213,47 @@ public class ReturnLoansMainView extends DialogViewBase<Object, ReturnLoansContr
             public void actionPerformed(ActionEvent arg0) {
                 getController().addLoan(txtLoanSearch.getNumber());
                 setBtnReturnLoansStatus();
+                setMinMaxDates();
+                SwingUtilities.invokeLater(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        txtLoanSearch.setText(txtLoanSearch.getDefaultText());
+                        txtLoanSearch.requestFocus();
+                    }
+                });
+            }
+        });
+
+        initKeyListeners();
+    }
+
+    private void initKeyListeners() {
+        txtLoanSearch.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0), "enter");
+        txtLoanSearch.getActionMap().put("enter", new AbstractAction() {
+            private static final long serialVersionUID = -5664120575484177305L;
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (btnAddLoan.isEnabled()) {
+                    for (ActionListener listener : btnAddLoan.getActionListeners()) {
+                        listener.actionPerformed(null);
+                    }
+                }
+            }
+        });
+
+        tblLoansToReturn.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0), "delete");
+        tblLoansToReturn.getActionMap().put("delete", new AbstractAction() {
+            private static final long serialVersionUID = -5664120575484177305L;
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (btnRemoveLoan.isEnabled()) {
+                    for (ActionListener listener : btnRemoveLoan.getActionListeners()) {
+                        listener.actionPerformed(null);
+                    }
+                }
             }
         });
     }
@@ -175,8 +274,31 @@ public class ReturnLoansMainView extends DialogViewBase<Object, ReturnLoansContr
         }
     }
 
+    private void setMinMaxDates() {
+        GregorianCalendar minDate = new GregorianCalendar();
+        minDate.setTime(dtDate.getMinSelectableDate());
+        for (Loan loan : Repository.getInstance().getLoansPMod().getBatchReturnLoansTableModel().getLoans()) {
+            if (minDate == null || minDate.compareTo(loan.getPickupDate()) < 0) {
+                minDate = loan.getPickupDate();
+            }
+        }
+        if (minDate != null) {
+            dtDate.setMinSelectableDate(minDate.getTime());
+            if (minDate.compareTo(dtDate.getCalendar()) > 0) {
+                dtDate.setDate(minDate.getTime());
+            }
+        }
+        dtDate.setMaxSelectableDate(new Date());
+    }
+
     @Override
     protected ReturnLoansController initController() {
         return new ReturnLoansController();
+    }
+
+    @Override
+    public void update(Observable o, Object arg) {
+        Repository.getInstance().getLoansPMod().getBatchReturnLoansTableModel().updateTableData();
+        super.update(o, arg);
     }
 }

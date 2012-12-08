@@ -164,4 +164,21 @@ public class BatchReturnLoansTableModel extends AbstractTableModel implements Ob
             fireTableDataChanged();
         }
     }
+
+    public List<Loan> getLoans() {
+        return loans;
+    }
+
+    public void updateTableData() {
+        List<Loan> loansToRemove = new ArrayList<Loan>();
+        for (Loan loan : loans) {
+            if (!loan.isLent()) {
+                loansToRemove.add(loan);
+            }
+        }
+        for (Loan loan : loansToRemove) {
+            loans.remove(loan);
+        }
+        fireTableDataChanged();
+    }
 }

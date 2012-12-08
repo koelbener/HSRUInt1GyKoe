@@ -3,6 +3,7 @@ package application.view.mainView;
 import java.util.ArrayList;
 import java.util.List;
 
+import application.core.Repository;
 import application.view.mainView.dialogView.BookDetailMainViewBase;
 import application.view.mainView.dialogView.EditBookDetailMainView;
 import application.view.mainView.dialogView.LoanDetailMainView;
@@ -18,6 +19,7 @@ public class MainViewFactory {
 
     private MasterMainView masterMainView;
     private LoanDetailMainView loanDetailMainView;
+    private ReturnLoansMainView returnLoansMainView;
     private final List<EditBookDetailMainView> bookDetailMainViews = new ArrayList<EditBookDetailMainView>();
 
     public MasterMainView getMasterMainView() {
@@ -60,7 +62,20 @@ public class MainViewFactory {
         }
     }
 
-    public void getReturnLoansView() {
-        new ReturnLoansMainView(null, "batchReturn.gif");
+    public ReturnLoansMainView getReturnLoansView() {
+        if (returnLoansMainView == null) {
+            returnLoansMainView = new ReturnLoansMainView(null, "batchReturn.gif");
+        } else {
+            returnLoansMainView.getContainer().setVisible(true);
+        }
+        return returnLoansMainView;
+    }
+
+    public void closeReturnLoansView() {
+        if (returnLoansMainView != null) {
+            Repository.getInstance().getLoansPMod().renewBatchReturnLoansModel();
+            returnLoansMainView.getContainer().dispose();
+            returnLoansMainView = null;
+        }
     }
 }
