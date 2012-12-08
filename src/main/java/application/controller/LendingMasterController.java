@@ -46,4 +46,9 @@ public class LendingMasterController extends ControllerBase {
         getRepository().getLoansPMod().updateFilter(option);
     }
 
+    public void openBackReturn() {
+        getRepository().getMainViewFactory().getReturnLoansView();
+
+    }
+
 }

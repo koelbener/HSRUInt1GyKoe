@@ -7,6 +7,7 @@ import application.view.mainView.dialogView.BookDetailMainViewBase;
 import application.view.mainView.dialogView.EditBookDetailMainView;
 import application.view.mainView.dialogView.LoanDetailMainView;
 import application.view.mainView.dialogView.NewBookDetailMainView;
+import application.view.mainView.dialogView.ReturnLoansMainView;
 
 import com.google.common.base.Preconditions;
 
@@ -59,4 +60,7 @@ public class MainViewFactory {
         }
     }
 
+    public void getReturnLoansView() {
+        new ReturnLoansMainView(null, "batchReturn.gif");
+    }
 }

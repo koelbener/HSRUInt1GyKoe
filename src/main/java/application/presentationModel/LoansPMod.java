@@ -9,6 +9,7 @@ import javax.swing.table.TableRowSorter;
 
 import application.core.Repository;
 import application.core.Texts;
+import application.presentationModel.componentModel.BatchReturnLoansTableModel;
 import application.presentationModel.componentModel.LoanDetailTableModel;
 import application.presentationModel.componentModel.LoanSearchFilterComboBoxModel;
 import application.presentationModel.componentModel.LoanSearchFilterComboBoxModel.FilterOption;
@@ -23,6 +24,7 @@ import domain.Customer;
 import domain.Loan;
 
 public class LoansPMod extends pModBase {
+    private static BatchReturnLoansTableModel batchReturnLoansTableModel;
     private final LoanTableModel loanTableModel;
     private final TableRowSorter<LoanTableModel> loanTableRowSorter;
     private final LoanDetailTableModel loanDetailTableModel;
@@ -48,6 +50,8 @@ public class LoansPMod extends pModBase {
         // no need to remove Observer, as loanTableModel always exists
         Repository.getInstance().getBooksPMod().addObserver(loanDetailTableModel);
 
+        // BatchReturnLoansTableModel
+        batchReturnLoansTableModel = new BatchReturnLoansTableModel();
     }
 
     public LoanDetailTableModel getLoanDetailTableModel() {
@@ -200,6 +204,15 @@ public class LoansPMod extends pModBase {
         return loan;
     }
 
+    public boolean hasOpenLoan(Long copyId) {
+        for (Loan loan : library.getLoans()) {
+            if (loan.isLent() && loan.getCopy().getInventoryNumber() == copyId) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public ValidationResult validateLoan(Copy copy, Customer customer) {
         ValidationResult result = new ValidationResult();
 
@@ -227,6 +240,10 @@ public class LoansPMod extends pModBase {
             }
         }
         return result;
+    }
+
+    public BatchReturnLoansTableModel getBatchReturnLoansTableModel() {
+        return batchReturnLoansTableModel;
     }
 
 }

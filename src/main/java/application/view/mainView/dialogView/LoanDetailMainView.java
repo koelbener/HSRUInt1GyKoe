@@ -66,8 +66,6 @@ import domain.Loan;
 
 public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailController> implements Observer {
 
-    private static final int FINE_PER_BOOK = 3;
-
     private static String defaultSearchValue;
 
     private JPanel pnCustomerSelection;
@@ -257,23 +255,23 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
         scrollPane.setMinimumSize(new Dimension(23, 75));
         pnLoanOverview.add(scrollPane, "cell 0 1 4 1,grow");
 
-        JPanel panel_5 = new JPanel();
-        pnLoanOverview.add(panel_5, "cell 0 2 4 1,grow");
-        panel_5.setLayout(new MigLayout("", "[][][][]", "[][]"));
+        JPanel pnReturnLoan = new JPanel();
+        pnLoanOverview.add(pnReturnLoan, "cell 0 2 4 1,grow");
+        pnReturnLoan.setLayout(new MigLayout("", "[][][][]", "[][]"));
 
         lblCopyStatus = new JLabel("Status:");
-        panel_5.add(lblCopyStatus, "cell 0 0");
+        pnReturnLoan.add(lblCopyStatus, "cell 0 0");
 
         btnReturnButton = new JButton();
-        panel_5.add(btnReturnButton, "cell 2 0");
+        pnReturnLoan.add(btnReturnButton, "cell 2 0");
         btnReturnButton.setEnabled(false);
 
         comboCondition = new JComboBox<Condition>(copyPMod.getCopyStatusModel());
         comboCondition.setRenderer(new ConditionListCellRenderer());
-        panel_5.add(comboCondition, "cell 1 0");
+        pnReturnLoan.add(comboCondition, "cell 1 0");
 
         lblReturnFeedbackLabel = new JLabel();
-        panel_5.add(lblReturnFeedbackLabel, "cell 3 0");
+        pnReturnLoan.add(lblReturnFeedbackLabel, "cell 3 0");
     }
 
     private void updateLoanOverViewSection() {
@@ -411,7 +409,7 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
         if (getCurrentCustomer() != null) {
             int overdueLoans = getController().getOverdueLoans(getCurrentCustomer());
             if (overdueLoans > 0) {
-                int fine = overdueLoans * FINE_PER_BOOK;
+                int fine = overdueLoans * Loan.FINE_PER_BOOK;
                 logger.info("Customer {} has to pay CHF {} fine.", getCurrentCustomer().getFullName(), fine);
                 lblFine.setText(Texts.get("LoanDetailMainViewBase.loansOverview.fine", fine));
                 lblFine.setIcon(IconUtil.loadIcon("warning.png"));
