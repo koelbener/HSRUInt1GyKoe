@@ -242,6 +242,10 @@ public class LoansPMod extends AbstractPresentationModel {
         return result;
     }
 
+    public List<Loan> getOverdueLoans() {
+        return library.getOverdueLoans();
+    }
+
     public BatchReturnLoansTableModel getBatchReturnLoansTableModel() {
         return batchReturnLoansTableModel;
     }
