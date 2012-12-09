@@ -3,6 +3,7 @@ package application;
 import java.lang.Thread.UncaughtExceptionHandler;
 
 import javax.swing.SwingUtilities;
+import javax.swing.ToolTipManager;
 import javax.swing.UIManager;
 
 import org.slf4j.Logger;
@@ -46,6 +47,8 @@ public class LibraryApp {
 
             @Override
             public void run() {
+                ToolTipManager.sharedInstance().setInitialDelay(0);
+                ToolTipManager.sharedInstance().setDismissDelay(5000);
                 createMainWindow(library);
             }
         });
