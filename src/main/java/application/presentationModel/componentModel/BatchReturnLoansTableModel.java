@@ -27,6 +27,7 @@ public class BatchReturnLoansTableModel extends AbstractTableModel implements Ob
 
     public BatchReturnLoansTableModel() {
         this.loans = new ArrayList<Loan>();
+        Texts.getInstance().addObserver(this);
         setColumns();
     }
 
@@ -162,6 +163,9 @@ public class BatchReturnLoansTableModel extends AbstractTableModel implements Ob
     public void update(Observable o, Object arg) {
         if (o.getClass().equals(BooksPMod.class)) {
             fireTableDataChanged();
+        } else if (o.getClass().equals(Texts.class)) {
+            setColumns();
+            fireTableStructureChanged();
         }
     }
 

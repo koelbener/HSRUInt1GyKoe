@@ -155,10 +155,8 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
         }
 
         // border of panels
-        pnNewLoan.setBorder(new TitledBorder(null, Texts.get("LoanDetailMainViewBase.newLoan.title"), TitledBorder.LEADING, TitledBorder.TOP, null,
-                null));
-        pnCustomerSelection.setBorder(new TitledBorder(null, Texts.get("LoanDetailMainViewBase.customerSelection.title"), TitledBorder.LEADING,
-                TitledBorder.TOP, null, null));
+        pnNewLoan.setBorder(new TitledBorder(null, Texts.get("LoanDetailMainViewBase.newLoan.title"), TitledBorder.LEADING, TitledBorder.TOP, null, null));
+        pnCustomerSelection.setBorder(new TitledBorder(null, Texts.get("LoanDetailMainViewBase.customerSelection.title"), TitledBorder.LEADING, TitledBorder.TOP, null, null));
 
         // components
         lblCopyTitle.setText(Texts.get("LoanDetailMainViewBase.newLoan.bookDescriptionLabel"));
@@ -170,8 +168,18 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
         lblCondition.setText(Texts.get("LoanDetailMainViewBase.newLoan.copyCondition"));
         btnReturnButton.setText(Texts.get("LoanDetailMainViewBase.loansOverview.returnButton"));
         btnLinkToLoan.setText(Texts.get("LoanDetailMainViewBase.newLoan.VisitLoan"));
-        lblReturnFeedbackLabel.setText("");
         lblAvailability.setText(Texts.get("LoanDetailMainViewBase.newLoan.availability"));
+
+        String overViewTitle = null;
+        Customer customer = getCurrentCustomer();
+        if (getCurrentCustomer() == null) {
+            overViewTitle = Texts.get("LoanDetailMainViewBase.loansOverview.title") + " " + customer.getFullName();
+        } else {
+            overViewTitle = Texts.get("LoanDetailMainViewBase.loansOverview.titleAlone");
+        }
+        pnLoanOverview.setBorder(new TitledBorder(null, overViewTitle, TitledBorder.LEADING, TitledBorder.TOP, null, null));
+        updateMakeLoanButtonVisibility();
+        updateNewLoanStatus();
 
         getContainer().pack();
 
@@ -284,7 +292,6 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
     }
 
     private void updateLoanOverViewSection() {
-        String overViewTitle = "";
         Customer customer;
 
         customer = getCurrentCustomer();
@@ -298,15 +305,13 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
             }
 
             // update border
-            overViewTitle = Texts.get("LoanDetailMainViewBase.loansOverview.title") + " " + customer.getFullName();
         } else {
             pMod.getLoanDetailTableModel().updateLoans((Customer) null);
-            overViewTitle = Texts.get("LoanDetailMainViewBase.loansOverview.titleAlone");
         }
         // update statistic
         List<Loan> openLoans = Repository.getInstance().getCustomerPMod().getCustomerOpenLoans(customer);
         lblValNumberOfLoans.setText("" + openLoans.size());
-        pnLoanOverview.setBorder(new TitledBorder(null, overViewTitle, TitledBorder.LEADING, TitledBorder.TOP, null, null));
+        setTexts();
 
     }
 
@@ -332,7 +337,6 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
         pnNewLoan.add(lblCopyTitle, "cell 0 1,grow");
 
         lblValCopyTitle = new JLabel();
-        // lblCopyDescription.setMaximumSize(new Dimension(250, 20));
         pnNewLoan.add(lblValCopyTitle, "cell 1 1 3,alignx left,growy");
 
         btnLinkToLoan = new JButton("");
@@ -386,19 +390,21 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
     }
 
     private void updateNewLoanStatus() {
-        boolean isCopyLent = Repository.getInstance().getCopyPMod().isCopyLent(currentSelectedCopy);
-        if (currentSelectedCopy.getCondition().equals(Condition.LOST)) {
-            lblAvailabilityValue.setText(Texts.get("validation.copy.lost"));
-            lblAvailabilityValue.setIcon(IconUtil.loadIcon("warning.png"));
-        } else {
-            if (!isCopyLent) {
-                lblAvailabilityValue.setIcon(IconUtil.loadIcon("check.png"));
-                lblAvailabilityValue.setText(Texts.get("validation.copy.isLent.false"));
-            } else {
-                String lender = copyPMod.getLender(currentSelectedCopy).getFullName();
-                lblAvailabilityValue.setText(Texts.get("validation.copy.isLent.true") + lender + ".");
+        if (currentSelectedCopy != null) {
+            boolean isCopyLent = Repository.getInstance().getCopyPMod().isCopyLent(currentSelectedCopy);
+            if (currentSelectedCopy.getCondition().equals(Condition.LOST)) {
+                lblAvailabilityValue.setText(Texts.get("validation.copy.lost"));
                 lblAvailabilityValue.setIcon(IconUtil.loadIcon("warning.png"));
-                btnLinkToLoan.setVisible(true);
+            } else {
+                if (!isCopyLent) {
+                    lblAvailabilityValue.setIcon(IconUtil.loadIcon("check.png"));
+                    lblAvailabilityValue.setText(Texts.get("validation.copy.isLent.false"));
+                } else {
+                    String lender = copyPMod.getLender(currentSelectedCopy).getFullName();
+                    lblAvailabilityValue.setText(Texts.get("validation.copy.isLent.true") + lender + ".");
+                    lblAvailabilityValue.setIcon(IconUtil.loadIcon("warning.png"));
+                    btnLinkToLoan.setVisible(true);
+                }
             }
         }
     }
@@ -457,7 +463,7 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
 
         initKeyListeners();
 
-        getContainer().addMouseListener(new MouseAdapter() {
+        getContainer().getRootPane().addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent arg0) {
                 lblReturnFeedbackLabel.setText("");

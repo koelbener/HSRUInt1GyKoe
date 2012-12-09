@@ -51,6 +51,7 @@ public class ReturnLoansMainView extends DialogViewBase<Object, ReturnLoansContr
     private JButton btnRemoveLoan;
     private JDateChooser dtDate;
     private String txtLoanSearchDefault;
+    private JLabel lblDate;
 
     public ReturnLoansMainView(Object referenceObject, String icon) {
         super(referenceObject, icon);
@@ -76,27 +77,30 @@ public class ReturnLoansMainView extends DialogViewBase<Object, ReturnLoansContr
 
         mainPanel = new JPanel();
         contentPane.add(mainPanel);
-        mainPanel.setLayout(new MigLayout("", "[322.00,grow][][]", "[][grow][]"));
+        mainPanel.setLayout(new MigLayout("", "[322.00,grow][-10.00][][]", "[][grow][]"));
 
         txtLoanSearch = new JNumberTextField(txtLoanSearchDefault);
-        mainPanel.add(txtLoanSearch, "cell 0 0 2 1,growx");
+        mainPanel.add(txtLoanSearch, "cell 0 0 3 1,growx");
         txtLoanSearch.setColumns(10);
 
         lblLoanFeedback = new JLabel();
-        mainPanel.add(lblLoanFeedback, "cell 1 0");
+        mainPanel.add(lblLoanFeedback, "cell 2 0");
 
         btnAddLoan = new JButton();
-        mainPanel.add(btnAddLoan, "cell 2 0,alignx left,aligny baseline");
+        mainPanel.add(btnAddLoan, "cell 3 0,alignx left,aligny baseline");
 
         tblLoansToReturn = new JTable(Repository.getInstance().getLoansPMod().getBatchReturnLoansTableModel());
         tblLoansToReturn.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        mainPanel.add(new JScrollPane(tblLoansToReturn), "cell 0 1 2 1,grow");
+        mainPanel.add(new JScrollPane(tblLoansToReturn), "cell 0 1 3 1,grow");
 
         btnRemoveLoan = new JButton("");
         mainPanel.add(btnRemoveLoan, "flowx,cell 0 2,aligny bottom");
 
+        lblDate = new JLabel("");
+        mainPanel.add(lblDate, "cell 1 2");
+
         btnReturnLoans = new JButton();
-        mainPanel.add(btnReturnLoans, "cell 2 2");
+        mainPanel.add(btnReturnLoans, "cell 3 2");
 
         btnAddLoan.setEnabled(false);
         btnReturnLoans.setEnabled(false);
@@ -104,7 +108,7 @@ public class ReturnLoansMainView extends DialogViewBase<Object, ReturnLoansContr
 
         dtDate = new JDateChooser(new Date());
         dtDate.setMinimumSize(new Dimension(70, 20));
-        mainPanel.add(dtDate, "cell 1 2,alignx right");
+        mainPanel.add(dtDate, "cell 2 2,alignx right");
 
         getContainer().getRootPane().setDefaultButton(btnReturnLoans);
         setMinMaxDates();
@@ -132,6 +136,7 @@ public class ReturnLoansMainView extends DialogViewBase<Object, ReturnLoansContr
         btnReturnLoans.setText(Texts.get("ReturnLoansMainView.button.returnLoans"));
         btnAddLoan.setText(Texts.get("ReturnLoansMainView.button.addLoan"));
         btnRemoveLoan.setText(Texts.get("ReturnLoansMainView.button.removeLoan"));
+        lblDate.setText(Texts.get("ReturnLoansMainView.date.explanation"));
 
         dtDate.setLocale(Texts.getInstance().getCurrentLocale());
         txtLoanSearchDefault = Texts.get("ReturnLoansMainView.button.txtLoanSearchDefault");
