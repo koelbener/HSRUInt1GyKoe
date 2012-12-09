@@ -156,7 +156,7 @@ public class BookMasterSubView extends SubViewBase<Library, BookMasterController
     private void createBookMasterHeader() {
         JPanel pnBookMasterHeader = new JPanel();
         pnInventory.add(pnBookMasterHeader, BorderLayout.NORTH);
-        pnBookMasterHeader.setLayout(new MigLayout("", "[grow][grow][][]", "[][]"));
+        pnBookMasterHeader.setLayout(new MigLayout("", "[grow][][][]", "[][]"));
 
         lblAllBooksHint = new JLabel();
         pnBookMasterHeader.add(lblAllBooksHint, "cell 0 0");
