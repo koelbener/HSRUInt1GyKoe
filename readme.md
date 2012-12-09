@@ -1,10 +1,10 @@
-
 Libraries
 =====
 
 This project uses:
 
 * [Eclipse Icons](http://eclipse-icons.i24.cc/)
+* [iText](http://itextpdf.com/) to generate PDFs
 * [MigLayout](http://www.miglayout.com/)
 * [Logback](http://logback.qos.ch/) and [SLF4J](http://www.slf4j.org/)
 * Google's [Guava Libraries](http://code.google.com/p/guava-libraries/)
