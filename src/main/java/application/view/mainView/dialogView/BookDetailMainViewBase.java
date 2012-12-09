@@ -19,6 +19,7 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 import javax.swing.border.TitledBorder;
@@ -248,7 +249,7 @@ public abstract class BookDetailMainViewBase extends DialogViewBase<Book, BookDe
         listCopies = new JList<Copy>();
         listCopies.setModel(listModelCopies);
         listCopies.setCellRenderer(new CopiesListCellRenderer());
-        pnCopiesOverview.add(listCopies);
+        pnCopiesOverview.add(new JScrollPane(listCopies));
 
         JPanel pnCopiesAction = new JPanel();
         pnCopiesAction.setLayout(new FlowLayout(FlowLayout.RIGHT));
