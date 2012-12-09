@@ -1,5 +1,6 @@
 package application.presentationModel;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import application.presentationModel.componentModel.CustomerListModel;
@@ -31,7 +32,13 @@ public class CustomerPMod extends AbstractPresentationModel {
     }
 
     public List<Loan> getCustomerOpenLoans(Customer customer) {
-        return library.getCustomerLoans(customer);
+        List<Loan> result = new ArrayList<Loan>();
+        for (Loan loan : library.getCustomerLoans(customer)) {
+            if (loan.isLent()) {
+                result.add(loan);
+            }
+        }
+        return result;
     }
 
 }
