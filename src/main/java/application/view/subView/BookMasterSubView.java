@@ -201,6 +201,8 @@ public class BookMasterSubView extends SubViewBase<Library, BookMasterController
 
         // Tooltips
         btnOpenBook.setToolTipText(Texts.get("BookMasterMainView.btnOpenBook.toolTipText"));
+        txtSearch.setToolTipText(Texts.get("BookMasterMainView.searchToolTip"));
+        checkBoxOnlyAvailable.setToolTipText(Texts.get("BookMasterMainView.lblNurVerfgbare.tooltip"));
 
         // table
         booksPMod.getBookTableModel().setColumns();
