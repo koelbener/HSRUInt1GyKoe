@@ -34,6 +34,7 @@ import application.controller.MasterController;
 import application.core.Language;
 import application.core.Texts;
 import application.pdf.OverdueNoticeGenerator;
+import application.pdf.OverdueNoticeGenerator.ReportException;
 import application.util.IconUtil;
 import application.view.subView.BookMasterSubView;
 import application.view.subView.LendingMasterSubView;
@@ -88,6 +89,7 @@ public class MasterMainView extends MainViewBase<Library, MasterController, JFra
         headerPanel.add(pnMainPanel, "cell 10 0,grow");
 
         btnGenerateOverdueNotices = new JButton();
+        btnGenerateOverdueNotices.setIcon(IconUtil.loadIcon("printview_tsk.gif"));
         headerPanel.add(btnGenerateOverdueNotices, "cell 17 0");
 
         languageComboBox = new JComboBox<Language>();
@@ -151,33 +153,43 @@ public class MasterMainView extends MainViewBase<Library, MasterController, JFra
             }
 
             int state = fileChooser.showSaveDialog(getContainer());
-            int stateConfirm = JOptionPane.YES_OPTION;
 
-            File selectedFile = fileChooser.getSelectedFile();
+            if (state == JFileChooser.APPROVE_OPTION) {
 
-            if (selectedFile.exists()) {
-                logger.info("File {} already exists!", selectedFile.getAbsolutePath());
-                String mesage = Texts.get("report.notice.message.fileexists", selectedFile.getName());
-                stateConfirm = JOptionPane.showConfirmDialog(null, mesage, Texts.get("report.notice.message.fileexists.title"),
-                        JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
-            }
-
-            if (state == JFileChooser.APPROVE_OPTION && stateConfirm == JOptionPane.YES_OPTION) {
-                OverdueNoticeGenerator generator = new OverdueNoticeGenerator();
-                generator.generate(selectedFile, getController().getOverdueLoans());
-
-                int stateOpen = JOptionPane.showOptionDialog(null, Texts.get("report.notice.finished"), Texts.get("report.notice.finished.title"),
-                        JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE, null, null, JOptionPane.YES_OPTION);
-
-                if (stateOpen == JOptionPane.YES_OPTION) {
-                    try {
-                        Desktop.getDesktop().open(selectedFile);
-                    } catch (IOException e) {
-                        logger.error("Unable to open pdf...", e);
-                    }
+                int stateConfirm = JOptionPane.YES_OPTION;
+                File selectedFile = fileChooser.getSelectedFile();
+                if (selectedFile.exists()) {
+                    logger.info("File {} already exists!", selectedFile.getAbsolutePath());
+                    String mesage = Texts.get("report.notice.message.fileexists", selectedFile.getName());
+                    stateConfirm = JOptionPane.showConfirmDialog(null, mesage, Texts.get("report.notice.message.fileexists.title"),
+                            JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
                 }
 
+                if (stateConfirm == JOptionPane.YES_OPTION) {
+                    OverdueNoticeGenerator generator = new OverdueNoticeGenerator();
+                    try {
+                        generator.generate(selectedFile, getController().getOverdueLoans());
+                        int stateOpen = JOptionPane.showOptionDialog(null, Texts.get("report.notice.finished"),
+                                Texts.get("report.notice.finished.title"), JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE, null, null,
+                                JOptionPane.YES_OPTION);
+
+                        if (stateOpen == JOptionPane.YES_OPTION) {
+                            try {
+                                Desktop.getDesktop().open(selectedFile);
+                            } catch (IOException e) {
+                                logger.error("Unable to open pdf...", e);
+                            }
+                        }
+                    } catch (ReportException e) {
+
+                        JOptionPane.showMessageDialog(getContainer(), Texts.get("report.notice.error"), Texts.get("report.notice.error.title"),
+                                JOptionPane.ERROR_MESSAGE);
+
+                    }
+
+                }
             }
+
         }
     }
 

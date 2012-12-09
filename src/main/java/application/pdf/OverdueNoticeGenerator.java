@@ -1,7 +1,6 @@
 package application.pdf;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -39,7 +38,7 @@ public class OverdueNoticeGenerator {
     private static Font normal = new Font(Font.FontFamily.HELVETICA, 12, Font.NORMAL);
     private final Logger logger = LoggerFactory.getLogger(OverdueNoticeGenerator.class);
 
-    public void generate(File selectedFile, List<Loan> overdueLoans) {
+    public void generate(File selectedFile, List<Loan> overdueLoans) throws ReportException {
 
         Stopwatch sw = new Stopwatch();
         sw.start();
@@ -51,18 +50,8 @@ public class OverdueNoticeGenerator {
             PdfWriter.getInstance(document, new FileOutputStream(outfile));
             document.open();
             addContent(document, overdueLoans);
-        } catch (FileNotFoundException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (DocumentException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (MalformedURLException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+        } catch (Exception e) {
+            throw new ReportException(e);
         } finally {
             if (document != null) {
                 document.close();
@@ -159,6 +148,15 @@ public class OverdueNoticeGenerator {
         c1.setPadding(6);
         c1.setHorizontalAlignment(Element.ALIGN_LEFT);
         table.addCell(c1);
+    }
+
+    public class ReportException extends Exception {
+        public ReportException(Exception e) {
+            super(e);
+        }
+
+        private static final long serialVersionUID = 1L;
+
     }
 
 }
