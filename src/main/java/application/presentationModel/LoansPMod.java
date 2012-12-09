@@ -71,6 +71,7 @@ public class LoansPMod extends AbstractPresentationModel {
         loanDetailTableModel.addLoan(loan);
         setChanged();
         notifyObservers();
+        Repository.getInstance().getBooksPMod().updateBook(loan.getCopy().getTitle());
     }
 
     public void updateLoan(Loan loan) {
@@ -78,6 +79,7 @@ public class LoansPMod extends AbstractPresentationModel {
         loanDetailTableModel.updateLoans(loan);
         setChanged();
         notifyObservers();
+        Repository.getInstance().getBooksPMod().updateBook(loan.getCopy().getTitle());
     }
 
     public int getLoansCount() {
