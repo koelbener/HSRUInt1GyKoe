@@ -33,7 +33,7 @@ public class MainViewFactory {
         if (loanDetailMainView == null) {
             loanDetailMainView = new LoanDetailMainView(loan);
         } else {
-            loanDetailMainView.switchToLoan(loan, true);
+            loanDetailMainView.switchToLoan(loan, true, loan == null);
             loanDetailMainView.getContainer().setVisible(true);
         }
         return loanDetailMainView;

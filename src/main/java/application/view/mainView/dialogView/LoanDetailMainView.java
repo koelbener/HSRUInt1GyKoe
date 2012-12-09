@@ -106,10 +106,10 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
         super(loan, "loan.gif");
     }
 
-    public void switchToLoan(Loan loan, boolean reloadAll) {
+    public void switchToLoan(Loan loan, boolean reloadAll, boolean resetCustomerSearch) {
         LOGGER.debug("switch to loan {}", loan);
         setReferenceObject(loan);
-        if (loan == null) {
+        if (resetCustomerSearch) {
             txtCustomerSearch.setText("");
         } else {
             updateLoanOverViewSection();
@@ -549,7 +549,7 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
                             // update ReferencedObject
                             listCustomer.setSelectedIndex(0);
                             Loan firstLoan = pMod.getFirstLoanOfCustomer(listCustomer.getSelectedValue());
-                            switchToLoan(firstLoan, false);
+                            switchToLoan(firstLoan, false, false);
                         }
                     });
                 }
@@ -562,7 +562,7 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
             @Override
             public void valueChanged(ListSelectionEvent arg0) {
                 Loan firstLoanOfCustomer = pMod.getFirstLoanOfCustomer(listCustomer.getSelectedValue());
-                switchToLoan(firstLoanOfCustomer, false);
+                switchToLoan(firstLoanOfCustomer, false, false);
             }
         });
 
@@ -614,7 +614,7 @@ public class LoanDetailMainView extends DialogViewBase<Loan, LoanDetailControlle
             @Override
             public void actionPerformed(ActionEvent arg0) {
                 if (copyPMod.isCopyLent(currentSelectedCopy)) {
-                    switchToLoan(copyPMod.getCurrentLoan(currentSelectedCopy), true);
+                    switchToLoan(copyPMod.getCurrentLoan(currentSelectedCopy), true, false);
                 }
             }
         });
