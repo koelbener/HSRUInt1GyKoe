@@ -20,3 +20,12 @@ Build
 =====
 
 `mvn assembly:single`
+
+Run
+=====
+
+All unit tests:
+`mvn clean compile test`
+
+All integration (GUI) tests:
+`mvn clean compile integration-test`
